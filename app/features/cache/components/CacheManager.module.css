@@ -9,7 +9,9 @@
 .tabs {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	background: var(--surface-muted);
+	gap: 8px;
+	padding: 8px;
+	background: var(--surface);
 }
 .tabs button {
 	display: flex;
@@ -18,9 +20,13 @@
 	justify-content: center;
 	gap: 8px;
 	border: 0;
-	background: transparent;
-	color: var(--text-muted);
+	border-radius: 16px;
+	background: var(--bg);
+	color: var(--text);
 	font-weight: 700;
+}
+.tabs button:hover {
+	background: var(--yellow);
 }
 .tabs button[aria-selected="true"] {
 	background: var(--blue);
@@ -35,6 +41,10 @@
 	background: var(--brand);
 	color: #fff;
 	font-size: 10px;
+}
+.tabs button[aria-selected="true"] span {
+	background: var(--surface);
+	color: var(--blue);
 }
 .main form {
 	display: grid;
