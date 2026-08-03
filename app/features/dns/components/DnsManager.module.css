@@ -176,14 +176,19 @@
 	position: fixed;
 	z-index: 500;
 	display: grid;
+	width: 100vw;
+	max-width: 100vw;
+	grid-template-columns: minmax(0, 1fr);
 	overflow: auto;
+	overflow-x: hidden;
 	place-items: center;
 	padding: 1.5rem;
 	background: rgb(3 12 26 / 68%);
 	inset: 0;
 }
 .modal {
-	width: min(47.5rem, 100%);
+	width: min(47.5rem, calc(100vw - 3rem));
+	min-width: 0;
 	max-height: calc(100vh - 3rem);
 	overflow: auto;
 	border-radius: 1.125rem;
@@ -210,6 +215,10 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 1.0625rem;
+}
+.formGrid > :global(.field) {
+	align-content: start;
+	grid-auto-rows: max-content;
 }
 .formGrid > div:nth-child(3),
 .formGrid > div:has(.textarea) {
@@ -304,6 +313,8 @@
 		place-items: end center;
 	}
 	.modal {
+		width: 100vw;
+		max-width: 100vw;
 		max-height: 92vh;
 		border-radius: 1.125rem 1.125rem 0 0;
 	}

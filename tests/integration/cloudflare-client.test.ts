@@ -53,6 +53,34 @@ describe("explicit Cloudflare API client", () => {
 		await expect(client(fetcher).getDnsRecord(record.id)).resolves.toMatchObject(record);
 	});
 
+	it("updates a record type atomically through the record PATCH endpoint", async () => {
+		const fetcher: typeof fetch = vi.fn(async (input, init) => {
+			expect(String(input)).toBe(`https://api.cloudflare.com/client/v4/zones/zone-test-1/dns_records/${record.id}`);
+			expect(init?.method).toBe("PATCH");
+			expect(JSON.parse(String(init?.body))).toEqual({
+				content: "2001:db8::1",
+				name: "magic.nycu.club",
+				proxied: false,
+				ttl: 1,
+				type: "AAAA"
+			});
+			return jsonResponse({
+				errors: [],
+				result: { ...record, content: "2001:db8::1", type: "AAAA" },
+				success: true
+			});
+		});
+		await expect(
+			client(fetcher).updateDnsRecord(record.id, {
+				content: "2001:db8::1",
+				name: "magic.nycu.club",
+				proxied: false,
+				ttl: 1,
+				type: "AAAA"
+			})
+		).resolves.toMatchObject({ id: record.id, type: "AAAA" });
+	});
+
 	it("paginates list responses until total_pages without calling the real API", async () => {
 		const fetcher: typeof fetch = vi.fn(async input => {
 			const url = new URL(String(input));

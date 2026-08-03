@@ -6,10 +6,10 @@ import { useDialogFocus } from "~/shared/client/useDialogFocus";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
 import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
-import { unsupportedDnsTypeReasons } from "~/shared/lib/dns/records";
+import { allowedDnsTypes, unsupportedDnsTypeReasons, type AllowedDnsType } from "~/shared/lib/dns/records";
 import styles from "./DnsManager.module.css";
 
-type AllowedType = "A" | "AAAA" | "CAA" | "CNAME" | "MX" | "SRV" | "TXT";
+const proxyTypes: readonly AllowedDnsType[] = ["A", "AAAA", "CNAME"];
 
 interface RecordView {
 	readonly content: string | null;
@@ -48,7 +48,7 @@ interface FormState {
 	tag: "iodef" | "issue" | "issuewild";
 	target: string;
 	ttl: string;
-	type: AllowedType;
+	type: AllowedDnsType;
 	value: string;
 	weight: string;
 }
@@ -144,7 +144,7 @@ export function DnsManager(props: Props) {
 	const openEdit = (record: RecordView) => {
 		const namespace = record.namespace ?? inferNamespace(record.name, props.zoneName);
 		const baseName = record.type === "SRV" ? dataString(record.data, "name") || record.name : record.name;
-		const type = record.type as AllowedType;
+		const type = record.type as AllowedDnsType;
 		setEditing(record);
 		setForm({
 			flags: dataNumber(record.data, "flags"),
@@ -167,6 +167,14 @@ export function DnsManager(props: Props) {
 
 	const updateForm = <K extends keyof FormState>(key: K, value: FormState[K]) => {
 		setForm(current => ({ ...current, [key]: value }));
+	};
+
+	const updateType = (type: AllowedDnsType) => {
+		setForm(current => ({
+			...current,
+			proxied: proxyTypes.includes(type) ? current.proxied : false,
+			type
+		}));
 	};
 
 	const preview = form.namespace ? (form.name === "@" ? form.namespace : `${form.name}.${form.namespace}`) : "請先選擇 namespace";
@@ -455,8 +463,8 @@ export function DnsManager(props: Props) {
 							<div className={styles.formGrid}>
 								<div className="field">
 									<label htmlFor="record-type">Type</label>
-									<select className="select" id="record-type" name="type" disabled={Boolean(editing)} value={form.type} onChange={event => updateForm("type", event.target.value as AllowedType)}>
-										{["A", "AAAA", "CNAME", "TXT", "MX", "SRV", "CAA"].map(type => (
+									<select className="select" id="record-type" name="type" value={form.type} onChange={event => updateType(event.target.value as AllowedDnsType)}>
+										{allowedDnsTypes.map(type => (
 											<option key={type}>{type}</option>
 										))}
 									</select>
