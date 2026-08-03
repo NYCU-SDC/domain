@@ -25,6 +25,8 @@ test.describe("public SSR and login entry", () => {
 		await firstFaq.click();
 		await expect(firstFaq).toHaveAttribute("aria-expanded", "false");
 		await expect(page.getByRole("link", { name: "隱私與安全" })).toHaveAttribute("href", "/security");
+		await expect(page.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute("href", "https://github.com/NYCU-SDC/domain");
+		await expect(page.getByRole("link", { name: "毛哥EM", exact: true })).toHaveAttribute("href", "https://github.com/elvisdragonmao/");
 		await expect(page.getByRole("link", { name: "交大軟體開發社" }).first()).toHaveAttribute("href", "https://sdc.nycu.club");
 	});
 
