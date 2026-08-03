@@ -32,7 +32,7 @@ export function AccountSessions(props: Props) {
 				<div>
 					<h2>{props.user.githubName ?? props.user.githubLogin}</h2>
 					<a href={props.user.githubProfileUrl}>
-						<GitFork />@{props.user.githubLogin}
+						<GitFork aria-hidden="true" />@{props.user.githubLogin}
 					</a>
 					<dl>
 						<div>
@@ -50,7 +50,7 @@ export function AccountSessions(props: Props) {
 			</section>
 			<section className={`card ${styles.grants}`}>
 				<h2>
-					<ShieldCheck />
+					<ShieldCheck aria-hidden="true" />
 					Namespace grants
 				</h2>
 				{props.user.isAdmin ? (

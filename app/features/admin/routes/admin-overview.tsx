@@ -62,7 +62,7 @@ export default function AdminOverview({ loaderData }: Route.ComponentProps) {
 			<section className={styles.metrics}>
 				{metrics.map(([Icon, label, value]) => (
 					<article className="card" key={label}>
-						<Icon />
+						<Icon aria-hidden="true" />
 						<span>
 							<small>{label}</small>
 							<strong>{value}</strong>
@@ -91,26 +91,34 @@ export default function AdminOverview({ loaderData }: Route.ComponentProps) {
 				<section className="card">
 					<h2>最近 admin 操作</h2>
 					<ul>
-						{loaderData.recent.map(item => (
-							<li key={item.id}>
-								<b>{item.action}</b>
-								<span className="statusPill">{item.status}</span>
-							</li>
-						))}
+						{loaderData.recent.length ? (
+							loaderData.recent.map(item => (
+								<li key={item.id}>
+									<b>{item.action}</b>
+									<span className="statusPill">{item.status}</span>
+								</li>
+							))
+						) : (
+							<li>目前沒有 admin 操作。</li>
+						)}
 					</ul>
 				</section>
 				<section className="card">
 					<h2>
-						<AlertTriangle />
+						<AlertTriangle aria-hidden="true" />
 						最近被拒絕的操作
 					</h2>
 					<ul>
-						{loaderData.denied.map(item => (
-							<li key={item.id}>
-								<b>{item.action}</b>
-								<span>{item.errorCode ?? "FORBIDDEN"}</span>
-							</li>
-						))}
+						{loaderData.denied.length ? (
+							loaderData.denied.map(item => (
+								<li key={item.id}>
+									<b>{item.action}</b>
+									<span>{item.errorCode ?? "FORBIDDEN"}</span>
+								</li>
+							))
+						) : (
+							<li>目前沒有被拒絕的操作。</li>
+						)}
 					</ul>
 				</section>
 			</div>

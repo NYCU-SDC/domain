@@ -20,6 +20,7 @@
 }
 .profile a {
 	display: flex;
+	min-height: 2.75rem;
 	align-items: center;
 	gap: 0.375rem;
 	color: var(--brand);
@@ -119,7 +120,7 @@
 	font-size: 0.75rem;
 }
 .sessionList article[data-revoked="true"] {
-	opacity: 0.55;
+	background: color-mix(in srgb, var(--red) 12%, var(--bg));
 }
 @media (max-width: 50rem) {
 	.grid {

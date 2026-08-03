@@ -14,7 +14,7 @@ export const meta: Route.MetaFunction = () =>
 
 export default function DocsPage() {
 	return (
-		<main className={styles.main} id="main-content">
+		<main className={styles.main} id="main-content" tabIndex={-1}>
 			<article className={styles.content}>
 				<h1>安全管理社團 DNS 與 cache</h1>
 				<p className={styles.lead}>先使用 GitHub 登入，再由管理員配置 namespace。Grant 會包含 namespace apex 與其下所有子網域，但不會延伸到名稱相似的其他社團。</p>

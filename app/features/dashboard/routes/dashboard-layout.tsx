@@ -1,5 +1,5 @@
 import { ChevronDown, ClipboardList, Database, Gauge, History, LayoutDashboard, LogOut, Menu, ShieldCheck, UserRound, Users, X } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Form, NavLink, Outlet } from "react-router";
 
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
@@ -22,16 +22,33 @@ const navigation = [
 
 export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 	const [menuOpen, setMenuOpen] = useState(false);
+	const menuButtonRef = useRef<HTMLButtonElement>(null);
+	const closeButtonRef = useRef<HTMLButtonElement>(null);
+	const closeMenu = useCallback(() => {
+		setMenuOpen(false);
+		window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+	}, []);
+
+	useEffect(() => {
+		if (!menuOpen) return;
+		closeButtonRef.current?.focus();
+		const closeOnEscape = (event: KeyboardEvent) => {
+			if (event.key !== "Escape") return;
+			closeMenu();
+		};
+		window.addEventListener("keydown", closeOnEscape);
+		return () => window.removeEventListener("keydown", closeOnEscape);
+	}, [closeMenu, menuOpen]);
 	return (
 		<ToastProvider>
 			<div className={styles.shell}>
-				<aside className={styles.sidebar} data-open={menuOpen}>
+				<aside aria-label="Dashboard 選單" className={styles.sidebar} data-open={menuOpen} id="dashboard-sidebar">
 					<div className={styles.sidebarTop}>
 						<NavLink className="brand" to="/dashboard" translate="no">
 							nycu.club
 						</NavLink>
-						<button className={styles.closeMenu} onClick={() => setMenuOpen(false)} type="button" aria-label="關閉選單">
-							<X />
+						<button className={styles.closeMenu} onClick={closeMenu} ref={closeButtonRef} type="button" aria-label="關閉選單">
+							<X aria-hidden="true" />
 						</button>
 					</div>
 					<nav className={styles.sideNav} aria-label="Dashboard 導覽">
@@ -45,26 +62,26 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 							<>
 								<p>系統管理</p>
 								<NavLink to="/admin" end className={({ isActive }) => (isActive ? styles.active : undefined)}>
-									<ShieldCheck />
+									<ShieldCheck aria-hidden="true" />
 									管理後台
 								</NavLink>
 								<NavLink to="/admin/applications" className={({ isActive }) => (isActive ? styles.active : undefined)}>
-									<ClipboardList />
+									<ClipboardList aria-hidden="true" />
 									子網域申請
 								</NavLink>
 								<NavLink to="/admin/users" className={({ isActive }) => (isActive ? styles.active : undefined)}>
-									<Users />
+									<Users aria-hidden="true" />
 									使用者
 								</NavLink>
 							</>
 						) : null}
 					</nav>
 				</aside>
-				{menuOpen ? <button className={styles.backdrop} onClick={() => setMenuOpen(false)} aria-label="關閉選單" type="button" /> : null}
-				<div className={styles.workspace}>
+				{menuOpen ? <button className={styles.backdrop} onClick={closeMenu} aria-label="關閉選單" type="button" /> : null}
+				<div className={styles.workspace} inert={menuOpen ? true : undefined}>
 					<header className={styles.topbar}>
-						<button className={styles.menuButton} onClick={() => setMenuOpen(true)} type="button" aria-label="開啟選單">
-							<Menu />
+						<button aria-controls="dashboard-sidebar" aria-expanded={menuOpen} aria-label="開啟選單" className={styles.menuButton} onClick={() => setMenuOpen(true)} ref={menuButtonRef} type="button">
+							<Menu aria-hidden="true" />
 						</button>
 						<label className={styles.namespaceSelect}>
 							<span>Namespace</span>
@@ -101,12 +118,12 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 							<Form action="/logout" method="post">
 								<input type="hidden" name="csrfToken" value={loaderData.csrfToken} />
 								<button className="button buttonGhost buttonSmall" aria-label="登出" title="登出" type="submit">
-									<LogOut size={18} />
+									<LogOut aria-hidden="true" size={18} />
 								</button>
 							</Form>
 						</div>
 					</header>
-					<main className={styles.content} id="main-content">
+					<main className={styles.content} id="main-content" tabIndex={-1}>
 						<Outlet />
 					</main>
 				</div>

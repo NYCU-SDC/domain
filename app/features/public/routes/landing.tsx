@@ -53,7 +53,7 @@ function FaqItem({ answer, index, question }: { readonly answer: string; readonl
 
 export default function Landing() {
 	return (
-		<main id="main-content">
+		<main id="main-content" tabIndex={-1}>
 			<section className={styles.hero}>
 				<div className={styles.heroCopy}>
 					<p className={styles.maintainer}>

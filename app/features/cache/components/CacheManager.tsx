@@ -1,5 +1,5 @@
 import { AlertOctagon, Ban, CheckCircle2, Eraser, Link2, Server, Tags } from "lucide-react";
-import { useState, type SyntheticEvent } from "react";
+import { useRef, useState, type KeyboardEvent, type SyntheticEvent } from "react";
 
 import { apiRequest } from "~/shared/client/api";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
@@ -14,6 +14,7 @@ interface Props {
 }
 
 type Tab = "hostnames" | "prefixes" | "urls";
+const tabs: readonly Tab[] = ["urls", "hostnames", "prefixes"];
 
 export function CacheManager(props: Props) {
 	const { showToast } = useToast();
@@ -21,10 +22,30 @@ export function CacheManager(props: Props) {
 	const [value, setValue] = useState("");
 	const [confirmation, setConfirmation] = useState("");
 	const [busy, setBusy] = useState(false);
+	const tabRefs = useRef<Record<Tab, HTMLButtonElement | null>>({ hostnames: null, prefixes: null, urls: null });
 	const items = value
 		.split("\n")
 		.map(item => item.trim())
 		.filter(Boolean);
+
+	const selectTab = (nextTab: Tab) => {
+		setTab(nextTab);
+		setValue("");
+	};
+
+	const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, currentTab: Tab) => {
+		const currentIndex = tabs.indexOf(currentTab);
+		let nextIndex: number | null = null;
+		if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabs.length;
+		if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+		if (event.key === "Home") nextIndex = 0;
+		if (event.key === "End") nextIndex = tabs.length - 1;
+		if (nextIndex === null) return;
+		event.preventDefault();
+		const nextTab = tabs[nextIndex];
+		selectTab(nextTab);
+		tabRefs.current[nextTab]?.focus();
+	};
 
 	const submit = async (event: SyntheticEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -70,43 +91,55 @@ export function CacheManager(props: Props) {
 			<section className={`card ${styles.main}`}>
 				<div className={styles.tabs} role="tablist" aria-label="Cache purge 類型">
 					<button
+						aria-controls="cache-panel-urls"
 						aria-selected={tab === "urls"}
-						onClick={() => {
-							setTab("urls");
-							setValue("");
+						id="cache-tab-urls"
+						onClick={() => selectTab("urls")}
+						onKeyDown={event => handleTabKeyDown(event, "urls")}
+						ref={element => {
+							tabRefs.current.urls = element;
 						}}
 						role="tab"
+						tabIndex={tab === "urls" ? 0 : -1}
 						type="button"
 					>
 						<Link2 aria-hidden="true" />
 						Purge URLs <span>建議</span>
 					</button>
 					<button
+						aria-controls="cache-panel-hostnames"
 						aria-selected={tab === "hostnames"}
-						onClick={() => {
-							setTab("hostnames");
-							setValue("");
+						id="cache-tab-hostnames"
+						onClick={() => selectTab("hostnames")}
+						onKeyDown={event => handleTabKeyDown(event, "hostnames")}
+						ref={element => {
+							tabRefs.current.hostnames = element;
 						}}
 						role="tab"
+						tabIndex={tab === "hostnames" ? 0 : -1}
 						type="button"
 					>
 						<Server aria-hidden="true" />
 						Hostnames
 					</button>
 					<button
+						aria-controls="cache-panel-prefixes"
 						aria-selected={tab === "prefixes"}
-						onClick={() => {
-							setTab("prefixes");
-							setValue("");
+						id="cache-tab-prefixes"
+						onClick={() => selectTab("prefixes")}
+						onKeyDown={event => handleTabKeyDown(event, "prefixes")}
+						ref={element => {
+							tabRefs.current.prefixes = element;
 						}}
 						role="tab"
+						tabIndex={tab === "prefixes" ? 0 : -1}
 						type="button"
 					>
 						<Eraser aria-hidden="true" />
 						Prefixes
 					</button>
 				</div>
-				<form onSubmit={submit}>
+				<form aria-labelledby={`cache-tab-${tab}`} id={`cache-panel-${tab}`} onSubmit={submit} role="tabpanel">
 					<div className={styles.tabIntro}>
 						<h2>{tab === "urls" ? "清除精確 URL" : tab === "hostnames" ? "清除 hostname 的所有 cache" : "清除 path prefix"}</h2>
 						<p>
@@ -141,7 +174,7 @@ export function CacheManager(props: Props) {
 							<ul>
 								{items.map(item => (
 									<li key={item}>
-										<CheckCircle2 />
+										<CheckCircle2 aria-hidden="true" />
 										{item}
 									</li>
 								))}
@@ -150,7 +183,7 @@ export function CacheManager(props: Props) {
 					) : null}
 					{tab !== "urls" ? (
 						<div className={styles.warning}>
-							<AlertOctagon />
+							<AlertOctagon aria-hidden="true" />
 							<span>
 								<b>影響範圍較大</b>
 								{tab === "hostnames" ? "Hostname purge 會清除該主機下所有已快取 URL。" : "Prefix purge 會清除所有以該 path 開頭的 URL。"}
@@ -167,7 +200,7 @@ export function CacheManager(props: Props) {
 					<h2>授權範圍</h2>
 					{props.isAdmin ? (
 						<p>
-							<CheckCircle2 />
+							<CheckCircle2 aria-hidden="true" />
 							Admin：所有非 protected hostname
 						</p>
 					) : (
@@ -180,7 +213,7 @@ export function CacheManager(props: Props) {
 					<small>每一個 URL、hostname 與 prefix 都會在 server 端重新驗證。</small>
 				</section>
 				<section className={`card ${styles.noTags}`}>
-					<Tags />
+					<Tags aria-hidden="true" />
 					<h2>不提供 cache tag purge</h2>
 					<p>Tag 不一定能安全映射到 namespace，可能影響共享 zone 中其他社團網站，因此一般使用者不開放。</p>
 				</section>

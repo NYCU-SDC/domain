@@ -7,7 +7,7 @@
 .toolbar label {
 	display: flex;
 	min-width: min(24.375rem, 100%);
-	min-height: 2.625rem;
+	min-height: 2.75rem;
 	align-items: center;
 	gap: 0.5rem;
 	padding: 0 0.6875rem;
@@ -20,12 +20,13 @@
 }
 .toolbar input {
 	width: 100%;
+	min-height: 2.75rem;
 	border: 0;
 	outline: 0;
 	background: transparent;
 }
 .toolbar select {
-	min-height: 2.625rem;
+	min-height: 2.75rem;
 	padding: 0 0.625rem;
 	border: 0;
 	border-radius: 0.5625rem;
@@ -90,8 +91,8 @@
 .actions button,
 .modal header button {
 	display: grid;
-	width: 2.125rem;
-	height: 2.125rem;
+	width: 2.75rem;
+	height: 2.75rem;
 	place-items: center;
 	border: 0;
 	border-radius: 0.5rem;
@@ -206,8 +207,8 @@
 	padding: 0.8125rem;
 	margin-top: 0.875rem;
 	border-radius: 0.5625rem;
-	background: var(--blue);
-	color: #fff;
+	background: color-mix(in srgb, var(--blue) 24%, var(--surface));
+	color: #000;
 }
 .sessionWarning {
 	background: var(--yellow);

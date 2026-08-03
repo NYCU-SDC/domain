@@ -69,7 +69,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 			/>
 			{loaderData.upstreamError ? (
 				<div className={styles.error} role="alert">
-					<Cloud />{" "}
+					<Cloud aria-hidden="true" />{" "}
 					<span>
 						{loaderData.upstreamError}
 						<small>Request ID: {loaderData.requestId}</small>
@@ -79,7 +79,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 			<section className={styles.metrics} aria-label="統計資料">
 				<article className="card">
 					<span>
-						<RadioTower />
+						<RadioTower aria-hidden="true" />
 					</span>
 					<div>
 						<small>可管理 namespace</small>
@@ -88,7 +88,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 				</article>
 				<article className="card">
 					<span>
-						<Database />
+						<Database aria-hidden="true" />
 					</span>
 					<div>
 						<small>DNS records</small>
@@ -97,7 +97,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 				</article>
 				<article className="card">
 					<span>
-						<Cloud />
+						<Cloud aria-hidden="true" />
 					</span>
 					<div>
 						<small>Proxied records</small>
@@ -106,7 +106,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 				</article>
 				<article className="card">
 					<span>
-						<Activity />
+						<Activity aria-hidden="true" />
 					</span>
 					<div>
 						<small>最近 cache purge</small>
@@ -131,7 +131,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 										<b>{event.action}</b>
 										<small>{event.hostname ?? event.namespace ?? "帳號操作"}</small>
 									</div>
-									<time>{formatTime(event.createdAt)}</time>
+									<time dateTime={new Date(event.createdAt).toISOString()}>{formatTime(event.createdAt)}</time>
 								</li>
 							))}
 						</ul>
@@ -141,7 +141,7 @@ export default function DashboardOverview({ loaderData }: Route.ComponentProps) 
 				</section>
 				<aside className={`card ${styles.security}`}>
 					<span>
-						<ShieldCheck />
+						<ShieldCheck aria-hidden="true" />
 					</span>
 					<h2>先確認目標，再執行 mutation</h2>
 					<p>更新或刪除 DNS record 時，後端會用 record ID 重新讀取 Cloudflare 現況，並同時驗證舊 hostname 與新 hostname。</p>

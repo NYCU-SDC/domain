@@ -13,7 +13,7 @@ export const meta: Route.MetaFunction = () =>
 
 export default function SecurityPage() {
 	return (
-		<main className={styles.main} id="main-content">
+		<main className={styles.main} id="main-content" tabIndex={-1}>
 			<article className={styles.content}>
 				<h1>隱私與安全</h1>
 				<p className={styles.lead}>

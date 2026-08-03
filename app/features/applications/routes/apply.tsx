@@ -121,7 +121,7 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 
 	if (actionData?.ok) {
 		return (
-			<main className={styles.success} id="main-content">
+			<main className={styles.success} id="main-content" tabIndex={-1}>
 				<span className={styles.successIcon}>
 					<Check aria-hidden="true" />
 				</span>
@@ -145,10 +145,10 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 	const errorFor = (field: string) => actionData?.errors?.[field];
 	const hasError = (field: string) => Boolean(errorFor(field));
 	return (
-		<main className={styles.layout} id="main-content">
+		<main className={styles.layout} id="main-content" tabIndex={-1}>
 			<aside className={styles.intro}>
 				<Link className={styles.back} to="/">
-					<ArrowLeft size={17} />
+					<ArrowLeft aria-hidden="true" size={17} />
 					回到首頁
 				</Link>
 				<h1>

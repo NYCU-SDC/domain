@@ -13,7 +13,7 @@ export const meta: Route.MetaFunction = () =>
 
 export default function StatusPage() {
 	return (
-		<main className={styles.main} id="main-content">
+		<main className={styles.main} id="main-content" tabIndex={-1}>
 			<article className={styles.content}>
 				<h1>服務狀態入口</h1>
 				<p className={styles.lead}>獨立的外部 status provider 尚未綁定。此頁保留為正式狀態入口；事故期間即使 dashboard 不可用，也應由維護者在外部狀態頁更新資訊。</p>

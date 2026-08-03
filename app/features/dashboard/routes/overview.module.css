@@ -28,17 +28,17 @@
 	padding: 1.25rem;
 }
 .metrics article:nth-child(1) {
-	background: var(--blue);
-	color: #fff;
+	background: color-mix(in srgb, var(--blue) 34%, var(--surface));
+	color: #000;
 }
 .metrics article:nth-child(2) {
 	background: var(--yellow);
 }
 .metrics article:nth-child(3) {
-	background: var(--green);
+	background: color-mix(in srgb, var(--green) 30%, var(--surface));
 }
 .metrics article:nth-child(4) {
-	background: var(--purple);
+	background: color-mix(in srgb, var(--purple) 30%, var(--surface));
 }
 .metrics article > span {
 	display: grid;
@@ -85,6 +85,9 @@
 }
 .sectionTop a,
 .security a {
+	display: inline-flex;
+	min-height: 2.75rem;
+	align-items: center;
 	color: var(--brand);
 	font-size: 0.8125rem;
 	font-weight: 750;

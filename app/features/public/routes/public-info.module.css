@@ -57,7 +57,7 @@
 	padding: 1.125rem 1.25rem;
 	margin-bottom: 1rem;
 	border-radius: var(--radius-lg);
-	background: var(--green);
+	background: color-mix(in srgb, var(--green) 28%, var(--surface));
 	color: #000;
 }
 

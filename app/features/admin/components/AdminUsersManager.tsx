@@ -1,7 +1,8 @@
 import { BadgeCheck, Ban, GitFork, KeyRound, Pencil, Plus, Search, Shield, UserCheck, X } from "lucide-react";
-import { useMemo, useState, type SyntheticEvent } from "react";
+import { useCallback, useMemo, useRef, useState, type SyntheticEvent } from "react";
 
 import { apiRequest } from "~/shared/client/api";
+import { useDialogFocus } from "~/shared/client/useDialogFocus";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
 import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
@@ -70,6 +71,9 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 	const [form, setForm] = useState<FormState>(initialForm);
 	const [preview, setPreview] = useState<GithubPreview | null>(null);
 	const [busy, setBusy] = useState(false);
+	const modalRef = useRef<HTMLElement>(null);
+	const closeModal = useCallback(() => setModal(null), []);
+	useDialogFocus(Boolean(modal), modalRef, closeModal);
 
 	const filtered = useMemo(
 		() =>
@@ -164,16 +168,19 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 			{filtered.length ? (
 				<DataTableFrame className={styles.table}>
 					<table>
+						<caption className="srOnly">使用者與 namespace 權限</caption>
 						<thead>
 							<tr>
-								<th>User</th>
-								<th>GitHub numeric ID</th>
-								<th>Status</th>
-								<th>Role</th>
-								<th>Namespaces</th>
-								<th>Internal note</th>
-								<th>Last login</th>
-								<th />
+								<th scope="col">User</th>
+								<th scope="col">GitHub numeric ID</th>
+								<th scope="col">Status</th>
+								<th scope="col">Role</th>
+								<th scope="col">Namespaces</th>
+								<th scope="col">Internal note</th>
+								<th scope="col">Last login</th>
+								<th scope="col">
+									<span className="srOnly">操作</span>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -234,10 +241,10 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 			)}
 			{modal ? (
 				<div className={styles.backdrop}>
-					<section className={styles.modal} role="dialog" aria-modal="true" aria-labelledby="admin-user-form-title">
+					<section className={styles.modal} ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="admin-user-form-title" tabIndex={-1}>
 						<header>
 							<h2 id="admin-user-form-title">{modal === "create" ? "新增 GitHub 使用者" : `編輯 @${editing?.githubLogin ?? ""}`}</h2>
-							<button aria-label="關閉" onClick={() => setModal(null)} type="button">
+							<button aria-label="關閉" onClick={closeModal} type="button">
 								<X aria-hidden="true" />
 							</button>
 						</header>
@@ -273,7 +280,7 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 										<span>@{preview.login}</span>
 										<code>GitHub ID: {preview.id}</code>
 									</div>
-									<BadgeCheck />
+									<BadgeCheck aria-hidden="true" />
 								</div>
 							) : null}
 							<div className={styles.formGrid}>
@@ -331,18 +338,18 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 							</div>
 							{editing?.isBootstrapAdmin ? (
 								<div className={styles.protected}>
-									<UserCheck />
+									<UserCheck aria-hidden="true" />
 									Bootstrap admin 的 admin 權限不可透過 UI 移除。
 								</div>
 							) : null}
 							{modal === "edit" ? (
 								<div className={styles.sessionWarning}>
-									<Ban />
+									<Ban aria-hidden="true" />
 									任何 status、admin、note 或 grant 變更都會撤銷此使用者所有 sessions。
 								</div>
 							) : null}
 							<footer>
-								<button className="button" onClick={() => setModal(null)} type="button">
+								<button className="button" onClick={closeModal} type="button">
 									取消
 								</button>
 								<button className="button buttonPrimary" disabled={busy || (modal === "create" && !preview)} type="submit">

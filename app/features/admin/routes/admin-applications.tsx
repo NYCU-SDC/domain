@@ -127,7 +127,7 @@ export default function AdminApplications({ actionData, loaderData }: Route.Comp
 								<header>
 									<div className={styles.identity}>
 										<span className={styles.status} data-status={application.status}>
-											{application.status === "approved" ? <CheckCircle2 /> : application.status === "rejected" ? <XCircle /> : <Clock3 />}
+											{application.status === "approved" ? <CheckCircle2 aria-hidden="true" /> : application.status === "rejected" ? <XCircle aria-hidden="true" /> : <Clock3 aria-hidden="true" />}
 											{statusLabels[application.status]}
 										</span>
 										<h2>{application.organizationName}</h2>
@@ -147,7 +147,7 @@ export default function AdminApplications({ actionData, loaderData }: Route.Comp
 											<dd>
 												<a href={`https://github.com/${application.githubLogin}`} rel="noreferrer" target="_blank">
 													@{application.githubLogin}
-													<ExternalLink size={14} />
+													<ExternalLink aria-hidden="true" size={14} />
 												</a>
 											</dd>
 										</div>
@@ -161,7 +161,7 @@ export default function AdminApplications({ actionData, loaderData }: Route.Comp
 												{application.currentWebsiteUrl ? (
 													<a href={application.currentWebsiteUrl} rel="noreferrer" target="_blank">
 														開啟網站
-														<ExternalLink size={14} />
+														<ExternalLink aria-hidden="true" size={14} />
 													</a>
 												) : (
 													"未提供"

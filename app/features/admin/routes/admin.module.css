@@ -10,17 +10,17 @@
 	padding: 1.25rem;
 }
 .metrics article:nth-child(1) {
-	background: var(--blue);
+	background: color-mix(in srgb, var(--blue) 34%, var(--surface));
 	color: #000;
 }
 .metrics article:nth-child(2) {
 	background: var(--yellow);
 }
 .metrics article:nth-child(3) {
-	background: var(--orange);
+	background: color-mix(in srgb, var(--orange) 38%, var(--surface));
 }
 .metrics article:nth-child(4) {
-	background: var(--green);
+	background: color-mix(in srgb, var(--green) 30%, var(--surface));
 }
 .metrics article > svg {
 	width: 1.75rem;

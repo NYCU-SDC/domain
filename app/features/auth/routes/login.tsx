@@ -28,7 +28,7 @@ export const meta: Route.MetaFunction = () => createPrivateMeta("登入｜nycu.c
 
 export default function Login({ loaderData }: Route.ComponentProps) {
 	return (
-		<main className={styles.main} id="main-content">
+		<main className={styles.main} id="main-content" tabIndex={-1}>
 			<section className={styles.panel}>
 				<h1>登入</h1>
 				{loaderData.errorMessage ? (

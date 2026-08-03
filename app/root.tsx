@@ -58,7 +58,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 		detail = error.message;
 	}
 	return (
-		<main className="errorPage" id="main-content">
+		<main className="errorPage" id="main-content" tabIndex={-1}>
 			<title>{`${status} ${title}｜nycu.club`}</title>
 			<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 			<a className="brand" href="/" aria-label="回到 nycu.club 首頁">

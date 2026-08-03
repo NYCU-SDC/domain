@@ -1,6 +1,7 @@
 import { ChevronRight, FileJson, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
+import { useDialogFocus } from "~/shared/client/useDialogFocus";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
 import styles from "./AuditTable.module.css";
@@ -38,6 +39,9 @@ export function AuditTable({ items }: { readonly items: AuditItem[] }) {
 	const [search, setSearch] = useState("");
 	const [status, setStatus] = useState("all");
 	const [selected, setSelected] = useState<AuditItem | null>(null);
+	const drawerRef = useRef<HTMLElement>(null);
+	const closeDrawer = useCallback(() => setSelected(null), []);
+	useDialogFocus(Boolean(selected), drawerRef, closeDrawer);
 	const filtered = useMemo(
 		() =>
 			items.filter(item => {
@@ -64,22 +68,25 @@ export function AuditTable({ items }: { readonly items: AuditItem[] }) {
 			{filtered.length ? (
 				<DataTableFrame className={styles.table}>
 					<table>
+						<caption className="srOnly">操作紀錄</caption>
 						<thead>
 							<tr>
-								<th>時間</th>
-								<th>Action</th>
-								<th>Target</th>
-								<th>Namespace</th>
-								<th>Status</th>
-								<th>Request ID</th>
-								<th />
+								<th scope="col">時間</th>
+								<th scope="col">Action</th>
+								<th scope="col">Target</th>
+								<th scope="col">Namespace</th>
+								<th scope="col">Status</th>
+								<th scope="col">Request ID</th>
+								<th scope="col">
+									<span className="srOnly">詳細資料</span>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{filtered.map(item => (
 								<tr key={item.id}>
 									<td>
-										<time>{formatTime(item.createdAt)}</time>
+										<time dateTime={new Date(item.createdAt).toISOString()}>{formatTime(item.createdAt)}</time>
 									</td>
 									<td>
 										<b>{item.action}</b>
@@ -111,10 +118,10 @@ export function AuditTable({ items }: { readonly items: AuditItem[] }) {
 			)}
 			{selected ? (
 				<div className={styles.drawerBackdrop}>
-					<aside className={styles.drawer} aria-label="Audit JSON detail">
+					<aside aria-labelledby="audit-detail-title" aria-modal="true" className={styles.drawer} ref={drawerRef} role="dialog" tabIndex={-1}>
 						<header>
-							<h2>{selected.action}</h2>
-							<button onClick={() => setSelected(null)} aria-label="關閉" type="button">
+							<h2 id="audit-detail-title">{selected.action}</h2>
+							<button onClick={closeDrawer} aria-label="關閉" type="button">
 								<X aria-hidden="true" />
 							</button>
 						</header>

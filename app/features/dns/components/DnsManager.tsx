@@ -1,7 +1,8 @@
 import { Check, Clipboard, Cloud, CloudOff, FilePenLine, Filter, Plus, RefreshCw, Search, ShieldAlert, Trash2, X } from "lucide-react";
-import { useMemo, useState, type SyntheticEvent } from "react";
+import { useCallback, useMemo, useRef, useState, type SyntheticEvent } from "react";
 
 import { apiRequest } from "~/shared/client/api";
+import { useDialogFocus } from "~/shared/client/useDialogFocus";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
 import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
@@ -117,6 +118,9 @@ export function DnsManager(props: Props) {
 	const [editing, setEditing] = useState<RecordView | null>(null);
 	const [form, setForm] = useState<FormState>(() => emptyForm(props.grants[0] ?? ""));
 	const [busy, setBusy] = useState(false);
+	const modalRef = useRef<HTMLElement>(null);
+	const closeModal = useCallback(() => setModalOpen(false), []);
+	useDialogFocus(modalOpen, modalRef, closeModal);
 
 	const filtered = useMemo(
 		() =>
@@ -319,15 +323,16 @@ export function DnsManager(props: Props) {
 			{visible.length ? (
 				<DataTableFrame className={styles.tableWrap}>
 					<table>
+						<caption className="srOnly">可管理的 DNS records</caption>
 						<thead>
 							<tr>
-								<th>Type</th>
-								<th>Name</th>
-								<th>Content / Target</th>
-								<th>Proxy</th>
-								<th>TTL</th>
-								<th>Namespace</th>
-								<th>
+								<th scope="col">Type</th>
+								<th scope="col">Name</th>
+								<th scope="col">Content / Target</th>
+								<th scope="col">Proxy</th>
+								<th scope="col">TTL</th>
+								<th scope="col">Namespace</th>
+								<th scope="col">
 									<span className="srOnly">Actions</span>
 								</th>
 							</tr>
@@ -346,24 +351,24 @@ export function DnsManager(props: Props) {
 									<td>
 										<button className={styles.copyValue} onClick={() => copy(record.name)} title="複製 hostname" type="button">
 											<code>{record.name}</code>
-											<Clipboard />
+											<Clipboard aria-hidden="true" />
 										</button>
 									</td>
 									<td>
 										<button className={styles.copyValue} onClick={() => copy(valueForRecord(record))} title="複製內容" type="button">
 											<span>{valueForRecord(record)}</span>
-											<Clipboard />
+											<Clipboard aria-hidden="true" />
 										</button>
 									</td>
 									<td>
 										{record.proxied ? (
 											<span className="statusPill" data-tone="success">
-												<Cloud />
+												<Cloud aria-hidden="true" />
 												Proxied
 											</span>
 										) : (
 											<span className="statusPill">
-												<CloudOff />
+												<CloudOff aria-hidden="true" />
 												DNS only
 											</span>
 										)}
@@ -439,11 +444,11 @@ export function DnsManager(props: Props) {
 
 			{modalOpen ? (
 				<div className={styles.modalBackdrop} role="presentation">
-					<section className={styles.modal} role="dialog" aria-modal="true" aria-labelledby="dns-form-title">
+					<section className={styles.modal} ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="dns-form-title" tabIndex={-1}>
 						<header>
 							<h2 id="dns-form-title">{editing ? `編輯 ${editing.name}` : "建立 DNS record"}</h2>
-							<button onClick={() => setModalOpen(false)} aria-label="關閉" type="button">
-								<X />
+							<button onClick={closeModal} aria-label="關閉" type="button">
+								<X aria-hidden="true" />
 							</button>
 						</header>
 						<form onSubmit={submit}>
@@ -672,7 +677,7 @@ export function DnsManager(props: Props) {
 							)}
 							{deepProxy ? (
 								<div className={styles.tlsWarning} role="alert">
-									<ShieldAlert />
+									<ShieldAlert aria-hidden="true" />
 									<p>
 										<b>多層子網域 TLS 警告</b>Cloudflare Universal SSL 在一般 full setup 下通常只涵蓋根網域與第一層子網域。若未啟用 Total TLS、Advanced Certificate 或其他對應憑證，開啟 Proxy 可能造成
 										HTTPS 憑證錯誤。{props.allowProxiedDeepSubdomains ? " 系統管理員已允許操作，但仍請確認憑證。" : " 請改用 DNS only，或聯絡管理員確認憑證設定。"}
@@ -680,7 +685,7 @@ export function DnsManager(props: Props) {
 								</div>
 							) : null}
 							<footer>
-								<button className="button" onClick={() => setModalOpen(false)} type="button">
+								<button className="button" onClick={closeModal} type="button">
 									取消
 								</button>
 								<button className="button buttonPrimary" disabled={busy || (!props.allowProxiedDeepSubdomains && deepProxy)} type="submit">
@@ -688,7 +693,7 @@ export function DnsManager(props: Props) {
 										"儲存中…"
 									) : (
 										<>
-											<Check />
+											<Check aria-hidden="true" />
 											{editing ? "儲存變更" : "建立 record"}
 										</>
 									)}

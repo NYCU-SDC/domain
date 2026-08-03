@@ -25,7 +25,7 @@ export const meta: Route.MetaFunction = () => createPrivateMeta("等待授權｜
 
 export default function AccessPending({ loaderData }: Route.ComponentProps) {
 	return (
-		<main className={styles.page} id="main-content">
+		<main className={styles.page} id="main-content" tabIndex={-1}>
 			<section className={`card ${styles.card}`}>
 				<span className={styles.stateIcon}>
 					<Clock3 aria-hidden="true" />
@@ -49,7 +49,7 @@ export default function AccessPending({ loaderData }: Route.ComponentProps) {
 					<form action="/logout" method="post">
 						<input type="hidden" name="csrfToken" value={loaderData.csrfToken} />
 						<button className="button" type="submit">
-							<LogOut size={17} /> 登出
+							<LogOut aria-hidden="true" size={17} /> 登出
 						</button>
 					</form>
 				</div>

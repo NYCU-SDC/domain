@@ -26,6 +26,9 @@
 }
 
 .links a {
+	display: flex;
+	min-height: 2.75rem;
+	align-items: center;
 	font-size: 0.9rem;
 	font-weight: 760;
 	text-decoration: none;
@@ -57,7 +60,7 @@
 	}
 
 	.actions :global(.button) {
-		min-height: 2.5rem;
+		min-height: 2.75rem;
 		padding-inline: 0.75rem;
 	}
 }

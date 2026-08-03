@@ -34,7 +34,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 	return (
 		<ToastContext.Provider value={value}>
 			{children}
-			<div className={styles.viewport} aria-live="polite" aria-label="通知">
+			<div className={styles.viewport} aria-atomic="false" aria-live="polite" aria-label="通知" role="region">
 				{toasts.map(toast => {
 					const Icon = toast.tone === "success" ? CheckCircle2 : toast.tone === "error" ? CircleAlert : Info;
 					return (
@@ -42,7 +42,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 							<Icon aria-hidden="true" />
 							<span>{toast.message}</span>
 							<button aria-label="關閉通知" onClick={() => dismiss(toast.id)} type="button">
-								<X />
+								<X aria-hidden="true" />
 							</button>
 						</div>
 					);

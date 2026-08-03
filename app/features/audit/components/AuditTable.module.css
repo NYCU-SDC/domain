@@ -6,7 +6,7 @@
 .filters label {
 	display: flex;
 	min-width: min(26.25rem, 100%);
-	min-height: 2.625rem;
+	min-height: 2.75rem;
 	align-items: center;
 	gap: 0.5rem;
 	padding: 0 0.6875rem;
@@ -19,12 +19,13 @@
 }
 .filters input {
 	width: 100%;
+	min-height: 2.75rem;
 	border: 0;
 	outline: 0;
 	background: transparent;
 }
 .filters select {
-	min-height: 2.625rem;
+	min-height: 2.75rem;
 	padding: 0 0.625rem;
 	border: 0;
 	border-radius: 0.5625rem;
@@ -48,8 +49,8 @@
 .table button,
 .drawer header button {
 	display: grid;
-	width: 2.125rem;
-	height: 2.125rem;
+	width: 2.75rem;
+	height: 2.75rem;
 	place-items: center;
 	border: 0;
 	border-radius: 0.5rem;

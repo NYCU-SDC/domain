@@ -15,6 +15,7 @@
 
 .back {
 	display: inline-flex;
+	min-height: 2.75rem;
 	align-items: center;
 	gap: 0.4375rem;
 	margin-bottom: 2.5rem;
@@ -33,7 +34,7 @@
 }
 
 .intro h1 span {
-	color: var(--purple);
+	color: var(--text);
 }
 
 .intro > p {
@@ -146,8 +147,8 @@
 	padding: 0.875rem 1rem;
 	margin-top: 1.5rem;
 	border-radius: 0.875rem;
-	background: var(--red);
-	color: #fff;
+	background: color-mix(in srgb, var(--red) 22%, var(--surface));
+	color: #000;
 	font-weight: 750;
 }
 
@@ -202,7 +203,7 @@
 	height: 4.5rem;
 	place-items: center;
 	border-radius: 1.25rem;
-	background: var(--green);
+	background: color-mix(in srgb, var(--green) 30%, var(--surface));
 	color: #080808;
 }
 

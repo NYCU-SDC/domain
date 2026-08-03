@@ -21,7 +21,11 @@
 }
 .closeMenu {
 	display: none;
+	width: 2.75rem;
+	height: 2.75rem;
+	place-items: center;
 	border: 0;
+	border-radius: 50%;
 	background: transparent;
 }
 .sideNav {
@@ -74,8 +78,8 @@
 }
 .menuButton {
 	display: none;
-	width: 2.5rem;
-	height: 2.5rem;
+	width: 2.75rem;
+	height: 2.75rem;
 	place-items: center;
 	border: 0;
 	border-radius: 50%;
@@ -101,7 +105,7 @@
 .namespaceSelect select {
 	appearance: none;
 	width: 100%;
-	min-height: 2.5rem;
+	min-height: 2.75rem;
 	padding: 0.4375rem 2.25rem 0.4375rem 0.875rem;
 	border: 0;
 	border-radius: 62.4375rem;
@@ -163,11 +167,18 @@
 		position: fixed;
 		width: 17.5rem;
 		transform: translateX(-105%);
-		transition: transform 170ms ease;
+		visibility: hidden;
+		transition:
+			transform 170ms ease,
+			visibility 170ms step-end;
 	}
 	.sidebar[data-open="true"] {
 		transform: translateX(0);
+		visibility: visible;
 		box-shadow: var(--shadow-lg);
+		transition:
+			transform 170ms ease,
+			visibility 0ms;
 	}
 	.closeMenu,
 	.menuButton {

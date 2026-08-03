@@ -14,16 +14,16 @@
 	gap: 0.625rem;
 	padding: 0.8125rem 0.875rem;
 	border-radius: 0.6875rem;
-	background: var(--blue);
-	color: #fff;
+	background: color-mix(in srgb, var(--blue) 24%, var(--surface));
+	color: #000;
 }
 .toast[data-tone="success"] {
-	background: var(--green);
+	background: color-mix(in srgb, var(--green) 24%, var(--surface));
 	color: #000;
 }
 .toast[data-tone="error"] {
-	background: var(--red);
-	color: #fff;
+	background: color-mix(in srgb, var(--red) 22%, var(--surface));
+	color: #000;
 }
 .toast > svg {
 	width: 1.1875rem;
@@ -37,8 +37,8 @@
 }
 .toast button {
 	display: grid;
-	width: 2rem;
-	height: 2rem;
+	width: 2.75rem;
+	height: 2.75rem;
 	place-items: center;
 	border: 0;
 	border-radius: 0.5rem;
