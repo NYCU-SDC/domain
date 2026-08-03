@@ -1,1 +1,10 @@
 pnpm-lock.yaml
+.agents/
+template/
+.react-router/
+.wrangler/
+build/
+coverage/
+playwright-report/
+test-results/
+worker-configuration.d.ts

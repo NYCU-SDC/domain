@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   quality:
-    name: Lint, typecheck, test, and build
+    name: Format, lint, typecheck, test, and build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -32,6 +32,9 @@ jobs:
 
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
 
       - name: Lint
         run: pnpm lint
