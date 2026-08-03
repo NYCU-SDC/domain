@@ -222,7 +222,7 @@ pnpm exec wrangler d1 create nycu-club
 pnpm exec wrangler d1 create nycu-club-staging
 ```
 
-把輸出的 `database_id` 分別填入 `wrangler.jsonc` 的 production 與 staging D1 binding。不要保留 repository 內的全零範例 ID。
+Production `nycu-club` D1 與 `nycu.club` zone ID 已寫入 `wrangler.jsonc`。若建立 staging database，請把輸出的 `database_id` 填入 staging D1 binding；不要在可部署的環境保留全零範例 ID。
 
 Local migration：
 
@@ -396,7 +396,20 @@ Pull request 與 `main` push 會執行 frozen install 及以上四個 checks。�
 4. GitHub OAuth production callback 正確。
 5. `nycu.club` custom domain 可由此 Worker deployment 使用。
 
-手動部署：
+### Cloudflare Workers Builds
+
+Production Worker 已連接 GitHub repository `NYCU-SDC/domain`。Push 到 `main` 時，Cloudflare Workers Builds 會依序執行：
+
+```text
+pnpm lint && pnpm typecheck && pnpm test && pnpm build
+pnpm exec wrangler deploy
+```
+
+Build environment 固定設定 `CLOUDFLARE_ENV=production` 與 Node.js 22，production deploy config 因此會使用 `https://nycu.club`、production D1 與 production rate-limit bindings。只有 `main` 會自動部署；`.agents/**` 與 `template/**` 不會觸發 production build。
+
+### 手動部署與 fallback
+
+本機手動部署：
 
 ```bash
 pnpm db:migrate:remote
@@ -410,7 +423,7 @@ pnpm db:migrate:staging
 pnpm deploy:staging
 ```
 
-`.github/workflows/deploy.yml` 是手動 `workflow_dispatch`，需要 GitHub Environment `production` 與：
+`.github/workflows/deploy.yml` 保留為手動 `workflow_dispatch` fallback，需要 GitHub Environment `production` 與：
 
 - `CLOUDFLARE_ACCOUNT_ID`
 - `CLOUDFLARE_DEPLOY_API_TOKEN`：具有 Workers Scripts 與 D1 deployment/migration 所需權限

@@ -76,9 +76,9 @@
       "vars": {
         "ENVIRONMENT": "production",
         "APP_ORIGIN": "https://nycu.club",
-        "CLOUDFLARE_ZONE_ID": "replace-with-production-zone-id",
+        "CLOUDFLARE_ZONE_ID": "c75bba10864c551932c66bb1c71dbe88",
         "CLOUDFLARE_ZONE_NAME": "nycu.club",
-        "BOOTSTRAP_ADMIN_GITHUB_IDS": "",
+        "BOOTSTRAP_ADMIN_GITHUB_IDS": "107802416",
         "PROTECTED_HOSTNAMES": "[\"nycu.club\",\"www.nycu.club\",\"api.nycu.club\",\"mail.nycu.club\",\"_dmarc.nycu.club\"]",
         "PROTECTED_RECORD_IDS": "[]",
         "ALLOW_PROXIED_DEEP_SUBDOMAINS": "false",
@@ -89,7 +89,7 @@
         {
           "binding": "DB",
           "database_name": "nycu-club",
-          "database_id": "00000000-0000-0000-0000-000000000000",
+          "database_id": "c60bfe85-b4f2-42a1-9f8c-ca4e06bfccd7",
           "migrations_dir": "drizzle"
         }
       ],
