@@ -19,21 +19,18 @@
 	height: 52px;
 	place-items: center;
 	margin-bottom: 20px;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 15px;
 	background: var(--yellow);
 	color: #080808;
 }
 .card img {
 	margin: 8px 0 17px;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 50%;
 }
 .card h1 {
 	max-width: 15ch;
 	margin: 0;
 	font-size: clamp(30px, 6vw, 46px);
-	letter-spacing: -0.04em;
 	line-height: 1.12;
 }
 .card > p {
@@ -49,7 +46,6 @@
 	gap: 12px;
 	padding: 18px;
 	margin: 26px 0;
-	border: 1px solid var(--border);
 	border-radius: 12px;
 	background: var(--surface-muted);
 	text-align: left;

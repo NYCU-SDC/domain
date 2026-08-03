@@ -11,7 +11,6 @@
 	height: 100vh;
 	flex-direction: column;
 	padding: 22px 16px;
-	border-right: 1.5px solid var(--border-strong);
 	background: var(--surface);
 }
 .sidebarTop {
@@ -42,7 +41,6 @@
 	align-items: center;
 	gap: 11px;
 	padding: 8px 12px;
-	border: 1.5px solid transparent;
 	border-radius: 999px;
 	color: var(--text-muted);
 	font-size: 14px;
@@ -53,12 +51,10 @@
 	width: 19px;
 }
 .sideNav a:hover {
-	border-color: var(--border-strong);
 	background: var(--surface-muted);
 	color: var(--text);
 }
 .sideNav a.active {
-	border-color: var(--border-strong);
 	background: var(--yellow);
 	color: #080808;
 }
@@ -74,16 +70,13 @@
 	align-items: center;
 	gap: 18px;
 	padding: 9px 24px;
-	border-bottom: 1.5px solid var(--border-strong);
-	background: color-mix(in srgb, var(--bg) 92%, transparent);
-	backdrop-filter: blur(14px);
+	background: var(--bg);
 }
 .menuButton {
 	display: none;
 	width: 40px;
 	height: 40px;
 	place-items: center;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 50%;
 	background: var(--surface);
 }
@@ -103,7 +96,6 @@
 	appearance: none;
 	min-height: 40px;
 	padding: 6px 32px 6px 12px;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 999px;
 	background: var(--surface);
 	font-size: 13px;
@@ -128,7 +120,6 @@
 	padding: 0 8px;
 }
 .profile img {
-	border: 1.5px solid var(--border-strong);
 	border-radius: 50%;
 }
 .profile span {

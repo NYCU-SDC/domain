@@ -2,7 +2,6 @@ import { ChevronDown, ClipboardList, Database, Gauge, History, LayoutDashboard, 
 import { useState } from "react";
 import { Form, NavLink, Outlet } from "react-router";
 
-import { ThemeToggle } from "../components/ThemeToggle";
 import { ToastProvider } from "../components/ToastProvider";
 import { requireDashboardPage } from "../lib/server/pages/page-auth.server";
 import type { Route } from "./+types/dashboard-layout";
@@ -90,7 +89,6 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 							<ChevronDown aria-hidden="true" />
 						</label>
 						<div className={styles.headerActions}>
-							<ThemeToggle />
 							<div className={styles.profile}>
 								<img src={loaderData.user.githubAvatarUrl} width="34" height="34" alt="" />
 								<span>

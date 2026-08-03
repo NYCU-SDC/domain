@@ -1,17 +1,15 @@
 .result {
 	padding: 13px 16px;
 	margin-bottom: 18px;
-	border: 1.5px solid var(--danger);
 	border-radius: 14px;
-	background: var(--danger-soft);
-	color: var(--danger);
+	background: var(--red);
+	color: #fff;
 	font-weight: 750;
 }
 
 .result[data-ok="true"] {
-	border-color: var(--green);
-	background: color-mix(in srgb, var(--green) 14%, var(--surface));
-	color: var(--success);
+	background: var(--green);
+	color: #000;
 }
 
 .filters {
@@ -19,7 +17,6 @@
 	grid-template-columns: minmax(220px, 1fr) 180px auto;
 	gap: 10px;
 	padding: 14px;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 18px;
 	background: var(--surface);
 }
@@ -42,9 +39,9 @@
 .reviewForm textarea {
 	width: 100%;
 	min-height: 44px;
-	border: 1.5px solid var(--border-strong);
+	border: 0;
 	border-radius: 12px;
-	background: var(--surface);
+	background: var(--bg);
 }
 
 .filters input {
@@ -66,7 +63,6 @@
 
 .summary strong {
 	font-size: 2.4rem;
-	letter-spacing: -0.06em;
 }
 
 .summary span {
@@ -81,7 +77,6 @@
 
 .application {
 	overflow: hidden;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 24px;
 	background: var(--surface);
 }
@@ -92,7 +87,6 @@
 	justify-content: space-between;
 	gap: 20px;
 	padding: 24px;
-	border-bottom: 1.5px solid var(--border-strong);
 }
 
 .application time {
@@ -108,7 +102,6 @@
 .identity h2 {
 	margin: 12px 0 2px;
 	font-size: clamp(1.45rem, 3vw, 2rem);
-	letter-spacing: -0.04em;
 }
 
 .identity code {
@@ -121,7 +114,6 @@
 	align-items: center;
 	gap: 6px;
 	padding: 4px 10px;
-	border: 1px solid currentColor;
 	border-radius: 999px;
 	font-size: 0.75rem;
 	font-weight: 820;
@@ -133,16 +125,20 @@
 }
 
 .status[data-status="pending"] {
-	color: var(--warning);
+	background: var(--yellow);
+	color: #000;
 }
 .status[data-status="reviewing"] {
-	color: var(--brand);
+	background: var(--blue);
+	color: #fff;
 }
 .status[data-status="approved"] {
-	color: var(--success);
+	background: var(--green);
+	color: #000;
 }
 .status[data-status="rejected"] {
-	color: var(--danger);
+	background: var(--red);
+	color: #fff;
 }
 
 .details {
@@ -200,7 +196,6 @@
 	align-items: center;
 	gap: 8px;
 	padding: 12px 24px;
-	border-block: 1.5px solid var(--border-strong);
 	background: var(--surface-muted);
 	font-size: 0.84rem;
 	font-weight: 700;
@@ -223,7 +218,7 @@
 	gap: 12px;
 	align-items: end;
 	padding: 24px;
-	background: color-mix(in srgb, var(--yellow) 12%, var(--surface));
+	background: var(--yellow);
 }
 
 .reviewForm label {

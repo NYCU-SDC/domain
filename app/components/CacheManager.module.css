@@ -9,7 +9,6 @@
 .tabs {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	border-bottom: 1px solid var(--border);
 	background: var(--surface-muted);
 }
 .tabs button {
@@ -19,15 +18,13 @@
 	justify-content: center;
 	gap: 8px;
 	border: 0;
-	border-bottom: 3px solid transparent;
 	background: transparent;
 	color: var(--text-muted);
 	font-weight: 700;
 }
 .tabs button[aria-selected="true"] {
-	border-color: var(--brand);
-	background: var(--surface);
-	color: var(--brand);
+	background: var(--blue);
+	color: #fff;
 }
 .tabs svg {
 	width: 18px;
@@ -53,7 +50,6 @@
 }
 .preview {
 	padding: 14px;
-	border: 1px solid var(--border);
 	border-radius: 10px;
 	background: var(--surface-muted);
 }
@@ -82,10 +78,9 @@
 	grid-template-columns: 23px 1fr;
 	gap: 10px;
 	padding: 14px;
-	border: 1px solid var(--warning);
 	border-radius: 10px;
-	background: color-mix(in srgb, var(--warning) 10%, transparent);
-	color: var(--warning);
+	background: var(--yellow);
+	color: #000;
 }
 .warning span {
 	display: grid;
@@ -127,18 +122,18 @@
 	align-items: center;
 	gap: 18px;
 	padding: 22px;
-	border-color: var(--danger);
-	background: var(--danger-soft);
+	background: var(--red);
+	color: #fff;
 }
 .dangerZone > svg {
-	color: var(--danger);
+	color: #fff;
 }
 .dangerZone h2,
 .dangerZone p {
 	margin: 0;
 }
 .dangerZone > div > p:last-child {
-	color: var(--text-muted);
+	color: #fff;
 }
 .confirm {
 	display: flex;

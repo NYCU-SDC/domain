@@ -5,10 +5,9 @@
 	gap: 12px;
 	padding: 14px;
 	margin-bottom: 16px;
-	border: 1px solid var(--danger);
 	border-radius: 11px;
-	background: var(--danger-soft);
-	color: var(--danger);
+	background: var(--red);
+	color: #fff;
 }
 .errorState span {
 	display: grid;
@@ -28,7 +27,6 @@
 	align-items: center;
 	gap: 8px;
 	padding: 0 10px;
-	border: 1px solid var(--border);
 	border-radius: 9px;
 	background: var(--surface);
 }
@@ -56,21 +54,21 @@
 }
 .tableWrap table {
 	width: 100%;
-	border-collapse: collapse;
+	border-collapse: separate;
+	border-spacing: 0 4px;
 }
 .tableWrap th {
 	padding: 11px 14px;
-	background: var(--surface-muted);
-	color: var(--text-muted);
+	background: var(--yellow);
+	color: #000;
 	font-size: 11px;
-	letter-spacing: 0.05em;
 	text-align: left;
 	text-transform: uppercase;
 }
 .tableWrap td {
 	max-width: 300px;
 	padding: 13px 14px;
-	border-top: 1px solid var(--border);
+	background: var(--surface);
 	font-size: 13px;
 	vertical-align: middle;
 }
@@ -80,10 +78,9 @@
 	justify-content: center;
 	padding: 3px 7px;
 	margin-right: 5px;
-	border: 1px solid color-mix(in srgb, var(--brand) 35%, var(--border));
 	border-radius: 6px;
-	background: var(--brand-soft);
-	color: var(--brand);
+	background: var(--blue);
+	color: #fff;
 	font:
 		750 12px ui-monospace,
 		monospace;
@@ -156,7 +153,6 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 12px 15px;
-	border-top: 1px solid var(--border);
 	color: var(--text-muted);
 	font-size: 12px;
 }
@@ -167,7 +163,6 @@
 .unsupported {
 	padding: 16px 18px;
 	margin-top: 18px;
-	border: 1px solid var(--border);
 	border-radius: 12px;
 	background: var(--surface);
 }
@@ -205,10 +200,8 @@
 	width: min(760px, 100%);
 	max-height: calc(100vh - 48px);
 	overflow: auto;
-	border: 1px solid var(--border);
 	border-radius: 18px;
 	background: var(--surface-raised);
-	box-shadow: var(--shadow-lg);
 }
 .modal > header {
 	position: sticky;
@@ -218,7 +211,6 @@
 	align-items: flex-start;
 	justify-content: space-between;
 	padding: 21px 24px;
-	border-bottom: 1px solid var(--border);
 	background: var(--surface-raised);
 }
 .modal h2 {
@@ -244,8 +236,8 @@
 	gap: 10px;
 	padding: 14px;
 	margin-top: 18px;
-	border: 1px solid var(--border);
 	border-radius: 11px;
+	background: var(--bg);
 }
 .proxyToggle input {
 	width: 18px;
@@ -257,8 +249,8 @@
 	height: 40px;
 	place-items: center;
 	border-radius: 10px;
-	background: var(--brand-soft);
-	color: var(--brand);
+	background: var(--blue);
+	color: #fff;
 }
 .proxyToggle div {
 	display: grid;
@@ -281,10 +273,9 @@
 	gap: 10px;
 	padding: 15px;
 	margin-top: 14px;
-	border: 1px solid var(--warning);
 	border-radius: 10px;
-	background: color-mix(in srgb, var(--warning) 11%, transparent);
-	color: var(--warning);
+	background: var(--yellow);
+	color: #000;
 }
 .tlsWarning p {
 	display: grid;
@@ -296,7 +287,6 @@
 	gap: 9px;
 	padding-top: 22px;
 	margin-top: 22px;
-	border-top: 1px solid var(--border);
 }
 @media (max-width: 1050px) {
 	.tableWrap {

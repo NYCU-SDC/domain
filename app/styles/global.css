@@ -1,105 +1,36 @@
+@import url("https://font.emtech.cc/css/MiSansTC.css");
+
 :root {
-	color-scheme: light dark;
-	--bg: #f3eae2;
-	--surface: #fffaf5;
-	--surface-raised: #fffdf9;
-	--surface-muted: #e9dfd6;
-	--text: #0a0a0a;
-	--text-muted: #5e5751;
-	--border: #aaa097;
-	--border-strong: #111111;
-	--brand: #087be8;
-	--brand-strong: #0064c4;
-	--brand-soft: #cfe7ff;
-	--blue: #087be8;
-	--yellow: #ffb400;
-	--orange: #ff5a0a;
-	--green: #00ad4f;
-	--purple: #aa4df2;
-	--red: #f03437;
-	--teal: #007e70;
-	--success: #006f39;
-	--warning: #8a4c00;
-	--danger: #b51427;
-	--danger-soft: #ffe1e4;
-	--focus: #7e35cf;
-	--shadow-sm: 3px 3px 0 rgb(10 10 10 / 12%);
-	--shadow-lg: 10px 12px 0 rgb(10 10 10 / 14%);
+	color-scheme: light;
+	--bg: #f4e9e1;
+	--surface: #fff;
+	--surface-raised: #fff;
+	--surface-muted: #f4e9e1;
+	--text: #000;
+	--text-muted: #000;
+	--brand: #0072e3;
+	--brand-strong: #000;
+	--brand-soft: #0072e3;
+	--blue: #0072e3;
+	--yellow: #ffb202;
+	--orange: #ff6101;
+	--green: #06aa3c;
+	--purple: #ab54f7;
+	--red: #e93837;
+	--teal: #06aa3c;
+	--success: #06aa3c;
+	--warning: #ffb202;
+	--danger: #e93837;
+	--danger-soft: #e93837;
+	--focus: #0072e3;
+	--shadow-sm: none;
+	--shadow-lg: none;
 	--radius-sm: 10px;
 	--radius: 18px;
 	--radius-lg: 28px;
-	font-family:
-		ui-sans-serif,
-		system-ui,
-		-apple-system,
-		BlinkMacSystemFont,
-		"Segoe UI",
-		sans-serif;
+	font-family: MiSansTC, sans-serif;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bg: #171411;
-		--surface: #221e1a;
-		--surface-raised: #29241f;
-		--surface-muted: #332d27;
-		--text: #fff8f1;
-		--text-muted: #c4b9ae;
-		--border: #746a61;
-		--border-strong: #f4e8dd;
-		--brand: #65aff7;
-		--brand-strong: #94c8fb;
-		--brand-soft: #153a5d;
-		--teal: #63d3c3;
-		--success: #64dc94;
-		--warning: #ffbe5c;
-		--danger: #ff858f;
-		--danger-soft: #4a2027;
-		--shadow-sm: 0 1px 2px rgb(0 0 0 / 25%);
-		--shadow-lg: 0 28px 80px rgb(0 0 0 / 40%);
-	}
-}
-
-:root[data-theme="light"] {
-	color-scheme: light;
-	--bg: #f3eae2;
-	--surface: #fffaf5;
-	--surface-raised: #fffdf9;
-	--surface-muted: #e9dfd6;
-	--text: #0a0a0a;
-	--text-muted: #5e5751;
-	--border: #aaa097;
-	--border-strong: #111111;
-	--brand: #087be8;
-	--brand-strong: #0064c4;
-	--brand-soft: #cfe7ff;
-	--teal: #007e70;
-	--success: #006f39;
-	--warning: #8a4c00;
-	--danger: #b51427;
-	--danger-soft: #ffe1e4;
-}
-
-:root[data-theme="dark"] {
-	color-scheme: dark;
-	--bg: #171411;
-	--surface: #221e1a;
-	--surface-raised: #29241f;
-	--surface-muted: #332d27;
-	--text: #fff8f1;
-	--text-muted: #c4b9ae;
-	--border: #746a61;
-	--border-strong: #f4e8dd;
-	--brand: #65aff7;
-	--brand-strong: #94c8fb;
-	--brand-soft: #153a5d;
-	--teal: #63d3c3;
-	--success: #64dc94;
-	--warning: #ffbe5c;
-	--danger: #ff858f;
-	--danger-soft: #4a2027;
 }
 
 * {
@@ -194,7 +125,6 @@ table {
 	gap: 10px;
 	color: var(--text);
 	font-weight: 900;
-	letter-spacing: -0.055em;
 	text-decoration: none;
 }
 
@@ -205,7 +135,7 @@ table {
 	justify-content: center;
 	gap: 9px;
 	padding: 9px 16px;
-	border: 1.5px solid var(--border-strong);
+	border: 0;
 	border-radius: 999px;
 	background: var(--surface);
 	color: var(--text);
@@ -217,29 +147,25 @@ table {
 		transform 120ms ease;
 }
 .button:hover {
-	background: var(--surface-muted);
+	background: var(--yellow);
 }
 .button:active {
 	transform: translateY(1px);
 }
 .buttonPrimary {
-	border-color: #0a0a0a;
-	background: #0a0a0a;
+	background: #000;
 	color: #fff;
 }
 .buttonPrimary:hover {
-	border-color: #0a0a0a;
 	background: var(--blue);
-	color: #050505;
+	color: #fff;
 }
 .buttonDanger {
-	border-color: var(--danger);
 	background: var(--danger);
 	color: #fff;
 }
 .buttonGhost {
-	border-color: transparent;
-	background: transparent;
+	background: var(--surface);
 }
 .buttonSmall {
 	min-height: 36px;
@@ -270,10 +196,8 @@ table {
 }
 
 .card {
-	border: 1.5px solid var(--border-strong);
 	border-radius: var(--radius);
 	background: var(--surface);
-	box-shadow: var(--shadow-sm);
 }
 
 .field {
@@ -291,18 +215,39 @@ table {
 	width: 100%;
 	min-height: 44px;
 	padding: 9px 11px;
-	border: 1.5px solid var(--border-strong);
+	border: 0;
 	border-radius: 12px;
-	background: var(--surface);
+	background: var(--bg);
 }
 .textarea {
 	min-height: 120px;
 	resize: vertical;
 }
-.input:hover,
-.select:hover,
-.textarea:hover {
-	border-color: var(--text-muted);
+input[type="checkbox"] {
+	display: inline-grid;
+	width: 18px;
+	height: 18px;
+	flex: 0 0 18px;
+	appearance: none;
+	place-content: center;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background: var(--surface);
+}
+input[type="checkbox"]::before {
+	width: 11px;
+	height: 11px;
+	background: var(--text);
+	clip-path: polygon(14% 44%, 0 59%, 39% 100%, 100% 22%, 83% 8%, 38% 67%);
+	content: "";
+	transform: scale(0);
+}
+input[type="checkbox"]:checked {
+	background: var(--green);
+}
+input[type="checkbox"]:checked::before {
+	transform: scale(1);
 }
 .helpText {
 	margin: 0;
@@ -328,22 +273,22 @@ table {
 	font-weight: 750;
 }
 .statusPill[data-tone="success"] {
-	background: color-mix(in srgb, var(--success) 15%, transparent);
-	color: var(--success);
+	background: var(--green);
+	color: #000;
 }
 .statusPill[data-tone="warning"] {
-	background: color-mix(in srgb, var(--warning) 15%, transparent);
-	color: var(--warning);
+	background: var(--yellow);
+	color: #000;
 }
 .statusPill[data-tone="danger"] {
-	background: var(--danger-soft);
-	color: var(--danger);
+	background: var(--red);
+	color: #fff;
 }
 
 .skeleton {
 	min-height: 18px;
 	border-radius: 7px;
-	background: linear-gradient(90deg, var(--surface-muted) 25%, var(--border) 50%, var(--surface-muted) 75%);
+	background: linear-gradient(90deg, var(--surface) 25%, var(--yellow) 50%, var(--surface) 75%);
 	background-size: 200% 100%;
 	animation: skeleton 1.4s ease-in-out infinite;
 }

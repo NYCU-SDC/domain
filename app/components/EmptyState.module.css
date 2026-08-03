@@ -4,7 +4,6 @@
 	place-items: center;
 	align-content: center;
 	padding: 34px;
-	border: 1px dashed var(--border);
 	border-radius: var(--radius);
 	background: var(--surface);
 	text-align: center;

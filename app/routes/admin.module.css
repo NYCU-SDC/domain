@@ -10,16 +10,17 @@
 	padding: 20px;
 }
 .metrics article:nth-child(1) {
-	background: color-mix(in srgb, var(--blue) 22%, var(--surface));
+	background: var(--blue);
+	color: #fff;
 }
 .metrics article:nth-child(2) {
-	background: color-mix(in srgb, var(--yellow) 26%, var(--surface));
+	background: var(--yellow);
 }
 .metrics article:nth-child(3) {
-	background: color-mix(in srgb, var(--orange) 18%, var(--surface));
+	background: var(--orange);
 }
 .metrics article:nth-child(4) {
-	background: color-mix(in srgb, var(--green) 20%, var(--surface));
+	background: var(--green);
 }
 .metrics article > svg {
 	width: 28px;
@@ -83,7 +84,8 @@
 	justify-content: space-between;
 	gap: 12px;
 	padding: 11px 0;
-	border-top: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--bg);
 	font-size: 13px;
 }
 .columns li span:not(.statusPill) {

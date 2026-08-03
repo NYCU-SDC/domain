@@ -11,9 +11,8 @@
 	align-items: center;
 	gap: 8px;
 	padding: 0 11px;
-	border: 1px solid var(--border);
 	border-radius: 9px;
-	background: var(--surface);
+	background: var(--bg);
 }
 .toolbar label svg {
 	width: 17px;
@@ -28,9 +27,9 @@
 .toolbar select {
 	min-height: 42px;
 	padding: 0 10px;
-	border: 1px solid var(--border);
+	border: 0;
 	border-radius: 9px;
-	background: var(--surface);
+	background: var(--bg);
 }
 .toolbar button {
 	margin-left: auto;
@@ -41,12 +40,12 @@
 .table table {
 	width: 100%;
 	min-width: 1180px;
-	border-collapse: collapse;
+	border-collapse: separate;
+	border-spacing: 0 4px;
 }
 .table th,
 .table td {
 	padding: 12px 13px;
-	border-bottom: 1px solid var(--border);
 	text-align: left;
 }
 .table th {
@@ -57,7 +56,17 @@
 }
 .table td {
 	max-width: 210px;
+	background: var(--surface);
 	font-size: 12px;
+}
+.table tbody tr:nth-child(even) td {
+	background: var(--bg);
+}
+.table td:first-child {
+	border-radius: 10px 0 0 10px;
+}
+.table td:last-child {
+	border-radius: 0 10px 10px 0;
 }
 .table td:first-child a {
 	display: flex;
@@ -136,10 +145,8 @@
 	width: min(760px, 100%);
 	max-height: calc(100vh - 48px);
 	overflow: auto;
-	border: 1px solid var(--border);
 	border-radius: 18px;
 	background: var(--surface-raised);
-	box-shadow: var(--shadow-lg);
 }
 .modal header {
 	position: sticky;
@@ -149,7 +156,6 @@
 	align-items: flex-start;
 	justify-content: space-between;
 	padding: 21px 24px;
-	border-bottom: 1px solid var(--border);
 	background: var(--surface-raised);
 }
 .modal h2 {
@@ -171,9 +177,9 @@
 	gap: 12px;
 	padding: 13px;
 	margin-top: 13px;
-	border: 1px solid var(--success);
 	border-radius: 10px;
-	background: color-mix(in srgb, var(--success) 9%, transparent);
+	background: var(--green);
+	color: #000;
 }
 .preview img {
 	border-radius: 50%;
@@ -203,8 +209,8 @@
 	align-items: center;
 	gap: 9px;
 	padding: 12px;
-	border: 1px solid var(--border);
 	border-radius: 10px;
+	background: var(--bg);
 }
 .check input {
 	width: 18px;
@@ -227,12 +233,12 @@
 	padding: 13px;
 	margin-top: 14px;
 	border-radius: 9px;
-	background: var(--brand-soft);
-	color: var(--brand);
+	background: var(--blue);
+	color: #fff;
 }
 .sessionWarning {
-	background: color-mix(in srgb, var(--warning) 10%, transparent);
-	color: var(--warning);
+	background: var(--yellow);
+	color: #000;
 }
 .modal footer {
 	display: flex;
@@ -240,7 +246,6 @@
 	gap: 9px;
 	padding-top: 20px;
 	margin-top: 20px;
-	border-top: 1px solid var(--border);
 }
 @media (max-width: 700px) {
 	.toolbar {

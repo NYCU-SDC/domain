@@ -10,7 +10,6 @@
 	align-items: center;
 	gap: 8px;
 	padding: 0 11px;
-	border: 1px solid var(--border);
 	border-radius: 9px;
 	background: var(--surface);
 }
@@ -27,9 +26,9 @@
 .filters select {
 	min-height: 42px;
 	padding: 0 10px;
-	border: 1px solid var(--border);
+	border: 0;
 	border-radius: 9px;
-	background: var(--surface);
+	background: var(--bg);
 }
 .table {
 	overflow-x: auto;
@@ -37,22 +36,26 @@
 .table table {
 	width: 100%;
 	min-width: 960px;
-	border-collapse: collapse;
+	border-collapse: separate;
+	border-spacing: 0 4px;
 }
 .table th,
 .table td {
 	padding: 12px 13px;
-	border-bottom: 1px solid var(--border);
 	text-align: left;
 }
 .table th {
-	background: var(--surface-muted);
-	color: var(--text-muted);
+	background: var(--yellow);
+	color: #000;
 	font-size: 11px;
 	text-transform: uppercase;
 }
 .table td {
+	background: var(--surface);
 	font-size: 12px;
+}
+.table tbody tr:nth-child(even) td {
+	background: var(--bg);
 }
 .table time {
 	color: var(--text-muted);
@@ -94,23 +97,20 @@
 	height: 100%;
 	padding: 24px;
 	overflow: auto;
-	border-left: 1px solid var(--border);
 	background: var(--surface-raised);
-	box-shadow: var(--shadow-lg);
 }
 .drawer header {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
 	padding-bottom: 18px;
-	border-bottom: 1px solid var(--border);
 }
 .drawer h2 {
 	margin: 0;
 }
 .drawer dl {
 	display: grid;
-	gap: 0;
+	gap: 6px;
 	margin: 20px 0;
 }
 .drawer dl div {
@@ -118,7 +118,8 @@
 	grid-template-columns: 110px 1fr;
 	gap: 14px;
 	padding: 9px 0;
-	border-bottom: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--bg);
 }
 .drawer dt {
 	color: var(--text-muted);
@@ -143,8 +144,8 @@
 	padding: 14px;
 	overflow: auto;
 	border-radius: 9px;
-	background: #081426;
-	color: #d9e9ff;
+	background: #000;
+	color: #fff;
 	font:
 		12px/1.6 ui-monospace,
 		monospace;
