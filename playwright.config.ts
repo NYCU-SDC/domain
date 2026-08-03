@@ -13,6 +13,11 @@ export default defineConfig({
 	},
 	webServer: {
 		command: "pnpm db:migrate:local && pnpm dev --host 127.0.0.1",
+		env: {
+			...process.env,
+			CLOUDFLARE_INCLUDE_PROCESS_ENV: "true",
+			IP_HASH_SECRET: "playwright-only-ip-hash-secret-32-bytes"
+		},
 		reuseExistingServer: !process.env.CI,
 		stderr: "pipe",
 		stdout: "pipe",
