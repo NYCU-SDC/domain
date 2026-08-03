@@ -1,0 +1,80 @@
+.header {
+	position: sticky;
+	z-index: 30;
+	top: 0;
+	border-bottom: 1.5px solid var(--border-strong);
+	background: color-mix(in srgb, var(--bg) 92%, transparent);
+	backdrop-filter: blur(14px);
+}
+
+.nav {
+	display: flex;
+	width: min(1240px, calc(100% - 40px));
+	min-height: 74px;
+	align-items: center;
+	gap: 28px;
+	margin: 0 auto;
+}
+
+.wordmark {
+	font-size: 1.35rem;
+	letter-spacing: -0.055em;
+}
+
+.links {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	margin-left: auto;
+}
+
+.links a {
+	font-size: 0.9rem;
+	font-weight: 760;
+	text-decoration: none;
+}
+
+.links a:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.actions {
+	display: flex;
+	gap: 8px;
+}
+
+@media (max-width: 760px) {
+	.nav {
+		width: min(100% - 24px, 1240px);
+		min-height: 66px;
+		gap: 12px;
+	}
+
+	.links {
+		display: none;
+	}
+
+	.actions {
+		margin-left: auto;
+	}
+
+	.actions :global(.button) {
+		min-height: 40px;
+		padding-inline: 12px;
+	}
+}
+
+@media (max-width: 460px) {
+	.wordmark {
+		font-size: 1.12rem;
+	}
+
+	.loginLabel {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+	}
+}

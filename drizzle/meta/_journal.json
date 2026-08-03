@@ -1,13 +1,20 @@
 {
-  "version": "7",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "6",
-      "when": 1785744182537,
-      "tag": "0000_secure_foundation",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "sqlite",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "6",
+			"when": 1785744182537,
+			"tag": "0000_secure_foundation",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "6",
+			"when": 1785758697055,
+			"tag": "0001_aberrant_old_lace",
+			"breakpoints": true
+		}
+	]
 }
