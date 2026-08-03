@@ -14,7 +14,7 @@
     "preview": "pnpm build && vite preview",
     "deploy": "CLOUDFLARE_ENV=production pnpm build && CLOUDFLARE_ENV=production wrangler deploy",
     "deploy:staging": "CLOUDFLARE_ENV=staging pnpm build && CLOUDFLARE_ENV=staging wrangler deploy",
-    "lint": "eslint .",
+    "lint": "react-router typegen && eslint .",
     "typecheck": "pnpm cf:typegen && react-router typegen && tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
