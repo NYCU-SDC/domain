@@ -27,6 +27,21 @@ function client(fetcher: typeof fetch): CloudflareClient {
 }
 
 describe("explicit Cloudflare API client", () => {
+	it("invokes fetch without binding it to the client instance", async () => {
+		const fetcher: typeof fetch = function (this: unknown) {
+			expect(this).toBeUndefined();
+			return Promise.resolve(
+				jsonResponse({
+					errors: [],
+					result: [record],
+					result_info: { page: 1, total_pages: 1 },
+					success: true
+				})
+			);
+		};
+		await expect(client(fetcher).listDnsRecords()).resolves.toHaveLength(1);
+	});
+
 	it("sets Bearer authorization and parses a successful record", async () => {
 		const fetcher: typeof fetch = vi.fn(async (input, init) => {
 			expect(String(input)).toContain("/zones/zone-test-1/dns_records/");

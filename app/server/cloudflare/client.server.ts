@@ -120,7 +120,8 @@ export class CloudflareClient {
 
 	constructor(options: CloudflareClientOptions) {
 		this.#apiToken = options.apiToken;
-		this.#fetcher = options.fetcher ?? fetch;
+		const configuredFetcher = options.fetcher;
+		this.#fetcher = (input, init) => (configuredFetcher ? configuredFetcher(input, init) : fetch(input, init));
 		this.#requestId = options.requestId;
 		this.#zoneId = options.zoneId;
 	}
