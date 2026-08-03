@@ -1,0 +1,7 @@
+# Copy to .dev.vars for local development. Never commit .dev.vars.
+APP_ORIGIN="http://localhost:5173"
+CLOUDFLARE_API_TOKEN="replace-with-zone-scoped-token"
+GITHUB_CLIENT_ID="replace-with-oauth-client-id"
+GITHUB_CLIENT_SECRET="replace-with-oauth-client-secret"
+AUTH_SECRET="replace-with-at-least-32-random-bytes"
+IP_HASH_SECRET="replace-with-a-distinct-at-least-32-byte-secret"
