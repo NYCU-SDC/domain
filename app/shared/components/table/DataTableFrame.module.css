@@ -27,11 +27,11 @@
 	white-space: nowrap;
 }
 .frame :global(td) {
-	background: var(--surface);
+	background: var(--table-row);
 	vertical-align: middle;
 }
 .frame :global(tbody tr:nth-child(even) td) {
-	background: var(--bg);
+	background: var(--table-row-alt);
 }
 @media (max-width: 37.5rem) {
 	.frame :global(th),

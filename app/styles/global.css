@@ -5,7 +5,10 @@
 	--bg: #f4e9e1;
 	--surface: #fff;
 	--surface-raised: #fff;
-	--surface-muted: #f4e9e1;
+	--surface-muted: color-mix(in srgb, var(--bg) 38%, var(--surface));
+	--control-surface: color-mix(in srgb, var(--bg) 64%, var(--surface));
+	--table-row: color-mix(in srgb, var(--bg) 28%, var(--surface));
+	--table-row-alt: color-mix(in srgb, var(--bg) 52%, var(--surface));
 	--text: #000;
 	--text-muted: #000;
 	--brand: #00447f;
@@ -63,7 +66,7 @@ select {
 	touch-action: manipulation;
 }
 select {
-	background-color: var(--surface);
+	background-color: var(--control-surface);
 	color: var(--text);
 }
 img {
@@ -219,7 +222,7 @@ table {
 	padding: 0.5625rem 0.6875rem;
 	border: 0;
 	border-radius: 0.75rem;
-	background: var(--bg);
+	background: var(--control-surface);
 }
 .textarea {
 	min-height: 7.5rem;
@@ -249,6 +252,7 @@ input[type="checkbox"]:checked {
 	background: #000;
 }
 input[type="checkbox"]:checked::before {
+	background: #fff;
 	transform: scale(1);
 }
 .helpText {

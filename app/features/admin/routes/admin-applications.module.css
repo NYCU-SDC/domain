@@ -41,7 +41,7 @@
 	min-height: 2.75rem;
 	border: 0;
 	border-radius: 0.75rem;
-	background: var(--bg);
+	background: var(--control-surface);
 }
 
 .filters input {

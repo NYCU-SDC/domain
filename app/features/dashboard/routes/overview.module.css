@@ -93,6 +93,8 @@
 	font-weight: 750;
 }
 .recent ul {
+	display: grid;
+	gap: 0.625rem;
 	padding: 0;
 	margin: 1.125rem 0 0;
 	list-style: none;
@@ -102,9 +104,9 @@
 	grid-template-columns: auto 1fr auto;
 	align-items: center;
 	gap: 0.75rem;
-	padding: 0.8125rem 0;
+	padding: 0.8125rem;
 	border-radius: 0.625rem;
-	background: var(--bg);
+	background: var(--surface-muted);
 }
 .recent li div {
 	display: grid;

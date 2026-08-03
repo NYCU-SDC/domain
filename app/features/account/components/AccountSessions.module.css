@@ -41,7 +41,7 @@
 	gap: 1rem;
 	padding: 0.75rem 1rem;
 	border-radius: 0.75rem;
-	background: var(--bg);
+	background: var(--surface-muted);
 }
 .profile dt {
 	color: var(--text-muted);
@@ -105,7 +105,7 @@
 	gap: 0.75rem;
 	padding: 0.8125rem;
 	border-radius: 0.625rem;
-	background: var(--bg);
+	background: var(--surface-muted);
 }
 .sessionList article > svg {
 	width: 1.25rem;
@@ -120,7 +120,7 @@
 	font-size: 0.75rem;
 }
 .sessionList article[data-revoked="true"] {
-	background: color-mix(in srgb, var(--red) 12%, var(--bg));
+	background: color-mix(in srgb, var(--red) 12%, var(--surface));
 }
 @media (max-width: 50rem) {
 	.grid {
