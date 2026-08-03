@@ -52,7 +52,7 @@ export default function AccessPending({ loaderData }: Route.ComponentProps) {
 						</button>
 					</form>
 				</div>
-				<small>此頁面不會載入 DNS records、其他使用者或 audit 資訊。</small>
+				<small>此頁面不會載入 DNS records 或其他使用者資訊。</small>
 			</section>
 		</main>
 	);

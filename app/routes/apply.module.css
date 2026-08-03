@@ -35,7 +35,6 @@
 .intro h1 {
 	margin: 0;
 	font-size: clamp(3rem, 6vw, 5.6rem);
-	letter-spacing: -0.075em;
 	line-height: 0.91;
 }
 
@@ -70,7 +69,6 @@
 	width: 30px;
 	height: 30px;
 	place-items: center;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 50%;
 	background: var(--yellow);
 	color: #080808;
@@ -80,20 +78,17 @@
 
 .formPanel {
 	padding: clamp(24px, 5vw, 52px);
-	border: 1.5px solid var(--border-strong);
 	border-radius: 34px;
 	background: var(--surface);
 }
 
 .formHeading {
 	padding-bottom: 28px;
-	border-bottom: 1.5px solid var(--border-strong);
 }
 
 .formHeading h2 {
 	margin: 0;
 	font-size: clamp(2rem, 4vw, 3.25rem);
-	letter-spacing: -0.055em;
 }
 
 .formHeading p {
@@ -116,10 +111,9 @@
 .formError {
 	padding: 14px 16px;
 	margin-top: 24px;
-	border: 1.5px solid var(--danger);
 	border-radius: 14px;
-	background: var(--danger-soft);
-	color: var(--danger);
+	background: var(--red);
+	color: #fff;
 	font-weight: 750;
 }
 
@@ -129,8 +123,8 @@
 	gap: 10px;
 	align-items: start;
 	padding: 14px;
-	border: 1.5px solid var(--border-strong);
 	border-radius: 14px;
+	background: var(--bg);
 	cursor: pointer;
 	font-size: 0.92rem;
 	font-weight: 680;
@@ -173,7 +167,6 @@
 	width: 72px;
 	height: 72px;
 	place-items: center;
-	border: 1.5px solid #0b0b0b;
 	border-radius: 20px;
 	background: var(--green);
 	color: #080808;
@@ -188,7 +181,6 @@
 .success h1 {
 	margin: 30px 0 6px;
 	font-size: clamp(3rem, 8vw, 6rem);
-	letter-spacing: -0.075em;
 	line-height: 0.95;
 }
 

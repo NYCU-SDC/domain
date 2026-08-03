@@ -1,16 +1,10 @@
 .page {
 	min-height: 100vh;
-	padding: 32px max(24px, calc((100vw - 1040px) / 2));
 	background: var(--bg);
 }
 
-.nav {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: clamp(56px, 10vw, 112px);
-	padding-bottom: 18px;
-	border-bottom: 1.5px solid var(--border-strong);
+.main {
+	padding: clamp(56px, 8vw, 96px) max(24px, calc((100vw - 1040px) / 2));
 }
 
 .content {
@@ -23,7 +17,6 @@
 	margin: 12px 0 20px;
 	font-size: clamp(2.25rem, 6vw, 4.5rem);
 	line-height: 1.03;
-	letter-spacing: -0.055em;
 }
 
 .lead {
@@ -67,13 +60,14 @@
 	gap: 12px;
 	align-items: center;
 	padding: 18px 20px;
-	border: 1px solid color-mix(in srgb, var(--success) 40%, var(--border));
+	margin-bottom: 16px;
 	border-radius: var(--radius-lg);
-	background: color-mix(in srgb, var(--success) 8%, var(--surface-raised));
+	background: var(--green);
+	color: #000;
 }
 
 .status svg {
-	color: var(--success);
+	color: #000;
 }
 
 .status span {
@@ -82,14 +76,11 @@
 }
 
 .status small {
-	color: var(--text-muted);
+	color: #000;
 }
 
 @media (max-width: 640px) {
-	.page {
+	.main {
 		padding-inline: 18px;
-	}
-	.nav {
-		margin-bottom: 56px;
 	}
 }

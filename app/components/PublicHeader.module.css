@@ -2,9 +2,7 @@
 	position: sticky;
 	z-index: 30;
 	top: 0;
-	border-bottom: 1.5px solid var(--border-strong);
-	background: color-mix(in srgb, var(--bg) 92%, transparent);
-	backdrop-filter: blur(14px);
+	background: var(--bg);
 }
 
 .nav {
@@ -18,7 +16,6 @@
 
 .wordmark {
 	font-size: 1.35rem;
-	letter-spacing: -0.055em;
 }
 
 .links {
