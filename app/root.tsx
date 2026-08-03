@@ -10,6 +10,8 @@ export function loader({ context }: Route.LoaderArgs) {
 
 export const links: Route.LinksFunction = () => [
 	{ href: "/favicon.svg", rel: "icon", type: "image/svg+xml" },
+	{ href: "/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180", type: "image/png" },
+	{ href: "/apple-touch-icon-precomposed.png", rel: "apple-touch-icon-precomposed", sizes: "180x180", type: "image/png" },
 	{ href: "https://nycu.club", rel: "canonical" },
 	{ href: "https://avatars.githubusercontent.com", rel: "preconnect" }
 ];
