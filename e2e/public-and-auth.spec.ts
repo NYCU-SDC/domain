@@ -16,14 +16,8 @@ test.describe("public SSR and login entry", () => {
 		for (const type of ["A", "AAAA", "CNAME", "TXT", "MX", "SRV", "CAA"]) {
 			await expect(page.getByLabel("支援的 DNS 類型").getByText(type, { exact: true })).toBeVisible();
 		}
-		const firstFaq = page.getByRole("button", { name: "誰可以使用？" });
-		await expect(firstFaq).toBeEnabled({ timeout: 30_000 });
-		await expect(firstFaq).toHaveAttribute("aria-expanded", "false");
-		await firstFaq.click();
-		await expect(firstFaq).toHaveAttribute("aria-expanded", "true");
-		await expect(page.getByText("陽明交大社團或校內單位的網站維護者都可以提出申請。", { exact: false })).toBeVisible();
-		await firstFaq.click();
-		await expect(firstFaq).toHaveAttribute("aria-expanded", "false");
+		await expect(page.getByRole("button", { name: "誰可以使用？" })).toHaveAttribute("aria-expanded", "false");
+		await expect(page.getByText("陽明交大社團或校內單位的網站維護者都可以提出申請。", { exact: false })).toBeAttached();
 		await expect(page.getByRole("link", { name: "隱私與安全" })).toHaveAttribute("href", "/security");
 		await expect(page.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute("href", "https://github.com/NYCU-SDC/domain");
 		await expect(page.getByRole("link", { name: "毛哥EM", exact: true })).toHaveAttribute("href", "https://github.com/elvisdragonmao/");

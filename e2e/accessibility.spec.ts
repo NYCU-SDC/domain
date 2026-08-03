@@ -34,6 +34,7 @@ test.describe("WCAG 2.2 accessibility guardrails", () => {
 
 	test("FAQ questions expose a visible keyboard focus state", async ({ page }) => {
 		await page.goto("/#faq");
+		await page.waitForLoadState("networkidle");
 		const question = page.getByRole("button", { name: "誰可以使用？" });
 		await expect(question).toBeEnabled();
 		await question.focus();
