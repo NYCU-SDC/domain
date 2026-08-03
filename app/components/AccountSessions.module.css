@@ -1,2 +1,138 @@
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }.profile { display: grid; grid-template-columns: 84px 1fr; gap: 22px; padding: 25px; }.profile img { border-radius: 50%; }.profile h2 { margin: 0; }.profile a { display: flex; align-items: center; gap: 6px; color: var(--brand); text-decoration: none; }.profile a svg { width: 16px; }.profile dl { margin: 18px 0 0; }.profile dl div { display: grid; grid-template-columns: 100px 1fr; padding: 7px 0; border-top: 1px solid var(--border); }.profile dt { color: var(--text-muted); }.profile dd { margin: 0; }.grants { padding: 25px; }.grants h2 { display: flex; align-items: center; gap: 8px; margin: 0; }.grants h2 svg { color: var(--brand); }.grants > p { color: var(--text-muted); }.grants ul { display: grid; gap: 8px; padding: 0; list-style: none; }.grants li { display: grid; padding: 12px; border-radius: 9px; background: var(--surface-muted); }.grants small { color: var(--text-muted); }.sessions { grid-column: 1 / -1; padding: 25px; }.sessions header { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }.sessions h2 { margin: 0; }.sessionList { display: grid; gap: 9px; margin-top: 20px; }.sessionList article { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; padding: 13px; border: 1px solid var(--border); border-radius: 10px; }.sessionList article > svg { width: 20px; color: var(--brand); }.sessionList article > div { display: grid; }.sessionList span, .sessionList small { color: var(--text-muted); font-size: 12px; }.sessionList article[data-revoked="true"] { opacity: .55; }
-@media (max-width: 800px) { .grid { grid-template-columns: 1fr; }.sessions { grid-column: 1; } } @media (max-width: 520px) { .profile { grid-template-columns: 1fr; }.sessions header { align-items: stretch; flex-direction: column; }.sessionList article { grid-template-columns: 32px 1fr; }.sessionList article > span { grid-column: 2; justify-self: start; } }
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+.profile {
+	display: grid;
+	grid-template-columns: 84px 1fr;
+	gap: 22px;
+	padding: 25px;
+}
+.profile img {
+	border-radius: 50%;
+}
+.profile h2 {
+	margin: 0;
+}
+.profile a {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--brand);
+	text-decoration: none;
+}
+.profile a svg {
+	width: 16px;
+}
+.profile dl {
+	margin: 18px 0 0;
+}
+.profile dl div {
+	display: grid;
+	grid-template-columns: 100px 1fr;
+	padding: 7px 0;
+	border-top: 1px solid var(--border);
+}
+.profile dt {
+	color: var(--text-muted);
+}
+.profile dd {
+	margin: 0;
+}
+.grants {
+	padding: 25px;
+}
+.grants h2 {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+.grants h2 svg {
+	color: var(--brand);
+}
+.grants > p {
+	color: var(--text-muted);
+}
+.grants ul {
+	display: grid;
+	gap: 8px;
+	padding: 0;
+	list-style: none;
+}
+.grants li {
+	display: grid;
+	padding: 12px;
+	border-radius: 9px;
+	background: var(--surface-muted);
+}
+.grants small {
+	color: var(--text-muted);
+}
+.sessions {
+	grid-column: 1 / -1;
+	padding: 25px;
+}
+.sessions header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 20px;
+}
+.sessions h2 {
+	margin: 0;
+}
+.sessionList {
+	display: grid;
+	gap: 9px;
+	margin-top: 20px;
+}
+.sessionList article {
+	display: grid;
+	grid-template-columns: 38px 1fr auto;
+	align-items: center;
+	gap: 12px;
+	padding: 13px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+}
+.sessionList article > svg {
+	width: 20px;
+	color: var(--brand);
+}
+.sessionList article > div {
+	display: grid;
+}
+.sessionList span,
+.sessionList small {
+	color: var(--text-muted);
+	font-size: 12px;
+}
+.sessionList article[data-revoked="true"] {
+	opacity: 0.55;
+}
+@media (max-width: 800px) {
+	.grid {
+		grid-template-columns: 1fr;
+	}
+	.sessions {
+		grid-column: 1;
+	}
+}
+@media (max-width: 520px) {
+	.profile {
+		grid-template-columns: 1fr;
+	}
+	.sessions header {
+		align-items: stretch;
+		flex-direction: column;
+	}
+	.sessionList article {
+		grid-template-columns: 32px 1fr;
+	}
+	.sessionList article > span {
+		grid-column: 2;
+		justify-self: start;
+	}
+}
