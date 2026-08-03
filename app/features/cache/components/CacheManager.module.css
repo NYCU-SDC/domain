@@ -21,16 +21,33 @@
 	gap: 0.5rem;
 	border: 0;
 	border-radius: 1rem;
-	background: var(--bg);
+	background: color-mix(in srgb, var(--blue) 22%, var(--surface));
 	color: var(--text);
 	font-weight: 700;
 }
+
+.tabs button:nth-child(2) {
+	background: color-mix(in srgb, var(--green) 22%, var(--surface));
+}
+
+.tabs button:nth-child(3) {
+	background: color-mix(in srgb, var(--purple) 22%, var(--surface));
+}
+
 .tabs button:hover {
-	background: var(--yellow);
+	background: color-mix(in srgb, var(--yellow) 48%, var(--surface));
 }
 .tabs button[aria-selected="true"] {
-	background: var(--blue);
-	color: #fff;
+	background: color-mix(in srgb, var(--blue) 42%, var(--surface));
+	color: #000;
+}
+
+.tabs button:nth-child(2)[aria-selected="true"] {
+	background: color-mix(in srgb, var(--green) 42%, var(--surface));
+}
+
+.tabs button:nth-child(3)[aria-selected="true"] {
+	background: color-mix(in srgb, var(--purple) 42%, var(--surface));
 }
 .tabs svg {
 	width: 1.125rem;
@@ -44,7 +61,7 @@
 }
 .tabs button[aria-selected="true"] span {
 	background: var(--surface);
-	color: var(--blue);
+	color: #000;
 }
 .main form {
 	display: grid;
