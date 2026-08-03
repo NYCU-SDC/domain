@@ -385,7 +385,27 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-E2E 包含 desktop/mobile public SSR、公開申請送出、login disclosure、private route redirect、pending isolation 與 versioned API authentication response。需要真實 GitHub 互動的 callback 不放入自動化 CI；OAuth state/PKCE/replay/session lifecycle 在 Workers integration test 中以受控 mock 完整驗證。
+E2E 包含 desktop/mobile public SSR、公開申請送出、login disclosure、private route redirect、pending isolation、SEO metadata、versioned API authentication response，以及 Axe A／AA／AAA rule set 與 44 × 44 CSS pixel enhanced target guardrail。需要真實 GitHub 互動的 callback 不放入自動化 CI；OAuth state/PKCE/replay/session lifecycle 在 Workers integration test 中以受控 mock 完整驗證。
+
+只執行 accessibility checks：
+
+```bash
+pnpm test:a11y
+```
+
+登入後的 dashboard、admin、dialog 與 cache tab 鍵盤流程可使用不含密碼的短效本機 Playwright storage state 另外驗證：
+
+```bash
+E2E_AUTH_STORAGE=/absolute/path/to/storage-state.json pnpm test:a11y
+```
+
+自動檢查涵蓋可程式判定的 WCAG 2.2 A／AA 與 Axe 支援的 AAA success criteria；正式宣告 AAA conformance 前仍須以螢幕閱讀器、鍵盤、200%／400% zoom、認知可理解性與完整使用流程做人工稽核。這個限制是 WCAG conformance 的評估邊界，不應把 Axe 零違規解讀成第三方認證。
+
+## SEO 與公開索引
+
+每個公開 route 都提供獨立 title、description、canonical、Open Graph 與 Twitter Card metadata；首頁另提供 Organization、WebSite 與 WebApplication JSON-LD。`/sitemap.xml` 只列出公開內容，`robots.txt` 排除 auth、API、dashboard 與 admin 路徑；private route 同時使用 `noindex, nofollow, noarchive, nosnippet`，避免只依賴 crawler directive。
+
+社群預覽圖位於 `public/og-image.png`（1200 × 630）。新增公開頁面時，必須同步加入 route-level metadata 與 sitemap；登入後頁面則使用 `createPrivateMeta`。
 
 ## Quality checks
 
@@ -397,7 +417,7 @@ pnpm test
 pnpm build
 ```
 
-Pull request 與 `main` push 會執行 frozen install 及以上五個 checks。一般 CI 不讀取任何 production Cloudflare Token。
+Pull request 與 `main` push 會執行 frozen install 及以上五個 checks。一般 CI 不讀取任何 production Cloudflare Token。Browser job 另安裝隔離的 Chromium，執行 desktop/mobile E2E、SEO 與公開頁 accessibility checks；沒有提供 storage state 時，authenticated accessibility suite 會明確 skip，不會偽造 production session。
 
 ## Deployment
 

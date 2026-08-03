@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = process.env.E2E_PORT ?? "5173";
-const baseURL = `http://127.0.0.1:${port}`;
+const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
 	expect: { timeout: 5_000 },
@@ -19,6 +19,7 @@ export default defineConfig({
 		env: {
 			...process.env,
 			CLOUDFLARE_INCLUDE_PROCESS_ENV: "true",
+			E2E_APP_ORIGIN: baseURL,
 			IP_HASH_SECRET: "playwright-only-ip-hash-secret-32-bytes"
 		},
 		reuseExistingServer: !process.env.CI,
