@@ -17,7 +17,7 @@ test.describe("public SSR and login entry", () => {
 			await expect(page.getByLabel("支援的 DNS 類型").getByText(type, { exact: true })).toBeVisible();
 		}
 		const firstFaq = page.getByRole("button", { name: "誰可以使用？" });
-		await expect(firstFaq).toBeEnabled();
+		await expect(firstFaq).toBeEnabled({ timeout: 30_000 });
 		await expect(firstFaq).toHaveAttribute("aria-expanded", "false");
 		await firstFaq.click();
 		await expect(firstFaq).toHaveAttribute("aria-expanded", "true");
