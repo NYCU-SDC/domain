@@ -1,28 +1,28 @@
 .empty {
 	display: grid;
-	min-height: 290px;
+	min-height: 18.125rem;
 	place-items: center;
 	align-content: center;
-	padding: 34px;
+	padding: 2.125rem;
 	border-radius: var(--radius);
 	background: var(--surface);
 	text-align: center;
 }
 .empty > span {
 	display: grid;
-	width: 54px;
-	height: 54px;
+	width: 3.375rem;
+	height: 3.375rem;
 	place-items: center;
-	border-radius: 15px;
+	border-radius: 0.9375rem;
 	background: var(--surface-muted);
 	color: var(--text-muted);
 }
 .empty h2 {
-	margin: 17px 0 4px;
-	font-size: 20px;
+	margin: 1.0625rem 0 0.25rem;
+	font-size: 1.25rem;
 }
 .empty p {
 	max-width: 48ch;
-	margin: 0 0 18px;
+	margin: 0 0 1.125rem;
 	color: var(--text-muted);
 }

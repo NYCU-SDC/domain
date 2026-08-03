@@ -1,19 +1,19 @@
 .viewport {
 	position: fixed;
 	z-index: 1000;
-	right: 20px;
-	bottom: 20px;
+	right: 1.25rem;
+	bottom: 1.25rem;
 	display: grid;
-	width: min(390px, calc(100vw - 40px));
-	gap: 10px;
+	width: min(24.375rem, calc(100vw - 2.5rem));
+	gap: 0.625rem;
 }
 .toast {
 	display: grid;
-	grid-template-columns: 22px 1fr auto;
+	grid-template-columns: 1.375rem 1fr auto;
 	align-items: center;
-	gap: 10px;
-	padding: 13px 14px;
-	border-radius: 11px;
+	gap: 0.625rem;
+	padding: 0.8125rem 0.875rem;
+	border-radius: 0.6875rem;
 	background: var(--blue);
 	color: #fff;
 }
@@ -26,7 +26,7 @@
 	color: #fff;
 }
 .toast > svg {
-	width: 19px;
+	width: 1.1875rem;
 	color: currentColor;
 }
 .toast[data-tone="success"] > svg {
@@ -37,16 +37,16 @@
 }
 .toast button {
 	display: grid;
-	width: 32px;
-	height: 32px;
+	width: 2rem;
+	height: 2rem;
 	place-items: center;
 	border: 0;
-	border-radius: 8px;
+	border-radius: 0.5rem;
 	background: transparent;
 }
 .toast button:hover {
 	background: var(--surface-muted);
 }
 .toast button svg {
-	width: 17px;
+	width: 1.0625rem;
 }

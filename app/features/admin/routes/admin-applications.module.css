@@ -1,7 +1,7 @@
 .result {
-	padding: 13px 16px;
-	margin-bottom: 18px;
-	border-radius: 14px;
+	padding: 0.8125rem 1rem;
+	margin-bottom: 1.125rem;
+	border-radius: 0.875rem;
 	background: var(--red);
 	color: #fff;
 	font-weight: 750;
@@ -14,10 +14,10 @@
 
 .filters {
 	display: grid;
-	grid-template-columns: minmax(220px, 1fr) 180px auto;
-	gap: 10px;
-	padding: 14px;
-	border-radius: 18px;
+	grid-template-columns: minmax(13.75rem, 1fr) 11.25rem auto;
+	gap: 0.625rem;
+	padding: 0.875rem;
+	border-radius: 1.125rem;
 	background: var(--surface);
 }
 
@@ -28,7 +28,7 @@
 .filters label svg {
 	position: absolute;
 	top: 50%;
-	left: 14px;
+	left: 0.875rem;
 	color: var(--text-muted);
 	transform: translateY(-50%);
 }
@@ -38,27 +38,27 @@
 .reviewForm select,
 .reviewForm textarea {
 	width: 100%;
-	min-height: 44px;
+	min-height: 2.75rem;
 	border: 0;
-	border-radius: 12px;
+	border-radius: 0.75rem;
 	background: var(--bg);
 }
 
 .filters input {
-	padding: 9px 12px 9px 42px;
+	padding: 0.5625rem 0.75rem 0.5625rem 2.625rem;
 }
 
 .filters select,
 .reviewForm select,
 .reviewForm textarea {
-	padding: 9px 12px;
+	padding: 0.5625rem 0.75rem;
 }
 
 .summary {
 	display: flex;
 	align-items: baseline;
-	gap: 8px;
-	margin: 28px 0 12px;
+	gap: 0.5rem;
+	margin: 1.75rem 0 0.75rem;
 }
 
 .summary strong {
@@ -72,12 +72,12 @@
 
 .list {
 	display: grid;
-	gap: 16px;
+	gap: 1rem;
 }
 
 .application {
 	overflow: hidden;
-	border-radius: 24px;
+	border-radius: 1.5rem;
 	background: var(--surface);
 }
 
@@ -85,8 +85,8 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-	gap: 20px;
-	padding: 24px;
+	gap: 1.25rem;
+	padding: 1.5rem;
 }
 
 .application time {
@@ -100,7 +100,7 @@
 }
 
 .identity h2 {
-	margin: 12px 0 2px;
+	margin: 0.75rem 0 0.125rem;
 	font-size: clamp(1.45rem, 3vw, 2rem);
 }
 
@@ -112,16 +112,16 @@
 .status {
 	display: inline-flex;
 	align-items: center;
-	gap: 6px;
-	padding: 4px 10px;
-	border-radius: 999px;
+	gap: 0.375rem;
+	padding: 0.25rem 0.625rem;
+	border-radius: 62.4375rem;
 	font-size: 0.75rem;
 	font-weight: 820;
 }
 
 .status svg {
-	width: 14px;
-	height: 14px;
+	width: 0.875rem;
+	height: 0.875rem;
 }
 
 .status[data-status="pending"] {
@@ -143,21 +143,21 @@
 
 .details {
 	display: grid;
-	grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
-	gap: 32px;
-	padding: 24px;
+	grid-template-columns: minmax(16.25rem, 0.8fr) minmax(0, 1.2fr);
+	gap: 2rem;
+	padding: 1.5rem;
 }
 
 .details dl {
 	display: grid;
-	gap: 14px;
+	gap: 0.875rem;
 	margin: 0;
 }
 
 .details dl > div {
 	display: grid;
-	grid-template-columns: 88px minmax(0, 1fr);
-	gap: 8px;
+	grid-template-columns: 5.5rem minmax(0, 1fr);
+	gap: 0.5rem;
 }
 
 .details dt,
@@ -178,11 +178,11 @@
 .details a {
 	display: inline-flex;
 	align-items: center;
-	gap: 5px;
+	gap: 0.3125rem;
 }
 
 .purpose h3 {
-	margin: 0 0 7px;
+	margin: 0 0 0.4375rem;
 }
 
 .purpose p {
@@ -194,8 +194,8 @@
 .delivery {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	padding: 12px 24px;
+	gap: 0.5rem;
+	padding: 0.75rem 1.5rem;
 	background: var(--surface-muted);
 	font-size: 0.84rem;
 	font-weight: 700;
@@ -214,36 +214,36 @@
 
 .reviewForm {
 	display: grid;
-	grid-template-columns: 180px minmax(0, 1fr) auto;
-	gap: 12px;
+	grid-template-columns: 11.25rem minmax(0, 1fr) auto;
+	gap: 0.75rem;
 	align-items: end;
-	padding: 24px;
+	padding: 1.5rem;
 	background: var(--yellow);
 }
 
 .reviewForm label {
 	display: grid;
-	gap: 6px;
+	gap: 0.375rem;
 }
 
 .reviewForm textarea {
-	min-height: 78px;
+	min-height: 4.875rem;
 	resize: vertical;
 }
 
 .pagination {
 	display: grid;
 	grid-template-columns: 1fr auto 1fr;
-	gap: 14px;
+	gap: 0.875rem;
 	align-items: center;
-	margin-top: 24px;
+	margin-top: 1.5rem;
 }
 
 .pagination > :last-child {
 	justify-self: end;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 53.75rem) {
 	.details,
 	.reviewForm {
 		grid-template-columns: 1fr;
@@ -254,7 +254,7 @@
 	}
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
 	.filters {
 		grid-template-columns: 1fr;
 	}
@@ -275,6 +275,6 @@
 
 	.delivery small {
 		width: 100%;
-		margin-left: 25px;
+		margin-left: 1.5625rem;
 	}
 }

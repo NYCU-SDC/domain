@@ -1,11 +1,11 @@
 .errorState {
 	display: grid;
-	grid-template-columns: 24px 1fr auto;
+	grid-template-columns: 1.5rem 1fr auto;
 	align-items: center;
-	gap: 12px;
-	padding: 14px;
-	margin-bottom: 16px;
-	border-radius: 11px;
+	gap: 0.75rem;
+	padding: 0.875rem;
+	margin-bottom: 1rem;
+	border-radius: 0.6875rem;
 	background: var(--red);
 	color: #fff;
 }
@@ -18,20 +18,20 @@
 .toolbar {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 9px;
-	margin-bottom: 15px;
+	gap: 0.5625rem;
+	margin-bottom: 0.9375rem;
 }
 .toolbar label {
 	display: flex;
-	min-height: 42px;
+	min-height: 2.625rem;
 	align-items: center;
-	gap: 8px;
-	padding: 0 10px;
-	border-radius: 9px;
+	gap: 0.5rem;
+	padding: 0 0.625rem;
+	border-radius: 0.5625rem;
 	background: var(--surface);
 }
 .toolbar label svg {
-	width: 17px;
+	width: 1.0625rem;
 	color: var(--text-muted);
 }
 .toolbar input,
@@ -41,7 +41,7 @@
 	background: transparent;
 }
 .search {
-	min-width: min(330px, 100%);
+	min-width: min(20.625rem, 100%);
 }
 .search input {
 	width: 100%;
@@ -50,30 +50,30 @@
 	margin-left: auto;
 }
 .tableWrap td {
-	max-width: 300px;
-	font-size: 13px;
+	max-width: 18.75rem;
+	font-size: 0.8125rem;
 }
 .typeBadge {
 	display: inline-flex;
-	min-width: 50px;
+	min-width: 3.125rem;
 	justify-content: center;
-	padding: 3px 7px;
-	margin-right: 5px;
-	border-radius: 6px;
+	padding: 0.1875rem 0.4375rem;
+	margin-right: 0.3125rem;
+	border-radius: 0.375rem;
 	background: var(--blue);
 	color: #fff;
 	font:
-		750 12px ui-monospace,
+		750 0.75rem ui-monospace,
 		monospace;
 }
 .copyValue {
 	display: flex;
 	max-width: 100%;
 	align-items: center;
-	gap: 7px;
-	padding: 4px;
+	gap: 0.4375rem;
+	padding: 0.25rem;
 	border: 0;
-	border-radius: 6px;
+	border-radius: 0.375rem;
 	background: transparent;
 	text-align: left;
 }
@@ -87,29 +87,29 @@
 	white-space: nowrap;
 }
 .copyValue svg {
-	width: 14px;
+	width: 0.875rem;
 	flex: none;
 	color: var(--text-muted);
 }
 .namespace {
 	color: var(--text-muted);
 	font:
-		11px ui-monospace,
+		0.6875rem ui-monospace,
 		monospace;
 }
 .actions {
 	display: flex;
 	justify-content: flex-end;
-	gap: 4px;
+	gap: 0.25rem;
 }
 .actions button,
 .modal header button {
 	display: grid;
-	width: 34px;
-	height: 34px;
+	width: 2.125rem;
+	height: 2.125rem;
 	place-items: center;
 	border: 0;
-	border-radius: 8px;
+	border-radius: 0.5rem;
 	background: transparent;
 }
 .actions button:hover,
@@ -124,27 +124,27 @@
 	opacity: 0.35;
 }
 .actions svg {
-	width: 17px;
+	width: 1.0625rem;
 }
 .statusPill svg {
-	width: 13px;
+	width: 0.8125rem;
 }
 .pagination {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 12px 15px;
+	padding: 0.75rem 0.9375rem;
 	color: var(--text-muted);
-	font-size: 12px;
+	font-size: 0.75rem;
 }
 .pagination div {
 	display: flex;
-	gap: 7px;
+	gap: 0.4375rem;
 }
 .unsupported {
-	padding: 16px 18px;
-	margin-top: 18px;
-	border-radius: 12px;
+	padding: 1rem 1.125rem;
+	margin-top: 1.125rem;
+	border-radius: 0.75rem;
 	background: var(--surface);
 }
 .unsupported summary {
@@ -154,18 +154,18 @@
 .unsupported > div {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 12px;
-	margin-top: 16px;
+	gap: 0.75rem;
+	margin-top: 1rem;
 }
 .unsupported article {
-	padding: 13px;
-	border-radius: 9px;
+	padding: 0.8125rem;
+	border-radius: 0.5625rem;
 	background: var(--surface-muted);
 }
 .unsupported p {
-	margin: 4px 0 0;
+	margin: 0.25rem 0 0;
 	color: var(--text-muted);
-	font-size: 13px;
+	font-size: 0.8125rem;
 }
 .modalBackdrop {
 	position: fixed;
@@ -173,15 +173,15 @@
 	display: grid;
 	overflow: auto;
 	place-items: center;
-	padding: 24px;
+	padding: 1.5rem;
 	background: rgb(3 12 26 / 68%);
 	inset: 0;
 }
 .modal {
-	width: min(760px, 100%);
-	max-height: calc(100vh - 48px);
+	width: min(47.5rem, 100%);
+	max-height: calc(100vh - 3rem);
 	overflow: auto;
-	border-radius: 18px;
+	border-radius: 1.125rem;
 	background: var(--surface-raised);
 }
 .modal > header {
@@ -191,20 +191,20 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-	padding: 21px 24px;
+	padding: 1.3125rem 1.5rem;
 	background: var(--surface-raised);
 }
 .modal h2 {
 	margin: 0;
-	font-size: 21px;
+	font-size: 1.3125rem;
 }
 .modal form {
-	padding: 24px;
+	padding: 1.5rem;
 }
 .formGrid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 17px;
+	gap: 1.0625rem;
 }
 .formGrid > div:nth-child(3),
 .formGrid > div:has(.textarea) {
@@ -212,24 +212,24 @@
 }
 .proxyToggle {
 	display: grid;
-	grid-template-columns: auto 44px 1fr;
+	grid-template-columns: auto 2.75rem 1fr;
 	align-items: center;
-	gap: 10px;
-	padding: 14px;
-	margin-top: 18px;
-	border-radius: 11px;
+	gap: 0.625rem;
+	padding: 0.875rem;
+	margin-top: 1.125rem;
+	border-radius: 0.6875rem;
 	background: var(--bg);
 }
 .proxyToggle input {
-	width: 18px;
-	height: 18px;
+	width: 1.125rem;
+	height: 1.125rem;
 }
 .proxyToggle > span {
 	display: grid;
-	width: 40px;
-	height: 40px;
+	width: 2.5rem;
+	height: 2.5rem;
 	place-items: center;
-	border-radius: 10px;
+	border-radius: 0.625rem;
 	background: var(--blue);
 	color: #fff;
 }
@@ -242,19 +242,19 @@
 .dnsOnly {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	padding: 13px;
-	border-radius: 9px;
+	gap: 0.5rem;
+	padding: 0.8125rem;
+	border-radius: 0.5625rem;
 	background: var(--surface-muted);
 	color: var(--text-muted);
 }
 .tlsWarning {
 	display: grid;
-	grid-template-columns: 25px 1fr;
-	gap: 10px;
-	padding: 15px;
-	margin-top: 14px;
-	border-radius: 10px;
+	grid-template-columns: 1.5625rem 1fr;
+	gap: 0.625rem;
+	padding: 0.9375rem;
+	margin-top: 0.875rem;
+	border-radius: 0.625rem;
 	background: var(--yellow);
 	color: #000;
 }
@@ -265,16 +265,16 @@
 .modal footer {
 	display: flex;
 	justify-content: flex-end;
-	gap: 9px;
-	padding-top: 22px;
-	margin-top: 22px;
+	gap: 0.5625rem;
+	padding-top: 1.375rem;
+	margin-top: 1.375rem;
 }
-@media (max-width: 1050px) {
+@media (max-width: 65.625rem) {
 	.tableWrap table {
-		min-width: 970px;
+		min-width: 60.625rem;
 	}
 }
-@media (max-width: 650px) {
+@media (max-width: 40.625rem) {
 	.toolbar {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -300,18 +300,18 @@
 	}
 	.modal {
 		max-height: 92vh;
-		border-radius: 18px 18px 0 0;
+		border-radius: 1.125rem 1.125rem 0 0;
 	}
 	.errorState {
-		grid-template-columns: 24px 1fr;
+		grid-template-columns: 1.5rem 1fr;
 	}
 	.errorState button {
 		grid-column: 1 / -1;
 	}
 }
 .toolbar label:focus-within {
-	outline: 3px solid var(--focus);
-	outline-offset: 3px;
+	outline: 0.1875rem solid var(--focus);
+	outline-offset: 0.1875rem;
 }
 .modal {
 	overscroll-behavior: contain;

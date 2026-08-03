@@ -12,7 +12,7 @@
 }
 .frame :global(th),
 .frame :global(td) {
-	padding: 16px 18px;
+	padding: 1rem 1.125rem;
 	text-align: left;
 }
 .frame :global(thead) {
@@ -20,7 +20,7 @@
 }
 .frame :global(th) {
 	color: #000;
-	font-size: 11px;
+	font-size: 0.6875rem;
 	font-weight: 800;
 	text-transform: uppercase;
 	white-space: nowrap;
@@ -32,9 +32,9 @@
 .frame :global(tbody tr:nth-child(even) td) {
 	background: var(--bg);
 }
-@media (max-width: 600px) {
+@media (max-width: 37.5rem) {
 	.frame :global(th),
 	.frame :global(td) {
-		padding: 13px 14px;
+		padding: 0.8125rem 0.875rem;
 	}
 }

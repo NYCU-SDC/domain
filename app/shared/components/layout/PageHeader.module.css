@@ -2,27 +2,27 @@
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-between;
-	gap: 28px;
-	padding-bottom: 24px;
-	margin-bottom: 30px;
+	gap: 1.75rem;
+	padding-bottom: 1.5rem;
+	margin-bottom: 1.875rem;
 }
 .header h1 {
 	margin: 0;
-	font-size: clamp(34px, 5vw, 56px);
+	font-size: clamp(2.125rem, 5vw, 3.5rem);
 	line-height: 1;
 }
 .header > div:first-child > p:last-child {
-	max-width: 720px;
-	margin: 10px 0 0;
+	max-width: 45rem;
+	margin: 0.625rem 0 0;
 	color: var(--text-muted);
 }
 .actions {
 	display: flex;
 	flex: none;
 	flex-wrap: wrap;
-	gap: 9px;
+	gap: 0.5625rem;
 }
-@media (max-width: 680px) {
+@media (max-width: 42.5rem) {
 	.header {
 		align-items: flex-start;
 		flex-direction: column;

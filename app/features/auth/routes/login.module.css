@@ -1,10 +1,10 @@
 .main {
 	display: grid;
-	width: min(560px, calc(100% - 40px));
-	min-height: calc(100vh - 74px);
+	width: min(35rem, calc(100% - 2.5rem));
+	min-height: calc(100vh - 4.625rem);
 	place-items: center;
 	margin: 0 auto;
-	padding: clamp(48px, 8vw, 100px) 0;
+	padding: clamp(3rem, 8vw, 6.25rem) 0;
 }
 
 .panel {
@@ -12,8 +12,8 @@
 	width: 100%;
 	flex-direction: column;
 	justify-content: center;
-	padding: clamp(30px, 7vw, 60px);
-	border-radius: 32px;
+	padding: clamp(1.875rem, 7vw, 3.75rem);
+	border-radius: 2rem;
 	background: var(--surface);
 }
 
@@ -26,36 +26,36 @@
 
 .githubButton {
 	width: 100%;
-	min-height: 52px;
-	margin-top: 32px;
+	min-height: 3.25rem;
+	margin-top: 2rem;
 }
 
 .error {
-	padding: 12px 14px;
-	margin-top: 18px;
-	border-radius: 12px;
+	padding: 0.75rem 0.875rem;
+	margin-top: 1.125rem;
+	border-radius: 0.75rem;
 	background: var(--red);
 	color: #fff;
 	font-weight: 700;
 }
 
 .applyPrompt {
-	margin: 24px 0 0;
+	margin: 1.5rem 0 0;
 	text-align: center;
 }
 
 .applyPrompt a {
 	font-weight: 800;
-	text-underline-offset: 4px;
+	text-underline-offset: 0.25rem;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 32.5rem) {
 	.main {
-		width: min(100% - 24px, 1000px);
-		padding-block: 32px 60px;
+		width: min(100% - 1.5rem, 62.5rem);
+		padding-block: 2rem 3.75rem;
 	}
 
 	.panel {
-		padding: 26px 20px;
+		padding: 1.625rem 1.25rem;
 	}
 }

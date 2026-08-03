@@ -1,21 +1,21 @@
 .toolbar {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 9px;
-	margin-bottom: 14px;
+	gap: 0.5625rem;
+	margin-bottom: 0.875rem;
 }
 .toolbar label {
 	display: flex;
-	min-width: min(390px, 100%);
-	min-height: 42px;
+	min-width: min(24.375rem, 100%);
+	min-height: 2.625rem;
 	align-items: center;
-	gap: 8px;
-	padding: 0 11px;
-	border-radius: 9px;
+	gap: 0.5rem;
+	padding: 0 0.6875rem;
+	border-radius: 0.5625rem;
 	background: var(--bg);
 }
 .toolbar label svg {
-	width: 17px;
+	width: 1.0625rem;
 	color: var(--text-muted);
 }
 .toolbar input {
@@ -25,26 +25,26 @@
 	background: transparent;
 }
 .toolbar select {
-	min-height: 42px;
-	padding: 0 10px;
+	min-height: 2.625rem;
+	padding: 0 0.625rem;
 	border: 0;
-	border-radius: 9px;
+	border-radius: 0.5625rem;
 	background: var(--bg);
 }
 .toolbar button {
 	margin-left: auto;
 }
 .table table {
-	min-width: 1180px;
+	min-width: 73.75rem;
 }
 .table td {
-	max-width: 210px;
-	font-size: 12px;
+	max-width: 13.125rem;
+	font-size: 0.75rem;
 }
 .table td:first-child a {
 	display: flex;
 	align-items: center;
-	gap: 9px;
+	gap: 0.5625rem;
 	text-decoration: none;
 }
 .table img {
@@ -57,21 +57,21 @@
 	color: var(--text-muted);
 }
 .table td code {
-	font-size: 11px;
+	font-size: 0.6875rem;
 }
 .grantCount {
 	display: grid;
-	width: 28px;
-	height: 28px;
+	width: 1.75rem;
+	height: 1.75rem;
 	place-items: center;
-	border-radius: 8px;
+	border-radius: 0.5rem;
 	background: var(--brand-soft);
 	color: var(--brand);
 	font-weight: 800;
 }
 .grantTooltip {
-	max-width: 160px;
-	margin-top: 4px;
+	max-width: 10rem;
+	margin-top: 0.25rem;
 	overflow: hidden;
 	color: var(--text-muted);
 	text-overflow: ellipsis;
@@ -85,16 +85,16 @@
 }
 .actions {
 	display: flex;
-	gap: 4px;
+	gap: 0.25rem;
 }
 .actions button,
 .modal header button {
 	display: grid;
-	width: 34px;
-	height: 34px;
+	width: 2.125rem;
+	height: 2.125rem;
 	place-items: center;
 	border: 0;
-	border-radius: 8px;
+	border-radius: 0.5rem;
 	background: transparent;
 }
 .actions button:hover,
@@ -102,7 +102,7 @@
 	background: var(--surface-muted);
 }
 .actions svg {
-	width: 17px;
+	width: 1.0625rem;
 }
 .backdrop {
 	position: fixed;
@@ -110,15 +110,15 @@
 	display: grid;
 	overflow: auto;
 	place-items: center;
-	padding: 24px;
+	padding: 1.5rem;
 	background: rgb(3 12 26 / 68%);
 	inset: 0;
 }
 .modal {
-	width: min(760px, 100%);
-	max-height: calc(100vh - 48px);
+	width: min(47.5rem, 100%);
+	max-height: calc(100vh - 3rem);
 	overflow: auto;
-	border-radius: 18px;
+	border-radius: 1.125rem;
 	background: var(--surface-raised);
 }
 .modal header {
@@ -128,29 +128,29 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-	padding: 21px 24px;
+	padding: 1.3125rem 1.5rem;
 	background: var(--surface-raised);
 }
 .modal h2 {
 	margin: 0;
 }
 .modal form {
-	padding: 24px;
+	padding: 1.5rem;
 }
 .resolveRow {
 	display: grid;
 	grid-template-columns: 1fr auto;
 	align-items: end;
-	gap: 10px;
+	gap: 0.625rem;
 }
 .preview {
 	display: grid;
-	grid-template-columns: 56px 1fr auto;
+	grid-template-columns: 3.5rem 1fr auto;
 	align-items: center;
-	gap: 12px;
-	padding: 13px;
-	margin-top: 13px;
-	border-radius: 10px;
+	gap: 0.75rem;
+	padding: 0.8125rem;
+	margin-top: 0.8125rem;
+	border-radius: 0.625rem;
 	background: var(--green);
 	color: #000;
 }
@@ -170,24 +170,24 @@
 .formGrid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 17px;
-	margin-top: 18px;
+	gap: 1.0625rem;
+	margin-top: 1.125rem;
 }
 .formGrid > label:nth-child(n + 3) {
 	grid-column: 1 / -1;
 }
 .check {
 	display: grid;
-	grid-template-columns: auto 35px 1fr;
+	grid-template-columns: auto 2.1875rem 1fr;
 	align-items: center;
-	gap: 9px;
-	padding: 12px;
-	border-radius: 10px;
+	gap: 0.5625rem;
+	padding: 0.75rem;
+	border-radius: 0.625rem;
 	background: var(--bg);
 }
 .check input {
-	width: 18px;
-	height: 18px;
+	width: 1.125rem;
+	height: 1.125rem;
 }
 .check > svg {
 	color: var(--brand);
@@ -202,10 +202,10 @@
 .sessionWarning {
 	display: flex;
 	align-items: center;
-	gap: 9px;
-	padding: 13px;
-	margin-top: 14px;
-	border-radius: 9px;
+	gap: 0.5625rem;
+	padding: 0.8125rem;
+	margin-top: 0.875rem;
+	border-radius: 0.5625rem;
 	background: var(--blue);
 	color: #fff;
 }
@@ -216,11 +216,11 @@
 .modal footer {
 	display: flex;
 	justify-content: flex-end;
-	gap: 9px;
-	padding-top: 20px;
-	margin-top: 20px;
+	gap: 0.5625rem;
+	padding-top: 1.25rem;
+	margin-top: 1.25rem;
 }
-@media (max-width: 700px) {
+@media (max-width: 43.75rem) {
 	.toolbar {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -237,7 +237,7 @@
 	}
 	.modal {
 		max-height: 92vh;
-		border-radius: 18px 18px 0 0;
+		border-radius: 1.125rem 1.125rem 0 0;
 	}
 	.formGrid {
 		grid-template-columns: 1fr;
@@ -250,8 +250,8 @@
 	}
 }
 .toolbar label:focus-within {
-	outline: 3px solid var(--focus);
-	outline-offset: 3px;
+	outline: 0.1875rem solid var(--focus);
+	outline-offset: 0.1875rem;
 }
 .modal {
 	overscroll-behavior: contain;

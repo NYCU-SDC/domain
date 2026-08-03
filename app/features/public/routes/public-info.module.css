@@ -1,22 +1,22 @@
 .main {
-	padding: clamp(56px, 8vw, 96px) max(24px, calc((100vw - 1040px) / 2));
+	padding: clamp(3.5rem, 8vw, 6rem) max(1.5rem, calc((100vw - 65rem) / 2));
 }
 
 .content {
-	max-width: 760px;
-	margin: 0 auto 96px;
+	max-width: 47.5rem;
+	margin: 0 auto 6rem;
 }
 
 .content h1 {
-	max-width: 680px;
-	margin: 12px 0 20px;
+	max-width: 42.5rem;
+	margin: 0.75rem 0 1.25rem;
 	font-size: clamp(2.25rem, 6vw, 4.5rem);
 	line-height: 1.03;
 }
 
 .lead {
-	max-width: 660px;
-	margin-bottom: 40px;
+	max-width: 41.25rem;
+	margin-bottom: 2.5rem;
 	color: var(--text-muted);
 	font-size: 1.1rem;
 	line-height: 1.8;
@@ -24,23 +24,23 @@
 
 .grid {
 	display: grid;
-	gap: 16px;
+	gap: 1rem;
 }
 
 .grid article {
-	padding: 24px;
+	padding: 1.5rem;
 }
 
 .grid h2 {
 	display: flex;
-	gap: 10px;
+	gap: 0.625rem;
 	align-items: center;
-	margin: 0 0 10px;
+	margin: 0 0 0.625rem;
 	font-size: 1.1rem;
 }
 
 .grid h2 svg {
-	width: 20px;
+	width: 1.25rem;
 	color: var(--brand);
 }
 
@@ -52,10 +52,10 @@
 
 .status {
 	display: flex;
-	gap: 12px;
+	gap: 0.75rem;
 	align-items: center;
-	padding: 18px 20px;
-	margin-bottom: 16px;
+	padding: 1.125rem 1.25rem;
+	margin-bottom: 1rem;
 	border-radius: var(--radius-lg);
 	background: var(--green);
 	color: #000;
@@ -67,15 +67,15 @@
 
 .status span {
 	display: grid;
-	gap: 3px;
+	gap: 0.1875rem;
 }
 
 .status small {
 	color: #000;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
 	.main {
-		padding-inline: 18px;
+		padding-inline: 1.125rem;
 	}
 }
