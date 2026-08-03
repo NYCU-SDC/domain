@@ -18,6 +18,7 @@ export default defineConfig({
 		command: `pnpm db:migrate:local && pnpm dev --host 127.0.0.1 --port ${port}`,
 		env: {
 			...process.env,
+			AUTH_SECRET: "playwright-only-auth-secret-at-least-32-bytes",
 			CLOUDFLARE_INCLUDE_PROCESS_ENV: "true",
 			E2E_APP_ORIGIN: baseURL,
 			IP_HASH_SECRET: "playwright-only-ip-hash-secret-32-bytes"
