@@ -1,10 +1,148 @@
-.page { display: grid; min-height: 100vh; grid-template-columns: minmax(420px, .9fr) 1.1fr; background: var(--surface); }
-.panel { display: flex; max-width: 560px; flex-direction: column; justify-content: center; padding: 64px clamp(32px, 7vw, 92px); }
-.copy { margin-top: 76px; }.copy h1 { margin: 0; font-size: clamp(36px, 5vw, 54px); letter-spacing: -.045em; line-height: 1.08; }.copy > p:last-child { color: var(--text-muted); }
-.githubButton { width: 100%; margin-top: 18px; }
-.error { padding: 12px 14px; margin-top: 18px; border: 1px solid var(--danger); border-radius: 10px; background: var(--danger-soft); color: var(--danger); font-weight: 650; }
-.permissions { display: grid; gap: 16px; padding: 0; margin: 30px 0 0; list-style: none; }.permissions li { display: grid; grid-template-columns: 26px 1fr; gap: 11px; }.permissions svg { color: var(--success); }.permissions span { display: grid; }.permissions small { margin-top: 2px; color: var(--text-muted); }
-.pending { padding: 13px; margin-top: 30px; border-radius: 10px; background: var(--surface-muted); color: var(--text-muted); font-size: 13px; }
-.aside { display: grid; min-height: 100%; place-items: center; padding: 72px; background: radial-gradient(circle at 75% 20%, #174e9c, transparent 37%), #061834; color: #fff; }.aside > div { max-width: 620px; }.aside h2 { margin: 30px 0 12px; font-size: clamp(38px, 5vw, 66px); letter-spacing: -.05em; line-height: 1.05; }.aside p { max-width: 55ch; color: #b6c8e3; font-size: 18px; }.gridMark { display: grid; width: 76px; height: 76px; place-items: center; border: 1px solid #6d91c5; border-radius: 21px; background: #0b2b59; color: #9bc0ff; font-size: 34px; font-weight: 850; box-shadow: 20px 20px 0 #0d2343; }
-@media (max-width: 860px) { .page { grid-template-columns: 1fr; }.panel { max-width: 620px; min-height: 100vh; margin: 0 auto; }.aside { display: none; } }
-@media (max-width: 520px) { .panel { padding: 32px 22px; }.copy { margin-top: 56px; } }
+.page {
+	min-height: 100vh;
+	background: var(--bg);
+}
+
+.main {
+	display: grid;
+	width: min(1000px, calc(100% - 40px));
+	min-height: calc(100vh - 75px);
+	grid-template-columns: 0.9fr 1.1fr;
+	align-items: stretch;
+	margin: 0 auto;
+	padding: clamp(48px, 8vw, 100px) 0;
+}
+
+.intro,
+.panel {
+	padding: clamp(30px, 6vw, 60px);
+	border: 1.5px solid #090909;
+}
+
+.intro {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border-radius: 32px 0 0 32px;
+	background: var(--purple);
+	color: #090909;
+}
+
+.intro h2 {
+	margin: 0;
+	font-size: clamp(2.7rem, 5vw, 5rem);
+	letter-spacing: -0.08em;
+	line-height: 0.9;
+}
+
+.intro p {
+	max-width: 34ch;
+	margin: auto 0 24px;
+	font-weight: 650;
+}
+
+.intro a {
+	font-weight: 830;
+	text-underline-offset: 4px;
+}
+
+.panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border-left: 0;
+	border-radius: 0 32px 32px 0;
+	background: var(--surface);
+}
+
+.copy h1 {
+	margin: 0;
+	font-size: clamp(2.4rem, 5vw, 4.4rem);
+	letter-spacing: -0.07em;
+	line-height: 0.94;
+}
+
+.copy p {
+	color: var(--text-muted);
+}
+
+.githubButton {
+	width: 100%;
+	min-height: 52px;
+	margin-top: 22px;
+}
+
+.error {
+	padding: 12px 14px;
+	margin-top: 18px;
+	border: 1.5px solid var(--danger);
+	border-radius: 12px;
+	background: var(--danger-soft);
+	color: var(--danger);
+	font-weight: 700;
+}
+
+.permissions {
+	display: grid;
+	gap: 16px;
+	padding: 0;
+	margin: 30px 0 0;
+	list-style: none;
+}
+
+.permissions li {
+	display: grid;
+	grid-template-columns: 26px 1fr;
+	gap: 11px;
+}
+
+.permissions svg {
+	color: var(--success);
+}
+
+.permissions span {
+	display: grid;
+}
+
+.permissions small {
+	margin-top: 2px;
+	color: var(--text-muted);
+}
+
+.pending {
+	padding: 13px;
+	margin: 30px 0 0;
+	border-radius: 12px;
+	background: var(--surface-muted);
+	color: var(--text-muted);
+	font-size: 0.82rem;
+}
+
+@media (max-width: 800px) {
+	.main {
+		grid-template-columns: 1fr;
+	}
+
+	.intro {
+		min-height: 360px;
+		border-radius: 28px 28px 0 0;
+	}
+
+	.panel {
+		border-top: 0;
+		border-left: 1.5px solid #090909;
+		border-radius: 0 0 28px 28px;
+	}
+}
+
+@media (max-width: 520px) {
+	.main {
+		width: min(100% - 24px, 1000px);
+		padding-block: 32px 60px;
+	}
+
+	.intro,
+	.panel {
+		padding: 26px 20px;
+	}
+}

@@ -1,4 +1,79 @@
-.page { display: grid; min-height: 100vh; place-items: center; padding: 30px; background: radial-gradient(circle at 50% 0, var(--brand-soft), var(--bg) 45%); }
-.card { display: flex; width: min(600px, 100%); flex-direction: column; align-items: center; padding: clamp(28px, 6vw, 54px); text-align: center; }
-.stateIcon { display: grid; width: 52px; height: 52px; place-items: center; margin-bottom: 20px; border-radius: 15px; background: var(--brand-soft); color: var(--brand); }.card img { margin: 8px 0 17px; border-radius: 50%; }.card h1 { max-width: 15ch; margin: 0; font-size: clamp(30px, 6vw, 46px); letter-spacing: -.04em; line-height: 1.12; }.card > p:not(.eyebrow) { display: flex; align-items: center; gap: 7px; color: var(--text-muted); }
-.notice { display: grid; width: 100%; grid-template-columns: 26px 1fr; gap: 12px; padding: 18px; margin: 26px 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); text-align: left; }.notice svg { color: var(--brand); }.notice div { display: grid; }.notice span { color: var(--text-muted); font-size: 14px; }.card small { margin-top: 24px; color: var(--text-muted); }
+.page {
+	display: grid;
+	min-height: 100vh;
+	place-items: center;
+	padding: 30px;
+	background: var(--bg);
+}
+.card {
+	display: flex;
+	width: min(600px, 100%);
+	flex-direction: column;
+	align-items: center;
+	padding: clamp(28px, 6vw, 54px);
+	text-align: center;
+}
+.stateIcon {
+	display: grid;
+	width: 52px;
+	height: 52px;
+	place-items: center;
+	margin-bottom: 20px;
+	border: 1.5px solid var(--border-strong);
+	border-radius: 15px;
+	background: var(--yellow);
+	color: #080808;
+}
+.card img {
+	margin: 8px 0 17px;
+	border: 1.5px solid var(--border-strong);
+	border-radius: 50%;
+}
+.card h1 {
+	max-width: 15ch;
+	margin: 0;
+	font-size: clamp(30px, 6vw, 46px);
+	letter-spacing: -0.04em;
+	line-height: 1.12;
+}
+.card > p {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	color: var(--text-muted);
+}
+.notice {
+	display: grid;
+	width: 100%;
+	grid-template-columns: 26px 1fr;
+	gap: 12px;
+	padding: 18px;
+	margin: 26px 0;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	background: var(--surface-muted);
+	text-align: left;
+}
+.notice svg {
+	color: var(--brand);
+}
+.notice div {
+	display: grid;
+}
+.notice span {
+	color: var(--text-muted);
+	font-size: 14px;
+}
+.card small {
+	margin-top: 24px;
+	color: var(--text-muted);
+}
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 9px;
+}
+.actions form {
+	margin: 0;
+}
