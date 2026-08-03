@@ -243,6 +243,7 @@ export const meta: Route.MetaFunction = () =>
 export default function Apply({ actionData }: Route.ComponentProps) {
 	const navigation = useNavigation();
 	const [clientErrors, setClientErrors] = useState<Partial<Record<FieldName, string>>>({});
+	const formTitleRef = useRef<HTMLHeadingElement>(null);
 	const reviewTitleRef = useRef<HTMLHeadingElement>(null);
 	const successTitleRef = useRef<HTMLHeadingElement>(null);
 	const errorSummaryRef = useRef<HTMLDivElement>(null);
@@ -255,6 +256,7 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 	useEffect(() => {
 		if (actionData?.phase === "review") reviewTitleRef.current?.focus();
 		if (actionData?.phase === "complete") successTitleRef.current?.focus();
+		if (actionData?.phase === "form" && actionData.ok) formTitleRef.current?.focus();
 		if (actionData?.phase !== "form" || !actionData.errors) return;
 		const firstField = fieldOrder.find(field => actionData.errors?.[field]);
 		if (firstField) {
@@ -409,7 +411,9 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 				) : (
 					<>
 						<div className={styles.formHeading}>
-							<h2 id="application-title">申請資料</h2>
+							<h2 id="application-title" ref={formTitleRef} tabIndex={-1}>
+								申請資料
+							</h2>
 							<p>除標示「選填」外，其餘欄位皆為必填。資料只供平台管理員審核，不會公開顯示。</p>
 						</div>
 						{Object.keys(errors).length > 0 ? (

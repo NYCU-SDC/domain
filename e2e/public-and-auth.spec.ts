@@ -28,23 +28,75 @@ test.describe("public SSR and login entry", () => {
 		await expect(page.getByRole("link", { name: "交大軟體開發社" }).first()).toHaveAttribute("href", "https://sdc.nycu.club");
 	});
 
-	test("application form validates and confirms a stored request", async ({ page }) => {
+	test("application form lists errors, reviews every value, and only then submits", async ({ page }) => {
 		await page.goto("/apply");
 		await expect(page.getByRole("heading", { name: "申請資料" })).toBeVisible();
 		await expect(page.getByText(".nycu.club", { exact: true })).toBeVisible();
-		await page.getByRole("button", { name: "送出申請" }).click();
+		for (const id of ["organizationName", "applicantName", "githubLogin", "contact", "requestedNamespace", "currentWebsiteUrl", "purpose", "terms"]) {
+			await expect(page.locator(`label[for="${id}"]`)).toHaveCount(1);
+		}
+
+		await page.getByRole("button", { name: "檢查申請資料" }).click();
+		const errorSummary = page.getByRole("alert");
+		await expect(errorSummary.getByRole("heading", { name: "請修正以下欄位" })).toBeVisible();
+		for (const message of [
+			"請填寫社團或單位名稱",
+			"請填寫申請人姓名",
+			"請填寫 GitHub username",
+			"請填寫可聯絡到你的 Email 或 Discord 帳號",
+			"請填寫想申請的網域",
+			"請說明網站用途與預計內容",
+			"請確認你了解子網域與使用規範"
+		]) {
+			await expect(errorSummary.getByRole("link", { name: message })).toBeVisible();
+		}
 		await expect(page.getByLabel("社團／單位名稱")).toBeFocused();
-		expect(await page.getByLabel("社團／單位名稱").evaluate(input => (input as HTMLInputElement).validity.valueMissing)).toBe(true);
 		await page.getByLabel("社團／單位名稱").fill("魔術社");
 		await page.getByLabel("申請人姓名").fill("王小明");
 		await page.getByLabel("GitHub username").fill("magician123");
 		await page.getByLabel("聯絡方式").fill("magic@example.edu.tw");
 		await page.getByLabel("想申請的網域").fill("magic");
+		await page.getByLabel("現有網站（選填）").fill("https://magic.example.edu.tw/");
 		await page.getByLabel("網站用途").fill("提供社團介紹、活動報名與成果展示，並由本屆幹部持續負責網站及 DNS 維護。");
-		await page.getByText("我了解子網域僅供社團使用").click();
-		await page.getByRole("button", { name: "送出申請" }).click();
+		await page.getByLabel(/我了解子網域僅供社團使用/u).check();
+		await page.getByRole("button", { name: "檢查申請資料" }).click();
+
+		const reviewTitle = page.getByRole("heading", { name: "確認申請資料" });
+		await expect(reviewTitle).toBeFocused();
+		const reviewList = page.locator("dl");
+		for (const value of ["魔術社", "王小明", "@magician123", "magic@example.edu.tw", "magic.nycu.club", "https://magic.example.edu.tw/", "已確認"]) {
+			await expect(reviewList.getByText(value, { exact: true })).toBeVisible();
+		}
+		await expect(reviewList).toContainText("提供社團介紹、活動報名與成果展示");
+		await expect(page.getByRole("heading", { name: "申請已送出" })).toHaveCount(0);
+
+		await page.getByRole("button", { name: "返回修改" }).click();
+		await expect(page.getByRole("heading", { name: "申請資料" })).toBeFocused();
+		await expect(page.getByLabel("社團／單位名稱")).toHaveValue("魔術社");
+		await expect(page.getByLabel("想申請的網域")).toHaveValue("magic");
+		await expect(page.getByLabel(/我了解子網域僅供社團使用/u)).toBeChecked();
+
+		await page.getByRole("button", { name: "檢查申請資料" }).click();
+		await expect(reviewTitle).toBeFocused();
+		await page.getByRole("button", { name: "確認並送出申請" }).click();
 		await expect(page.getByRole("heading", { name: "申請已送出" })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "申請已送出" })).toBeFocused();
 		await expect(page.getByText(/申請編號/u)).toBeVisible();
+	});
+
+	test("application action is cancelled when the pointer is released outside", async ({ page }) => {
+		await page.goto("/apply");
+		const button = page.getByRole("button", { name: "檢查申請資料" });
+		const box = await button.boundingBox();
+		expect(box).not.toBeNull();
+		if (!box) return;
+		await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+		await page.mouse.down();
+		await page.mouse.move(Math.max(0, box.x - 20), Math.max(0, box.y - 20));
+		await page.mouse.up();
+		await expect(page.getByRole("heading", { name: "申請資料" })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "確認申請資料" })).toHaveCount(0);
+		await expect(page.getByRole("alert")).toHaveCount(0);
 	});
 
 	test("login offers GitHub entry and the application path", async ({ page }) => {

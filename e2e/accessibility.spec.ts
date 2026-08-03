@@ -44,4 +44,23 @@ test.describe("WCAG 2.2 accessibility guardrails", () => {
 			expect(undersized, `${path} contains targets smaller than 44 by 44 CSS pixels`).toEqual([]);
 		}
 	});
+
+	test("application errors and confirmation remain accessible dynamic states", async ({ page }) => {
+		await page.goto("/apply");
+		await page.getByRole("button", { name: "檢查申請資料" }).click();
+		await expect(page.getByRole("alert")).toContainText("請修正以下欄位");
+		await expect(page.getByLabel("社團／單位名稱")).toBeFocused();
+		await expectNoAutomatedWcagViolations(page);
+
+		await page.getByLabel("社團／單位名稱").fill("可及性測試社");
+		await page.getByLabel("申請人姓名").fill("測試申請人");
+		await page.getByLabel("GitHub username").fill("accessible-club");
+		await page.getByLabel("聯絡方式").fill("accessible@example.edu.tw");
+		await page.getByLabel("想申請的網域").fill(`accessible-${Date.now()}`);
+		await page.getByLabel("網站用途").fill("這是一份用來驗證申請確認畫面鍵盤操作、語意結構與狀態訊息的可及性測試資料。");
+		await page.getByLabel(/我了解子網域僅供社團使用/u).check();
+		await page.getByRole("button", { name: "檢查申請資料" }).click();
+		await expect(page.getByRole("heading", { name: "確認申請資料" })).toBeFocused();
+		await expectNoAutomatedWcagViolations(page);
+	});
 });
