@@ -38,6 +38,7 @@ test.describe("search metadata", () => {
 		expect(sitemap.headers()["content-type"]).toContain("application/xml");
 		const sitemapBody = await sitemap.text();
 		expect(sitemapBody).toContain("/apply</loc>");
+		expect(sitemapBody).not.toContain("/status</loc>");
 		expect(sitemapBody).not.toContain("/dashboard");
 		expect(sitemapBody).not.toContain("/login");
 

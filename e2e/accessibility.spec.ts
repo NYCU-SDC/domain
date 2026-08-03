@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const publicRoutes = ["/", "/apply", "/docs", "/security", "/status", "/login"] as const;
+const publicRoutes = ["/", "/apply", "/docs", "/security", "/login"] as const;
 const wcagTags = ["wcag2a", "wcag2aa", "wcag2aaa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 async function expectNoAutomatedWcagViolations(page: Page): Promise<void> {

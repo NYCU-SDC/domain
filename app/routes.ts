@@ -6,7 +6,6 @@ export default [
 		route("apply", "features/applications/routes/apply.tsx"),
 		route("login", "features/auth/routes/login.tsx"),
 		route("security", "features/public/routes/security.tsx"),
-		route("status", "features/public/routes/status.tsx"),
 		route("docs", "features/public/routes/docs.tsx")
 	]),
 	route("auth/github", "features/auth/routes/auth-github.ts"),

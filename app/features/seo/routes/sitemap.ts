@@ -2,7 +2,7 @@ import { getAppConfig } from "~/server/config.server";
 import { getWorkerRuntime } from "~/server/runtime.server";
 import type { Route } from "./+types/sitemap";
 
-const publicPaths = ["/", "/apply", "/docs", "/security", "/status"] as const;
+const publicPaths = ["/", "/apply", "/docs", "/security"] as const;
 
 function escapeXml(value: string): string {
 	return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");

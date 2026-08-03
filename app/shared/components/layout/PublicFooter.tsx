@@ -5,8 +5,7 @@ import styles from "./PublicFooter.module.css";
 const footerLinks = [
 	{ label: "使用說明", to: "/docs" },
 	{ label: "申請子網域", to: "/apply" },
-	{ label: "隱私與安全", to: "/security" },
-	{ label: "系統狀態", to: "/status" }
+	{ label: "隱私與安全", to: "/security" }
 ] as const;
 
 export function PublicFooter() {

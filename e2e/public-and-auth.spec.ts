@@ -63,11 +63,15 @@ test.describe("public SSR and login entry", () => {
 	test("public support routes return useful SSR content", async ({ page }) => {
 		await page.goto("/security");
 		await expect(page.getByRole("heading", { name: "隱私與安全", exact: true })).toBeVisible();
-		await expect(page.getByRole("navigation", { name: "頁尾導覽" }).getByRole("link", { name: "系統狀態" })).toHaveAttribute("href", "/status");
-		await page.goto("/status");
-		await expect(page.getByRole("heading", { name: "服務狀態入口" })).toBeVisible();
 		await expect(page.getByRole("navigation", { name: "主要導覽" }).getByRole("link", { name: "申請子網域" })).toHaveAttribute("href", "/apply");
 		await expect(page.getByRole("navigation", { name: "頁尾導覽" }).getByRole("link", { name: "隱私與安全" })).toHaveAttribute("href", "/security");
+	});
+
+	test("removed status route returns a noindex 404", async ({ page }) => {
+		const response = await page.goto("/status");
+		expect(response?.status()).toBe(404);
+		await expect(page).toHaveTitle(/404 找不到這個頁面/u);
+		await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, nofollow, noarchive, nosnippet");
 	});
 });
 

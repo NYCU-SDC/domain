@@ -522,10 +522,6 @@ Worker entry 統一套用：
 - Break-glass 只透過 Cloudflare Dashboard 或獨立受控流程，操作後補登事件與原因。
 - 若啟用 deep proxy，先驗證 Total TLS/Advanced Certificate coverage，再修改 `ALLOW_PROXIED_DEEP_SUBDOMAINS`。
 
-### Status page
-
-`/status` 是同一 Worker 提供的預設狀態入口，只能證明 Worker/SSR route 可回應。Production 應把頁面中的說明與 footer link 接到獨立於本 Worker 的外部監控／status provider，避免 outage 時失去公告通道。
-
 ## 設計決策摘要
 
 - Runtime 只使用 Web Crypto；Node crypto 僅出現在 README 的 secret 產生命令。
