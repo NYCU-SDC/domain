@@ -285,10 +285,6 @@
 	background: var(--yellow);
 }
 
-.faqToggle:disabled {
-	cursor: wait;
-}
-
 .faqToggle svg {
 	width: 1.25rem;
 	flex: none;

@@ -1,5 +1,5 @@
 import { ArrowRight, Check, ChevronDown, Cloud, Database, ExternalLink, GitFork, ListPlus, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 import { createPublicMeta, landingStructuredData } from "~/shared/lib/seo";
@@ -30,16 +30,14 @@ const faq = [
 const dnsTypes = ["A", "AAAA", "CNAME", "TXT", "MX", "SRV", "CAA"] as const;
 
 function FaqItem({ answer, index, question }: { readonly answer: string; readonly index: number; readonly question: string }) {
-	const [interactive, setInteractive] = useState(false);
 	const [open, setOpen] = useState(false);
 	const answerId = `faq-answer-${index}`;
 	const questionId = `faq-question-${index}`;
-	useEffect(() => setInteractive(true), []);
 
 	return (
 		<article className={styles.faqItem}>
 			<h3 className={styles.faqQuestion}>
-				<button className={styles.faqToggle} id={questionId} type="button" aria-controls={answerId} aria-expanded={open} disabled={!interactive} onClick={() => setOpen(current => !current)}>
+				<button className={styles.faqToggle} id={questionId} type="button" aria-controls={answerId} aria-expanded={open} onClick={() => setOpen(current => !current)}>
 					<span>{question}</span>
 					<ChevronDown aria-hidden="true" />
 				</button>
