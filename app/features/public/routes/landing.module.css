@@ -280,6 +280,11 @@
 	text-underline-offset: 0.25rem;
 }
 
+.faqToggle:focus-visible {
+	outline: none;
+	background: var(--yellow);
+}
+
 .faqToggle:disabled {
 	cursor: wait;
 }

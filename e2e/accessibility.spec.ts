@@ -32,6 +32,16 @@ test.describe("WCAG 2.2 accessibility guardrails", () => {
 		await expect(page.locator("#main-content")).toBeFocused();
 	});
 
+	test("FAQ questions expose a visible keyboard focus state", async ({ page }) => {
+		await page.goto("/#faq");
+		const question = page.getByRole("button", { name: "誰可以使用？" });
+		await question.focus();
+		await expect(question).toBeFocused();
+		await expect(question).toHaveCSS("background-color", "rgb(255, 178, 2)");
+		await question.press("Enter");
+		await expect(question).toHaveAttribute("aria-expanded", "true");
+	});
+
 	test("form controls and buttons meet the enhanced target size", async ({ page }) => {
 		for (const path of publicRoutes) {
 			await page.goto(path);
