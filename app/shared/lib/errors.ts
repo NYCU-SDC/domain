@@ -51,3 +51,16 @@ export function toAppError(error: unknown): AppError {
 	if (error instanceof AppError) return error;
 	return new AppError("INTERNAL_ERROR", "系統暫時無法處理請求", { cause: error });
 }
+
+const SENSITIVE_ERROR_FRAGMENT = /\b(?:authorization|bearer|cookie|oauth(?:\s+|_)code|session(?:\s+|_)token|api(?:\s+|_)token)\b/iu;
+
+export function safeErrorDiagnostics(error: unknown): { errorMessage: string; errorName: string } {
+	if (!(error instanceof Error)) {
+		return { errorMessage: "Non-Error value", errorName: "UnknownError" };
+	}
+	const message = SENSITIVE_ERROR_FRAGMENT.test(error.message) ? "Sensitive error message redacted" : error.message;
+	return {
+		errorMessage: message.slice(0, 300),
+		errorName: error.name.slice(0, 80)
+	};
+}

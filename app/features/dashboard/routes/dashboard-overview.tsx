@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { listAuthorizedDnsRecords } from "~/features/dns/server/records.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { safeErrorDiagnostics, toAppError } from "~/shared/lib/errors";
 import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/dashboard-overview";
 import styles from "./overview.module.css";
@@ -14,7 +15,18 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	let upstreamError: string | null = null;
 	try {
 		records = await listAuthorizedDnsRecords(session, runtime.env, runtime.requestId);
-	} catch {
+	} catch (error) {
+		const appError = toAppError(error);
+		console.error(
+			JSON.stringify({
+				code: appError.code,
+				...safeErrorDiagnostics(error),
+				message: "dashboard.dns-summary.failed",
+				requestId: runtime.requestId,
+				safeError: appError.message,
+				userId: session.user.id
+			})
+		);
 		upstreamError = "目前無法讀取 Cloudflare DNS；請稍後重新整理，或提供 request ID 給管理員。";
 	}
 	const recent = await runtime.env.DB.prepare(

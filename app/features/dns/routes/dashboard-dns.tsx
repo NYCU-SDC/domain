@@ -2,7 +2,7 @@ import { requireDashboardPage } from "~/features/dashboard/server/page-auth.serv
 import { listAuthorizedDnsRecords } from "~/features/dns/server/records.server";
 import { getAppConfig } from "~/server/config.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
-import { toAppError } from "~/shared/lib/errors";
+import { safeErrorDiagnostics, toAppError } from "~/shared/lib/errors";
 import { createPrivateMeta } from "~/shared/lib/seo";
 import { DnsManager } from "../components/DnsManager";
 import type { Route } from "./+types/dashboard-dns";
@@ -24,9 +24,11 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 		};
 	} catch (error) {
 		const appError = toAppError(error);
+		const diagnostics = safeErrorDiagnostics(error);
 		console.error(
 			JSON.stringify({
 				code: appError.code,
+				...diagnostics,
 				message: "dns.list.failed",
 				requestId: runtime.requestId,
 				safeError: appError.message,
