@@ -31,6 +31,7 @@
 .intro h1 {
 	margin: 0;
 	font-size: clamp(3rem, 6vw, 5.6rem);
+	line-height: 1.2;
 }
 
 .intro h1 span {
