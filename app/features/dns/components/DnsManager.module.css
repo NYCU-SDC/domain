@@ -49,28 +49,9 @@
 .toolbar > button:first-of-type {
 	margin-left: auto;
 }
-.tableWrap {
-	overflow: hidden;
-}
-.tableWrap table {
-	width: 100%;
-	border-collapse: separate;
-	border-spacing: 0 4px;
-}
-.tableWrap th {
-	padding: 11px 14px;
-	background: var(--yellow);
-	color: #000;
-	font-size: 11px;
-	text-align: left;
-	text-transform: uppercase;
-}
 .tableWrap td {
 	max-width: 300px;
-	padding: 13px 14px;
-	background: var(--surface);
 	font-size: 13px;
-	vertical-align: middle;
 }
 .typeBadge {
 	display: inline-flex;
@@ -289,9 +270,6 @@
 	margin-top: 22px;
 }
 @media (max-width: 1050px) {
-	.tableWrap {
-		overflow-x: auto;
-	}
 	.tableWrap table {
 		min-width: 970px;
 	}

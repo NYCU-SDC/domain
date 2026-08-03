@@ -1,0 +1,40 @@
+.frame {
+	width: 100%;
+	overflow-x: auto;
+	border-radius: var(--radius);
+	background: var(--surface);
+	scrollbar-gutter: stable;
+}
+.frame :global(table) {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.frame :global(th),
+.frame :global(td) {
+	padding: 16px 18px;
+	text-align: left;
+}
+.frame :global(thead) {
+	background: var(--yellow);
+}
+.frame :global(th) {
+	color: #000;
+	font-size: 11px;
+	font-weight: 800;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+.frame :global(td) {
+	background: var(--surface);
+	vertical-align: middle;
+}
+.frame :global(tbody tr:nth-child(even) td) {
+	background: var(--bg);
+}
+@media (max-width: 600px) {
+	.frame :global(th),
+	.frame :global(td) {
+		padding: 13px 14px;
+	}
+}

@@ -2,6 +2,7 @@ import { ChevronRight, FileJson, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
+import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
 import styles from "./AuditTable.module.css";
 
 interface AuditItem {
@@ -61,7 +62,7 @@ export function AuditTable({ items }: { readonly items: AuditItem[] }) {
 				</select>
 			</div>
 			{filtered.length ? (
-				<div className={`card ${styles.table}`}>
+				<DataTableFrame className={styles.table}>
 					<table>
 						<thead>
 							<tr>
@@ -104,7 +105,7 @@ export function AuditTable({ items }: { readonly items: AuditItem[] }) {
 							))}
 						</tbody>
 					</table>
-				</div>
+				</DataTableFrame>
 			) : (
 				<EmptyState title="沒有符合條件的操作紀錄" description="調整搜尋或 status filter 後再試。" />
 			)}

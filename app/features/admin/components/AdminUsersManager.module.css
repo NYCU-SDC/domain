@@ -34,39 +34,12 @@
 .toolbar button {
 	margin-left: auto;
 }
-.table {
-	overflow-x: auto;
-}
 .table table {
-	width: 100%;
 	min-width: 1180px;
-	border-collapse: separate;
-	border-spacing: 0 4px;
-}
-.table th,
-.table td {
-	padding: 12px 13px;
-	text-align: left;
-}
-.table th {
-	background: var(--surface-muted);
-	color: var(--text-muted);
-	font-size: 10px;
-	text-transform: uppercase;
 }
 .table td {
 	max-width: 210px;
-	background: var(--surface);
 	font-size: 12px;
-}
-.table tbody tr:nth-child(even) td {
-	background: var(--bg);
-}
-.table td:first-child {
-	border-radius: 10px 0 0 10px;
-}
-.table td:last-child {
-	border-radius: 0 10px 10px 0;
 }
 .table td:first-child a {
 	display: flex;

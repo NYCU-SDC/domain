@@ -30,32 +30,11 @@
 	border-radius: 9px;
 	background: var(--bg);
 }
-.table {
-	overflow-x: auto;
-}
 .table table {
-	width: 100%;
 	min-width: 960px;
-	border-collapse: separate;
-	border-spacing: 0 4px;
-}
-.table th,
-.table td {
-	padding: 12px 13px;
-	text-align: left;
-}
-.table th {
-	background: var(--yellow);
-	color: #000;
-	font-size: 11px;
-	text-transform: uppercase;
 }
 .table td {
-	background: var(--surface);
 	font-size: 12px;
-}
-.table tbody tr:nth-child(even) td {
-	background: var(--bg);
 }
 .table time {
 	color: var(--text-muted);
@@ -117,7 +96,7 @@
 	display: grid;
 	grid-template-columns: 110px 1fr;
 	gap: 14px;
-	padding: 9px 0;
+	padding: 11px 14px;
 	border-radius: 10px;
 	background: var(--bg);
 }

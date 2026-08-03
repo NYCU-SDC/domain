@@ -4,6 +4,7 @@ import { useMemo, useState, type SyntheticEvent } from "react";
 import { apiRequest } from "~/shared/client/api";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
+import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
 import styles from "./AdminUsersManager.module.css";
 
 interface AdminUser {
@@ -161,7 +162,7 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 				</button>
 			</div>
 			{filtered.length ? (
-				<div className={`card ${styles.table}`}>
+				<DataTableFrame className={styles.table}>
 					<table>
 						<thead>
 							<tr>
@@ -227,7 +228,7 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 							))}
 						</tbody>
 					</table>
-				</div>
+				</DataTableFrame>
 			) : (
 				<EmptyState title="找不到使用者" description="請調整搜尋、status 或 admin filter。" />
 			)}

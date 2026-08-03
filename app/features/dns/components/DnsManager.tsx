@@ -4,6 +4,7 @@ import { useMemo, useState, type SyntheticEvent } from "react";
 import { apiRequest } from "~/shared/client/api";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
+import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
 import { unsupportedDnsTypeReasons } from "~/shared/lib/dns/records";
 import styles from "./DnsManager.module.css";
 
@@ -316,7 +317,7 @@ export function DnsManager(props: Props) {
 			</div>
 
 			{visible.length ? (
-				<div className={`card ${styles.tableWrap}`}>
+				<DataTableFrame className={styles.tableWrap}>
 					<table>
 						<thead>
 							<tr>
@@ -410,7 +411,7 @@ export function DnsManager(props: Props) {
 							</button>
 						</div>
 					</div>
-				</div>
+				</DataTableFrame>
 			) : (
 				<EmptyState
 					title="沒有符合條件的 DNS record"
