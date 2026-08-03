@@ -109,7 +109,7 @@ export async function action({ context, request }: Route.ActionArgs) {
 export const meta: Route.MetaFunction = () => [
 	{ title: "申請子網域｜nycu.club" },
 	{
-		content: "向交大軟體開發社申請 nycu.club 社團 namespace。",
+		content: "向交大軟體開發社申請 nycu.club 社團網域。",
 		name: "description"
 	}
 ];
@@ -161,7 +161,7 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 				<p>這份表單會送到交大軟體開發社。審核通過後，再用 GitHub 登入管理 DNS、Proxy 與快取。</p>
 				<ul>
 					<li>
-						<span>1</span>準備想使用的 namespace
+						<span>1</span>準備想使用的網域
 					</li>
 					<li>
 						<span>2</span>說明社團與網站用途
@@ -192,7 +192,10 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 								name="organizationName"
 								autoComplete="organization"
 								defaultValue={values.organizationName}
+								maxLength={120}
+								minLength={2}
 								placeholder="例如：魔術社"
+								required
 								aria-invalid={hasError("organizationName") || undefined}
 								aria-describedby={errorFor("organizationName") ? "organizationName-error" : undefined}
 							/>
@@ -210,7 +213,10 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 								name="applicantName"
 								autoComplete="name"
 								defaultValue={values.applicantName}
+								maxLength={100}
+								minLength={2}
 								placeholder="例如：王小明"
+								required
 								aria-invalid={hasError("applicantName") || undefined}
 								aria-describedby={errorFor("applicantName") ? "applicantName-error" : undefined}
 							/>
@@ -232,8 +238,12 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 								autoCapitalize="none"
 								autoComplete="off"
 								defaultValue={values.githubLogin}
+								maxLength={39}
+								pattern="[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?"
 								placeholder="例如：magician123"
+								required
 								spellCheck={false}
+								title="請輸入有效的 GitHub username"
 								aria-invalid={hasError("githubLogin") || undefined}
 								aria-describedby={errorFor("githubLogin") ? "githubLogin-error" : undefined}
 							/>
@@ -251,7 +261,10 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 								name="contact"
 								autoComplete="email"
 								defaultValue={values.contact}
+								maxLength={160}
+								minLength={3}
 								placeholder="Email 或 Discord username"
+								required
 								aria-invalid={hasError("contact") || undefined}
 								aria-describedby={errorFor("contact") ? "contact-error" : undefined}
 							/>
@@ -264,21 +277,27 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 					</div>
 
 					<div className="field">
-						<label htmlFor="requestedNamespace">想申請的 namespace</label>
-						<input
-							className="input"
-							id="requestedNamespace"
-							name="requestedNamespace"
-							autoCapitalize="none"
-							autoComplete="off"
-							defaultValue={values.requestedNamespace}
-							placeholder="例如：magic.nycu.club"
-							spellCheck={false}
-							aria-invalid={hasError("requestedNamespace") || undefined}
-							aria-describedby={hasError("requestedNamespace") ? "namespace-help requestedNamespace-error" : "namespace-help"}
-						/>
+						<label htmlFor="requestedNamespace">想申請的網域</label>
+						<div className={styles.domainInput}>
+							<input
+								id="requestedNamespace"
+								name="requestedNamespace"
+								autoCapitalize="none"
+								autoComplete="off"
+								defaultValue={values.requestedNamespace}
+								maxLength={240}
+								placeholder="magic"
+								required
+								spellCheck={false}
+								aria-invalid={hasError("requestedNamespace") || undefined}
+								aria-describedby={hasError("requestedNamespace") ? "namespace-help requestedNamespace-error" : "namespace-help"}
+							/>
+							<span className={styles.domainSuffix} aria-hidden="true">
+								.nycu.club
+							</span>
+						</div>
 						<p className="helpText" id="namespace-help">
-							核准後會包含此名稱與下層所有子網域，例如 *.magic.nycu.club。
+							只要填寫前半段。核准後會包含完整網域與其下層所有子網域，例如 *.magic.nycu.club。
 						</p>
 						{errorFor("requestedNamespace") ? (
 							<p className="errorText" id="requestedNamespace-error">
@@ -297,6 +316,7 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 							inputMode="url"
 							autoComplete="url"
 							defaultValue={values.currentWebsiteUrl}
+							maxLength={500}
 							placeholder="https://example.com/…"
 							aria-invalid={hasError("currentWebsiteUrl") || undefined}
 							aria-describedby={hasError("currentWebsiteUrl") ? "currentWebsiteUrl-error" : undefined}
@@ -316,7 +336,10 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 							name="purpose"
 							autoComplete="off"
 							defaultValue={values.purpose}
+							maxLength={2000}
+							minLength={30}
 							placeholder="請說明網站內容、預計使用方式與維護人員…"
+							required
 							rows={6}
 							aria-invalid={hasError("purpose") || undefined}
 							aria-describedby={hasError("purpose") ? "purpose-help purpose-error" : "purpose-help"}
@@ -337,8 +360,8 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 					</div>
 
 					<label className={styles.consent}>
-						<input name="terms" type="checkbox" value="accepted" aria-invalid={hasError("terms") || undefined} aria-describedby={hasError("terms") ? "terms-error" : undefined} />
-						<span>我了解 namespace 只限申請用途，並同意依平台安全規範管理 DNS。</span>
+						<input name="terms" type="checkbox" value="accepted" required aria-invalid={hasError("terms") || undefined} aria-describedby={hasError("terms") ? "terms-error" : undefined} />
+						<span>我了解子網域僅供社團使用，且不會進行非法活動。</span>
 					</label>
 					{errorFor("terms") ? (
 						<p className="errorText" id="terms-error">

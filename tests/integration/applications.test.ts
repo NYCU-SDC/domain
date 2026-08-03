@@ -37,6 +37,11 @@ describe("public namespace applications", () => {
 		expect(() => normalizeAccessApplicationInput({ ...validRaw, website: "bot-filled" }, env)).toThrow(/輸入資料格式/u);
 	});
 
+	it("composes a relative requested domain with the configured zone", () => {
+		const normalized = normalizeAccessApplicationInput({ ...validRaw, requestedNamespace: "Magic" }, env);
+		expect(normalized.requestedNamespace).toBe("magic.nycu.club");
+	});
+
 	it("stores the application with an audit event and tracks notification delivery", async () => {
 		const input = normalizeAccessApplicationInput(validRaw, env);
 		const request = testRequest("/apply", { method: "POST" });

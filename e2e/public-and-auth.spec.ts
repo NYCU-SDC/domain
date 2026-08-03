@@ -30,13 +30,17 @@ test.describe("public SSR and login entry", () => {
 	test("application form validates and confirms a stored request", async ({ page }) => {
 		await page.goto("/apply");
 		await expect(page.getByRole("heading", { name: "申請資料" })).toBeVisible();
+		await expect(page.getByText(".nycu.club", { exact: true })).toBeVisible();
+		await page.getByRole("button", { name: "送出申請" }).click();
+		await expect(page.getByLabel("社團／單位名稱")).toBeFocused();
+		expect(await page.getByLabel("社團／單位名稱").evaluate(input => (input as HTMLInputElement).validity.valueMissing)).toBe(true);
 		await page.getByLabel("社團／單位名稱").fill("魔術社");
 		await page.getByLabel("申請人姓名").fill("王小明");
 		await page.getByLabel("GitHub username").fill("magician123");
 		await page.getByLabel("聯絡方式").fill("magic@example.edu.tw");
-		await page.getByLabel("想申請的 namespace").fill("magic.nycu.club");
+		await page.getByLabel("想申請的網域").fill("magic");
 		await page.getByLabel("網站用途").fill("提供社團介紹、活動報名與成果展示，並由本屆幹部持續負責網站及 DNS 維護。");
-		await page.getByText("我了解 namespace 只限申請用途").click();
+		await page.getByText("我了解子網域僅供社團使用").click();
 		await page.getByRole("button", { name: "送出申請" }).click();
 		await expect(page.getByRole("heading", { name: "申請已送出" })).toBeVisible();
 		await expect(page.getByText(/申請編號/u)).toBeVisible();

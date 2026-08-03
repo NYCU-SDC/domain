@@ -65,9 +65,13 @@ export function normalizeAccessApplicationInput(raw: unknown, env: Env): AccessA
 	const parsed = accessApplicationFormSchema.safeParse(raw);
 	if (!parsed.success) throw validationErrorFromZod(parsed.error);
 	const config = getAppConfig(env);
+	const requestedWithoutTrailingDot = parsed.data.requestedNamespace.endsWith(".") ? parsed.data.requestedNamespace.slice(0, -1) : parsed.data.requestedNamespace;
+	const requestedLowercase = requestedWithoutTrailingDot.toLowerCase();
+	const isFullZoneHostname = requestedLowercase === config.zoneName || requestedLowercase.endsWith(`.${config.zoneName}`);
+	const requestedFqdn = isFullZoneHostname ? parsed.data.requestedNamespace : `${parsed.data.requestedNamespace}.${config.zoneName}`;
 	return {
 		...parsed.data,
-		requestedNamespace: normalizeNamespaceGrant(parsed.data.requestedNamespace, config.zoneName, config.protectedHostnames)
+		requestedNamespace: normalizeNamespaceGrant(requestedFqdn, config.zoneName, config.protectedHostnames)
 	};
 }
 

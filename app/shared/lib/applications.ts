@@ -28,9 +28,9 @@ export const accessApplicationFormSchema = z.object({
 		.pipe(z.string().min(1, "請填寫 GitHub username").max(39).regex(githubLoginPattern, "GitHub username 格式不正確")),
 	organizationName: z.string().trim().min(2, "請填寫社團或單位名稱").max(120),
 	purpose: z.string().trim().min(30, "請用至少 30 個字說明網站用途與預計內容").max(2_000),
-	requestedNamespace: z.string().trim().min(4, "請填寫想申請的 namespace").max(253),
+	requestedNamespace: z.string().trim().min(1, "請填寫想申請的網域").max(253),
 	terms: z.literal("accepted", {
-		error: "請確認你了解 namespace 與使用規範"
+		error: "請確認你了解子網域與使用規範"
 	}),
 	website: z.string().max(0, "表單驗證失敗").default("")
 });

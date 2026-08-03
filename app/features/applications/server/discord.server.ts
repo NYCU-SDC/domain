@@ -28,7 +28,7 @@ export async function notifyDiscordOfApplication(application: AccessApplicationV
 					fields: [
 						{ inline: true, name: "社團／單位", value: application.organizationName },
 						{ inline: true, name: "GitHub", value: `@${application.githubLogin}` },
-						{ inline: false, name: "申請 namespace", value: application.requestedNamespace },
+						{ inline: false, name: "申請網域", value: application.requestedNamespace },
 						{ inline: false, name: "聯絡方式", value: application.contact },
 						{ inline: false, name: "用途", value: application.purpose.slice(0, 1_024) }
 					],

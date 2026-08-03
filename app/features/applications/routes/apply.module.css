@@ -102,6 +102,46 @@
 	gap: 1.125rem;
 }
 
+.domainInput {
+	display: grid;
+	min-width: 0;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: stretch;
+	overflow: hidden;
+	border-radius: 0.75rem;
+	background: var(--bg);
+}
+
+.domainInput:focus-within {
+	outline: 0.1875rem solid var(--focus);
+	outline-offset: 0.1875rem;
+}
+
+.domainInput input {
+	min-width: 0;
+	min-height: 2.75rem;
+	padding: 0.5625rem 0.6875rem;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	color: var(--text);
+	font: inherit;
+}
+
+.domainInput input::placeholder {
+	color: var(--text-muted);
+}
+
+.domainSuffix {
+	display: flex;
+	align-items: center;
+	padding: 0.5625rem 0.875rem;
+	background: var(--yellow);
+	font-size: 0.925rem;
+	font-weight: 820;
+	white-space: nowrap;
+}
+
 .formError {
 	padding: 0.875rem 1rem;
 	margin-top: 1.5rem;
