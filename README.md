@@ -1,6 +1,6 @@
 # nycu.club Domain Console
 
-`nycu.club` 是由軟體開發社維護、部署在單一 Cloudflare Worker 的社團子網域管理平台。經授權的 GitHub 使用者可以在自己的 DNS namespace 內管理 record、Cloudflare Proxy 與 cache purge，不需要取得 Cloudflare account 或整個 zone 的 credential。
+`nycu.club` 是由[交大軟體開發社](https://sdc.nycu.club)維護、部署在單一 Cloudflare Worker 的社團子網域管理平台。經授權的 GitHub 使用者可以在自己的 DNS namespace 內管理 record、Cloudflare Proxy 與 cache purge，不需要取得 Cloudflare account 或整個 zone 的 credential。
 
 - 正式站：`https://nycu.club`
 - 登入頁：`https://nycu.club/login`
@@ -32,6 +32,7 @@ Cloudflare DNS 是 DNS records 的唯一 source of truth。D1 不保存 DNS mirr
 - OAuth state consumption metadata
 - server-side session token hash
 - immutable-through-the-application audit logs
+- 公開子網域申請、審核狀態與 Discord 通知結果
 - 必要的 application metadata
 
 主要責任分層：
@@ -43,6 +44,8 @@ app/lib/server/cloudflare/固定白名單 Cloudflare client
 app/lib/server/db/        Drizzle schema 與 D1 client
 app/lib/server/permissions/namespace、protected resource、purge 權限
 app/lib/server/audit/     snapshot redaction 與 audit insert
+app/lib/server/applications/申請 canonicalization、D1 寫入與管理員審核
+app/lib/server/notifications/固定 Discord webhook 通知 client
 app/routes/               SSR pages 與 versioned JSON API dispatcher
 workers/app.ts            單一 Worker entry、request context、CSP/security headers
 drizzle/                  可重現的 SQL migrations
@@ -67,7 +70,7 @@ _acme-challenge.magic.nycu.club
 但不允許 `nycu.club`、`evilmagic.nycu.club`、`photo.nycu.club` 或 `magic.nycu.club.evil.example`。比較前會 lowercase、移除單一 trailing dot、正規化 IDNA/Punycode，並驗證 wildcard、underscore、空 label、單一 label 63 characters 與完整 FQDN 253 characters 限制。判斷使用完整 DNS label boundary：
 
 ```ts
-hostname === namespace || hostname.endsWith(`.${namespace}`)
+hostname === namespace || hostname.endsWith(`.${namespace}`);
 ```
 
 Grant 本身必須是 `nycu.club` 的真正子網域，不可包含 wildcard、不可等於 zone apex、不可是 protected hostname。重疊 grant 會保留最廣但仍安全的 canonical namespace。
@@ -117,11 +120,11 @@ curl --fail --silent --show-error \
 
 正式 session cookie 是 `__Host-nycu_session`，包含至少 256-bit 原始 opaque token，設定 `Secure; HttpOnly; SameSite=Lax; Path=/` 且沒有 `Domain`。D1 只保存 SHA-256 token hash。預設效期 7 天；expired、revoked、suspended user session 都會被拒絕。
 
-所有 mutation 都要求：
+Authenticated mutation 都要求：
 
 - authenticated active session（admin route 另驗 admin）
 - 精確 `Origin === APP_ORIGIN`
--可信 `Sec-Fetch-Site`
+- 可信 `Sec-Fetch-Site`
 - HMAC-bound CSRF token
 - 指定 `Content-Type`
 - Zod input validation
@@ -132,15 +135,15 @@ curl --fail --silent --show-error \
 
 只開放：
 
-| Type | 專屬驗證 | Proxy |
-|---|---|---|
-| A | IPv4、TTL | 支援 |
-| AAAA | IPv6、TTL | 支援 |
-| CNAME | canonical target FQDN、TTL | 支援 |
-| TXT | 非空、最長 4096，不自動加引號 | DNS only |
-| MX | target、priority `0..65535` | 強制 DNS only |
-| SRV | service/protocol/name/priority/weight/port/target | 強制 DNS only |
-| CAA | flags、`issue`/`issuewild`/`iodef`、value | 強制 DNS only |
+| Type  | 專屬驗證                                          | Proxy         |
+| ----- | ------------------------------------------------- | ------------- |
+| A     | IPv4、TTL                                         | 支援          |
+| AAAA  | IPv6、TTL                                         | 支援          |
+| CNAME | canonical target FQDN、TTL                        | 支援          |
+| TXT   | 非空、最長 4096，不自動加引號                     | DNS only      |
+| MX    | target、priority `0..65535`                       | 強制 DNS only |
+| SRV   | service/protocol/name/priority/weight/port/target | 強制 DNS only |
+| CAA   | flags、`issue`/`issuewild`/`iodef`、value         | 強制 DNS only |
 
 TTL 支援 `1`（Auto）或 `60..86400` 秒；proxied record 必須使用 Auto。NS、DS、DNSKEY、SOA、PTR、HTTPS、SVCB、NAPTR、TLSA、SSHFP、LOC 等不在 production schema，因此即使修改前端 request 也會被拒絕。UI 的 DNS 頁會解釋各類型未開放的原因。
 
@@ -188,13 +191,19 @@ TTL 支援 `1`（Auto）或 `60..86400` 秒；proxied record 必須使用 Auto�
 
 ```json
 {
-  "ok": false,
-  "error": { "code": "FORBIDDEN", "message": "你沒有權限管理此 hostname" },
-  "requestId": "..."
+	"ok": false,
+	"error": { "code": "FORBIDDEN", "message": "你沒有權限管理此 hostname" },
+	"requestId": "..."
 }
 ```
 
 Production 不回傳 stack trace。Audit snapshot 會限制深度、數量與長度，並遮蔽 authorization、cookie、secret、token、OAuth code、verifier 等欄位。一般使用者只看到自己的事件與目前 grant namespace 的 DNS/cache 事件；admin note 會從一般 API 與 SSR audit detail 遞迴移除。應用程式沒有修改或刪除 audit log 的 API。
+
+### 子網域申請
+
+`GET /apply` 提供不需登入的公開申請表單。`POST /apply` 只接受 bounded `application/x-www-form-urlencoded` body，並檢查 same-origin、IP rate limit、重複欄位、honeypot、GitHub login、用途長度及 canonical namespace；apex、wildcard grant、protected hostname 與非 `nycu.club` 名稱都會在伺服器端拒絕。
+
+成功申請會寫入 D1 與 `application.submit` audit event，再以 Worker `waitUntil()` 背景通知 Discord。Webhook 失敗不會遺失申請，後台會保留 `pending`、`sent` 或 `failed` 通知狀態與安全化錯誤。管理員可從 `/admin/applications` 搜尋、篩選、更新審核狀態與 internal note；每次更新都寫入 `application.review` audit event。申請人的聯絡資料與用途不會出現在一般使用者 API。
 
 ## 前置需求
 
@@ -290,6 +299,7 @@ CLOUDFLARE_ENV=production pnpm exec wrangler secret put GITHUB_CLIENT_ID
 CLOUDFLARE_ENV=production pnpm exec wrangler secret put GITHUB_CLIENT_SECRET
 CLOUDFLARE_ENV=production pnpm exec wrangler secret put AUTH_SECRET
 CLOUDFLARE_ENV=production pnpm exec wrangler secret put IP_HASH_SECRET
+CLOUDFLARE_ENV=production pnpm exec wrangler secret put DISCORD_APPLICATION_WEBHOOK_URL
 ```
 
 Staging 使用相同指令但改為 `CLOUDFLARE_ENV=staging`，並使用獨立 secrets。Cloudflare Vite Plugin 會在 build 時把所選環境展平成 deploy config，因此 deployment scripts 也會在 build 與 deploy 兩步都設定 `CLOUDFLARE_ENV`；不要改回只在 `wrangler deploy` 使用 `--env`。`AUTH_SECRET` 與 `IP_HASH_SECRET` 至少各 32 random bytes，兩者不可重用。可在維運終端產生：
@@ -304,7 +314,7 @@ Local：
 cp .dev.vars.example .dev.vars
 ```
 
-填入 local/staging OAuth App 與測試用 zone-scoped token。`.dev.vars` 已被 `.gitignore` 排除，不可提交。
+填入 local/staging OAuth App、測試用 zone-scoped token 與獨立 Discord test webhook。`.dev.vars` 已被 `.gitignore` 排除，不可提交。Production webhook URL 只能放在 Worker secret，不可寫入 `wrangler.jsonc`、GitHub Actions YAML 或前端 bundle。
 
 > Wrangler 本身也讀取名為 `CLOUDFLARE_API_TOKEN` 的 process environment variable。執行 `wrangler secret put CLOUDFLARE_API_TOKEN` 時，shell environment 的同名值應是有 Workers deployment 權限的「部署 token」，互動提示中貼入的值才是 Worker runtime 的「應用程式 zone token」。兩者要分開建立、分開輪替。
 
@@ -326,6 +336,8 @@ pnpm dev
 GET  /auth/github
 GET  /auth/github/callback
 POST /logout
+GET  /apply
+POST /apply
 
 GET  /api/v1/me
 GET  /api/v1/namespaces
@@ -373,18 +385,19 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-E2E 包含 desktop/mobile public SSR、login disclosure、private route redirect、pending isolation 與 versioned API authentication response。需要真實 GitHub 互動的 callback 不放入自動化 CI；OAuth state/PKCE/replay/session lifecycle 在 Workers integration test 中以受控 mock 完整驗證。
+E2E 包含 desktop/mobile public SSR、公開申請送出、login disclosure、private route redirect、pending isolation 與 versioned API authentication response。需要真實 GitHub 互動的 callback 不放入自動化 CI；OAuth state/PKCE/replay/session lifecycle 在 Workers integration test 中以受控 mock 完整驗證。
 
 ## Quality checks
 
 ```bash
+pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
 ```
 
-Pull request 與 `main` push 會執行 frozen install 及以上四個 checks。一般 CI 不讀取任何 production Cloudflare Token。
+Pull request 與 `main` push 會執行 frozen install 及以上五個 checks。一般 CI 不讀取任何 production Cloudflare Token。
 
 ## Deployment
 
@@ -392,7 +405,7 @@ Pull request 與 `main` push 會執行 frozen install 及以上四個 checks。�
 
 1. D1 IDs 與 zone ID 已替換。
 2. Production vars 已依實際 protected records 與 admins 調整。
-3. 五個 Worker secrets 已設定。
+3. 六個 Worker secrets 已設定。
 4. GitHub OAuth production callback 正確。
 5. `nycu.club` custom domain 可由此 Worker deployment 使用。
 
@@ -401,7 +414,7 @@ Pull request 與 `main` push 會執行 frozen install 及以上四個 checks。�
 Production Worker 已連接 GitHub repository `NYCU-SDC/domain`。Push 到 `main` 時，Cloudflare Workers Builds 會依序執行：
 
 ```text
-pnpm lint && pnpm typecheck && pnpm test && pnpm build
+pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build
 pnpm exec wrangler deploy
 ```
 
@@ -434,13 +447,13 @@ Workflow 將 `CLOUDFLARE_DEPLOY_API_TOKEN` 映射為 Wrangler process 的 `CLOUD
 
 `wrangler.jsonc` 提供獨立 Workers Rate Limiting bindings：
 
-| Binding | Default |
-|---|---:|
-| `AUTH_RATE_LIMITER` | 10 / minute / processed IP |
-| `API_RATE_LIMITER` | 120 / minute / user |
-| `DNS_MUTATION_RATE_LIMITER` | 30 / minute / user |
-| `CACHE_PURGE_RATE_LIMITER` | 5 / minute / user |
-| `ADMIN_MUTATION_RATE_LIMITER` | 30 / minute / admin |
+| Binding                         |                     Default |
+| ------------------------------- | --------------------------: |
+| `AUTH_RATE_LIMITER`             |  10 / minute / processed IP |
+| `API_RATE_LIMITER`              |         120 / minute / user |
+| `DNS_MUTATION_RATE_LIMITER`     |          30 / minute / user |
+| `CACHE_PURGE_RATE_LIMITER`      |           5 / minute / user |
+| `ADMIN_MUTATION_RATE_LIMITER`   |         30 / minute / admin |
 | `PURGE_EVERYTHING_RATE_LIMITER` | 1 / minute / admin + action |
 
 Upstream Cloudflare/GitHub 429 也會被轉成安全、可操作的 `RATE_LIMITED` response；API 回傳 `Retry-After`。
@@ -465,6 +478,7 @@ Worker entry 統一套用：
 - Cloudflare application token：建立 replacement → `wrangler secret put` → 驗證 zone read/DNS/cache → revoke 舊 token。
 - Deployment token：在 GitHub Environment 更新 `CLOUDFLARE_DEPLOY_API_TOKEN`，與 application token 分開輪替。
 - GitHub Client Secret：在 OAuth App 產生新 secret → 更新 Worker secret → 完成登入驗證 → revoke 舊 secret。
+- Discord application webhook：建立 replacement webhook → 更新 `DISCORD_APPLICATION_WEBHOOK_URL` → 送出受控測試申請並確認通知狀態 → 刪除舊 webhook。Webhook URL 若曾出現在聊天、issue、log 或 commit，應立即視為已洩漏並輪替。
 - `AUTH_SECRET` rotation 會使 OAuth 暫存 cookie 與 CSRF token 失效；安排短暫重新登入窗口。
 - `IP_HASH_SECRET` rotation 會中斷新舊 IP hash 的可比較性，需在 audit procedure 留下 rotation 時間。
 
