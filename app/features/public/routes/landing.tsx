@@ -2,16 +2,17 @@ import { ArrowRight, Check, ChevronDown, Cloud, Database, ExternalLink, GitFork,
 import { useState } from "react";
 import { Link } from "react-router";
 
+import { createPublicMeta, landingStructuredData } from "~/shared/lib/seo";
 import type { Route } from "./+types/landing";
 import styles from "./landing.module.css";
 
-export const meta: Route.MetaFunction = () => [
-	{ title: "nycu.club｜免費陽明交大社團子網域" },
-	{
-		name: "description",
-		content: "由交大軟體開發社維護，讓校內社團自行管理 nycu.club DNS、Cloudflare Proxy 與快取。"
-	}
-];
+export const meta: Route.MetaFunction = () =>
+	createPublicMeta({
+		description: "由交大軟體開發社維護，讓校內社團自行管理 nycu.club DNS、Cloudflare Proxy 與快取。",
+		path: "/",
+		structuredData: landingStructuredData,
+		title: "nycu.club｜免費陽明交大社團子網域"
+	});
 
 const faq = [
 	["誰可以使用？", "陽明交大社團或校內單位的網站維護者都可以提出申請。審核通過後，管理權會綁定 GitHub numeric ID。"],

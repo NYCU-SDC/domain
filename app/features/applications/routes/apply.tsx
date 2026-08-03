@@ -8,6 +8,7 @@ import { getWorkerRuntime } from "~/server/runtime.server";
 import { enforceRateLimit } from "~/server/security/rate-limit.server";
 import { assertSameOrigin, hashClientIp, readUrlEncodedForm } from "~/server/security/request.server";
 import { toAppError } from "~/shared/lib/errors";
+import { createPublicMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/apply";
 import styles from "./apply.module.css";
 
@@ -106,13 +107,12 @@ export async function action({ context, request }: Route.ActionArgs) {
 	}
 }
 
-export const meta: Route.MetaFunction = () => [
-	{ title: "申請子網域｜nycu.club" },
-	{
-		content: "向交大軟體開發社申請 nycu.club 社團網域。",
-		name: "description"
-	}
-];
+export const meta: Route.MetaFunction = () =>
+	createPublicMeta({
+		description: "向交大軟體開發社申請免費的 nycu.club 社團網域，審核通過後即可管理 DNS、Proxy 與快取。",
+		path: "/apply",
+		title: "申請子網域｜nycu.club"
+	});
 
 export default function Apply({ actionData }: Route.ComponentProps) {
 	const navigation = useNavigation();

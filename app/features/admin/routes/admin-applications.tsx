@@ -10,6 +10,7 @@ import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
 import { accessApplicationListQuerySchema, applicationStatuses } from "~/shared/lib/applications";
 import { toAppError, validationErrorFromZod } from "~/shared/lib/errors";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/admin-applications";
 import styles from "./admin-applications.module.css";
 
@@ -69,7 +70,7 @@ export async function action({ context, request }: Route.ActionArgs) {
 	}
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "子網域申請｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("子網域申請｜nycu.club");
 
 function formatDate(timestamp: number): string {
 	return new Intl.DateTimeFormat("zh-TW", {

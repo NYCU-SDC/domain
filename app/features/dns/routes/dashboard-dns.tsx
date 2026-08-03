@@ -3,6 +3,7 @@ import { listAuthorizedDnsRecords } from "~/features/dns/server/records.server";
 import { getAppConfig } from "~/server/config.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
 import { toAppError } from "~/shared/lib/errors";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import { DnsManager } from "../components/DnsManager";
 import type { Route } from "./+types/dashboard-dns";
 
@@ -45,7 +46,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	}
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "DNS Records｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("DNS Records｜nycu.club");
 
 export default function DashboardDns({ loaderData }: Route.ComponentProps) {
 	return (

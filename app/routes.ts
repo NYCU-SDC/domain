@@ -14,6 +14,7 @@ export default [
 	route("logout", "features/auth/routes/logout.ts"),
 	route("access-pending", "features/auth/routes/access-pending.tsx"),
 	route("api/v1/*", "features/api/routes/api.ts"),
+	route("sitemap.xml", "features/seo/routes/sitemap.ts"),
 	layout("features/dashboard/routes/dashboard-layout.tsx", [
 		route("dashboard", "features/dashboard/routes/dashboard-overview.tsx"),
 		route("dashboard/dns", "features/dns/routes/dashboard-dns.tsx"),

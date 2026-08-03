@@ -3,6 +3,7 @@ import { Link, redirect } from "react-router";
 
 import { getAuthenticatedSession } from "~/features/auth/server/session.server";
 import { getWorkerRuntime } from "~/server/runtime.server";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/login";
 import styles from "./login.module.css";
 
@@ -23,7 +24,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	return { errorMessage: error ? (messages[error] ?? "登入失敗，請重新嘗試。") : null };
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "登入｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("登入｜nycu.club", "使用 GitHub 登入 nycu.club 子網域管理平台。");
 
 export default function Login({ loaderData }: Route.ComponentProps) {
 	return (

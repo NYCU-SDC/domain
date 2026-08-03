@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { listAuthorizedDnsRecords } from "~/features/dns/server/records.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/dashboard-overview";
 import styles from "./overview.module.css";
 
@@ -43,7 +44,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	};
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "總覽｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("總覽｜nycu.club");
 
 function formatTime(timestamp: number | null): string {
 	if (!timestamp) return "尚無紀錄";

@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const port = process.env.E2E_PORT ?? "5173";
+const baseURL = `http://127.0.0.1:${port}`;
+
 export default defineConfig({
 	expect: { timeout: 5_000 },
 	fullyParallel: true,
@@ -7,12 +10,12 @@ export default defineConfig({
 	retries: process.env.CI ? 2 : 0,
 	testDir: "./e2e",
 	use: {
-		baseURL: "http://localhost:5173",
+		baseURL,
 		screenshot: "only-on-failure",
 		trace: "retain-on-failure"
 	},
 	webServer: {
-		command: "pnpm db:migrate:local && pnpm dev --host 127.0.0.1",
+		command: `pnpm db:migrate:local && pnpm dev --host 127.0.0.1 --port ${port}`,
 		env: {
 			...process.env,
 			CLOUDFLARE_INCLUDE_PROCESS_ENV: "true",
@@ -22,7 +25,7 @@ export default defineConfig({
 		stderr: "pipe",
 		stdout: "pipe",
 		timeout: 120_000,
-		url: "http://localhost:5173"
+		url: baseURL
 	},
 	workers: process.env.CI ? 2 : undefined,
 	projects: [

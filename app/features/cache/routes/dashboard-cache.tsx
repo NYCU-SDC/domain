@@ -1,6 +1,7 @@
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { getAppConfig } from "~/server/config.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import { CacheManager } from "../components/CacheManager";
 import type { Route } from "./+types/dashboard-cache";
 
@@ -16,7 +17,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	};
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "快取管理｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("快取管理｜nycu.club");
 
 export default function DashboardCache({ loaderData }: Route.ComponentProps) {
 	return (

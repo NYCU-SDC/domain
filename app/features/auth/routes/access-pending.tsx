@@ -4,6 +4,7 @@ import { Link, redirect } from "react-router";
 import { getAuthenticatedSession } from "~/features/auth/server/session.server";
 import { getWorkerRuntime } from "~/server/runtime.server";
 import { createCsrfToken } from "~/server/security/request.server";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/access-pending";
 import styles from "./pending.module.css";
 
@@ -20,7 +21,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	};
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "等待授權｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("等待授權｜nycu.club");
 
 export default function AccessPending({ loaderData }: Route.ComponentProps) {
 	return (

@@ -1,10 +1,16 @@
 import { BookOpen, Database, KeyRound, RefreshCw, ShieldCheck } from "lucide-react";
 import { Link } from "react-router";
 
+import { createPublicMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/docs";
 import styles from "./public-info.module.css";
 
-export const meta: Route.MetaFunction = () => [{ title: "使用說明｜nycu.club" }, { name: "description", content: "nycu.club DNS、Proxy 與 cache 管理使用說明。" }];
+export const meta: Route.MetaFunction = () =>
+	createPublicMeta({
+		description: "了解如何申請 nycu.club 社團網域，以及管理 DNS records、Cloudflare Proxy 與 cache purge。",
+		path: "/docs",
+		title: "使用說明｜nycu.club"
+	});
 
 export default function DocsPage() {
 	return (

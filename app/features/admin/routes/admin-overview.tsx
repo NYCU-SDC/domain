@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/admin-overview";
 import styles from "./admin.module.css";
 
@@ -38,7 +39,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	};
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "管理後台｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("管理後台｜nycu.club");
 
 export default function AdminOverview({ loaderData }: Route.ComponentProps) {
 	const metrics = [

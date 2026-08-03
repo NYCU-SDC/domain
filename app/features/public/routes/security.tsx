@@ -1,9 +1,15 @@
 import { EyeOff, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 
+import { createPublicMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/security";
 import styles from "./public-info.module.css";
 
-export const meta: Route.MetaFunction = () => [{ title: "隱私與安全｜nycu.club" }, { name: "description", content: "nycu.club 子網域管理平台的隱私、安全邊界與事件回報說明。" }];
+export const meta: Route.MetaFunction = () =>
+	createPublicMeta({
+		description: "了解 nycu.club 子網域管理平台使用的 GitHub 資料、session、安全邊界與事件回報方式。",
+		path: "/security",
+		title: "隱私與安全｜nycu.club"
+	});
 
 export default function SecurityPage() {
 	return (

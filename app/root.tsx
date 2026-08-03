@@ -2,6 +2,7 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, 
 
 import type { Route } from "./+types/root";
 import { getWorkerRuntime } from "./server/runtime.server";
+import { createPrivateMeta } from "./shared/lib/seo";
 import "./styles/global.css";
 
 export function loader({ context }: Route.LoaderArgs) {
@@ -12,20 +13,10 @@ export const links: Route.LinksFunction = () => [
 	{ href: "/favicon.svg", rel: "icon", type: "image/svg+xml" },
 	{ href: "/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180", type: "image/png" },
 	{ href: "/apple-touch-icon-precomposed.png", rel: "apple-touch-icon-precomposed", sizes: "180x180", type: "image/png" },
-	{ href: "https://nycu.club", rel: "canonical" },
 	{ href: "https://avatars.githubusercontent.com", rel: "preconnect" }
 ];
 
-export const meta: Route.MetaFunction = () => [
-	{ title: "nycu.club｜社團子網域管理平台" },
-	{
-		content: "由軟體開發社維護，提供陽明交大社團自助式 DNS 與 Cloudflare cache 管理。",
-		name: "description"
-	},
-	{ content: "website", property: "og:type" },
-	{ content: "nycu.club 社團子網域管理平台", property: "og:title" },
-	{ content: "zh_TW", property: "og:locale" }
-];
+export const meta: Route.MetaFunction = () => createPrivateMeta("nycu.club｜社團子網域管理平台");
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	const data = useRouteLoaderData<typeof loader>("root");
@@ -68,6 +59,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 	}
 	return (
 		<main className="errorPage" id="main-content">
+			<title>{`${status} ${title}｜nycu.club`}</title>
+			<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 			<a className="brand" href="/" aria-label="回到 nycu.club 首頁">
 				nycu.club
 			</a>

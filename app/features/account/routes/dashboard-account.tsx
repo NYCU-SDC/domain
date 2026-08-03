@@ -1,5 +1,6 @@
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import { AccountSessions } from "../components/AccountSessions";
 import type { Route } from "./+types/dashboard-account";
 
@@ -26,7 +27,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	};
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "帳號與 Sessions｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("帳號與 Sessions｜nycu.club");
 
 export default function DashboardAccount({ loaderData }: Route.ComponentProps) {
 	return (

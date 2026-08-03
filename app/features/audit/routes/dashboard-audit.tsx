@@ -1,5 +1,6 @@
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import { AuditTable } from "../components/AuditTable";
 import type { Route } from "./+types/dashboard-audit";
 
@@ -61,7 +62,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	};
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "操作紀錄｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("操作紀錄｜nycu.club");
 
 export default function DashboardAudit({ loaderData }: Route.ComponentProps) {
 	return (

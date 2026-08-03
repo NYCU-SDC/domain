@@ -1,9 +1,15 @@
 import { Activity, CheckCircle2, ExternalLink } from "lucide-react";
 
+import { createPublicMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/status";
 import styles from "./public-info.module.css";
 
-export const meta: Route.MetaFunction = () => [{ title: "系統狀態｜nycu.club" }, { name: "description", content: "nycu.club 子網域管理平台狀態入口。" }];
+export const meta: Route.MetaFunction = () =>
+	createPublicMeta({
+		description: "查看 nycu.club 子網域管理平台及其 Cloudflare、GitHub 依賴服務的狀態入口。",
+		path: "/status",
+		title: "系統狀態｜nycu.club"
+	});
 
 export default function StatusPage() {
 	return (

@@ -1,6 +1,7 @@
 import { listAdminUsers } from "~/features/admin/server/users.server";
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { createPrivateMeta } from "~/shared/lib/seo";
 import { AdminUsersManager } from "../components/AdminUsersManager";
 import type { Route } from "./+types/admin-users";
 
@@ -16,7 +17,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	return { csrfToken, users: users.items };
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "使用者管理｜nycu.club" }];
+export const meta: Route.MetaFunction = () => createPrivateMeta("使用者管理｜nycu.club");
 
 export default function AdminUsers({ loaderData }: Route.ComponentProps) {
 	return (
