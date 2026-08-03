@@ -38,15 +38,15 @@ Cloudflare DNS 是 DNS records 的唯一 source of truth。D1 不保存 DNS mirr
 主要責任分層：
 
 ```text
-app/lib/shared/           Workers 與 UI 共用的純驗證、DNS canonicalization、錯誤格式
-app/lib/server/auth/      GitHub OAuth、PKCE、opaque session
-app/lib/server/cloudflare/固定白名單 Cloudflare client
-app/lib/server/db/        Drizzle schema 與 D1 client
-app/lib/server/permissions/namespace、protected resource、purge 權限
-app/lib/server/audit/     snapshot redaction 與 audit insert
-app/lib/server/applications/申請 canonicalization、D1 寫入與管理員審核
-app/lib/server/notifications/固定 Discord webhook 通知 client
-app/routes/               SSR pages 與 versioned JSON API dispatcher
+app/features/             依 public、auth、applications、DNS、cache、audit、account、admin 等功能垂直切分
+app/features/*/routes/    各 feature 擁有的 React Router route modules 與 route-local CSS
+app/features/*/components/只由該 feature 使用的互動元件
+app/features/*/server/    各 feature 的 server-only domain logic
+app/shared/components/    跨 feature 的 layout、Header、Footer、empty state 與 toast
+app/shared/client/        瀏覽器共用的 typed API client
+app/shared/lib/           Workers 與 UI 共用的 schema、DNS canonicalization、crypto 與錯誤格式
+app/server/               Cloudflare、D1、GitHub、runtime 與 request security 等跨 feature 基礎設施
+app/routes.ts             明確 route config；公開頁透過 pathless PublicLayout 共用 Header 與 Footer
 workers/app.ts            單一 Worker entry、request context、CSP/security headers
 drizzle/                  可重現的 SQL migrations
 tests/                    workerd/Vitest unit 與 integration tests
@@ -246,7 +246,7 @@ pnpm db:migrate:staging
 pnpm db:migrate:remote
 ```
 
-Schema source 位於 `app/lib/server/db/schema.server.ts`，migration 位於 `drizzle/`。修改 schema 後：
+Schema source 位於 `app/server/db/schema.server.ts`，migration 位於 `drizzle/`。修改 schema 後：
 
 ```bash
 pnpm db:generate --name describe_change
