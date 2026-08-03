@@ -2,6 +2,7 @@ import { requireDashboardPage } from "~/features/dashboard/server/page-auth.serv
 import { listAuthorizedDnsRecords } from "~/features/dns/server/records.server";
 import { getAppConfig } from "~/server/config.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { toAppError } from "~/shared/lib/errors";
 import { DnsManager } from "../components/DnsManager";
 import type { Route } from "./+types/dashboard-dns";
 
@@ -20,11 +21,21 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 			requestId: runtime.requestId,
 			zoneName: config.zoneName
 		};
-	} catch {
+	} catch (error) {
+		const appError = toAppError(error);
+		console.error(
+			JSON.stringify({
+				code: appError.code,
+				message: "dns.list.failed",
+				requestId: runtime.requestId,
+				safeError: appError.message,
+				userId: session.user.id
+			})
+		);
 		return {
 			allowProxiedDeepSubdomains: config.allowProxiedDeepSubdomains,
 			csrfToken,
-			error: "無法從 Cloudflare 讀取 DNS records。請稍後重試。",
+			error: appError.message,
 			grants: session.grants,
 			isAdmin: session.user.isAdmin,
 			records: [],
