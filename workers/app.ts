@@ -1,6 +1,6 @@
 import { createRequestHandler, RouterContextProvider } from "react-router";
 
-import { workerRuntimeContext } from "../app/lib/runtime-context";
+import { workerRuntimeContext } from "../app/shared/runtime/worker-runtime-context";
 
 const requestHandler = createRequestHandler(() => import("virtual:react-router/server-build"), import.meta.env.MODE);
 

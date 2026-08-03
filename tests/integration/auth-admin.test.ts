@@ -1,13 +1,13 @@
 import { env } from "cloudflare:workers";
 import { describe, expect, it, vi } from "vitest";
 
-import { createAdminUser, updateAdminUser } from "../../app/lib/server/admin/users.server";
-import { createGithubAuthorization, exchangeGithubCode, readGithubCallback, upsertGithubLogin } from "../../app/lib/server/auth/oauth.server";
-import { createSession, getAuthenticatedSession, requireAdminSession, revokeCurrentSession } from "../../app/lib/server/auth/session.server";
-import { assertPurgeEverythingAccess } from "../../app/lib/server/permissions/dns-authorization.server";
-import { enforceRateLimit } from "../../app/lib/server/security/rate-limit.server";
-import { decryptJson, encryptJson, sha256Base64Url, sha256Hex } from "../../app/lib/shared/crypto";
-import { AppError } from "../../app/lib/shared/errors";
+import { createAdminUser, updateAdminUser } from "../../app/features/admin/server/users.server";
+import { createGithubAuthorization, exchangeGithubCode, readGithubCallback, upsertGithubLogin } from "../../app/features/auth/server/oauth.server";
+import { createSession, getAuthenticatedSession, requireAdminSession, revokeCurrentSession } from "../../app/features/auth/server/session.server";
+import { assertPurgeEverythingAccess } from "../../app/features/dns/server/authorization.server";
+import { enforceRateLimit } from "../../app/server/security/rate-limit.server";
+import { decryptJson, encryptJson, sha256Base64Url, sha256Hex } from "../../app/shared/lib/crypto";
+import { AppError } from "../../app/shared/lib/errors";
 import { addGrant, insertTestUser, sessionFor, testRequest } from "../helpers";
 
 function cookieHeader(cookie: string): string {

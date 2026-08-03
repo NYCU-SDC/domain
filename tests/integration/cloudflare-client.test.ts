@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { CloudflareClient } from "../../app/lib/server/cloudflare/client.server";
-import { AppError } from "../../app/lib/shared/errors";
+import { CloudflareClient } from "../../app/server/cloudflare/client.server";
+import { AppError } from "../../app/shared/lib/errors";
 
 const record = {
 	content: "192.0.2.1",

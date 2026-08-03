@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import type { AppConfig } from "../../app/lib/server/config.server";
-import { assertHostnameAccess } from "../../app/lib/server/permissions/dns-authorization.server";
-import { normalizePurgeHostnames, normalizePurgePrefixes, normalizePurgeUrls } from "../../app/lib/shared/cache";
-import { normalizeDnsMutation, parseDnsRecordInput } from "../../app/lib/shared/dns/records";
-import { AppError } from "../../app/lib/shared/errors";
+import { assertHostnameAccess } from "../../app/features/dns/server/authorization.server";
+import type { AppConfig } from "../../app/server/config.server";
+import { normalizePurgeHostnames, normalizePurgePrefixes, normalizePurgeUrls } from "../../app/shared/lib/cache";
+import { normalizeDnsMutation, parseDnsRecordInput } from "../../app/shared/lib/dns/records";
+import { AppError } from "../../app/shared/lib/errors";
 import { sessionFor } from "../helpers";
 
 const namespace = "magic.nycu.club";

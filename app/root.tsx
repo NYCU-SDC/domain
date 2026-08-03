@@ -1,7 +1,7 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteLoaderData } from "react-router";
 
 import type { Route } from "./+types/root";
-import { getWorkerRuntime } from "./lib/server/runtime.server";
+import { getWorkerRuntime } from "./server/runtime.server";
 import "./styles/global.css";
 
 export function loader({ context }: Route.LoaderArgs) {

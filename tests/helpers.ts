@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
 
-import type { AuthenticatedSession } from "../app/lib/server/auth/session.server";
+import type { AuthenticatedSession } from "../app/features/auth/server/session.server";
 
 export interface TestUserOptions {
 	readonly githubId?: string;

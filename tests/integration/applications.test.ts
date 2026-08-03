@@ -7,9 +7,9 @@ import {
 	markApplicationNotification,
 	normalizeAccessApplicationInput,
 	reviewAccessApplication
-} from "../../app/lib/server/applications/applications.server";
-import { notifyDiscordOfApplication } from "../../app/lib/server/notifications/discord.server";
-import { readUrlEncodedForm } from "../../app/lib/server/security/request.server";
+} from "../../app/features/applications/server/applications.server";
+import { notifyDiscordOfApplication } from "../../app/features/applications/server/discord.server";
+import { readUrlEncodedForm } from "../../app/server/security/request.server";
 import { insertTestUser, sessionFor, testRequest } from "../helpers";
 
 const validRaw = {

@@ -1,0 +1,61 @@
+.main {
+	display: grid;
+	width: min(560px, calc(100% - 40px));
+	min-height: calc(100vh - 74px);
+	place-items: center;
+	margin: 0 auto;
+	padding: clamp(48px, 8vw, 100px) 0;
+}
+
+.panel {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	justify-content: center;
+	padding: clamp(30px, 7vw, 60px);
+	border-radius: 32px;
+	background: var(--surface);
+}
+
+.panel h1 {
+	margin: 0;
+	font-size: clamp(2.25rem, 6vw, 3.5rem);
+	line-height: 1;
+	text-align: center;
+}
+
+.githubButton {
+	width: 100%;
+	min-height: 52px;
+	margin-top: 32px;
+}
+
+.error {
+	padding: 12px 14px;
+	margin-top: 18px;
+	border-radius: 12px;
+	background: var(--red);
+	color: #fff;
+	font-weight: 700;
+}
+
+.applyPrompt {
+	margin: 24px 0 0;
+	text-align: center;
+}
+
+.applyPrompt a {
+	font-weight: 800;
+	text-underline-offset: 4px;
+}
+
+@media (max-width: 520px) {
+	.main {
+		width: min(100% - 24px, 1000px);
+		padding-block: 32px 60px;
+	}
+
+	.panel {
+		padding: 26px 20px;
+	}
+}

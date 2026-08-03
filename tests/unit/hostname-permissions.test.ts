@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import type { AppConfig } from "../../app/lib/server/config.server";
-import { assertHostnameAccess, assertRecordAccess, canSeeRecord } from "../../app/lib/server/permissions/dns-authorization.server";
-import { isDeepSubdomain, isHostnameWithinNamespace, normalizeGrantSet, normalizeHostname, normalizeNamespaceGrant, resolveRelativeOwner } from "../../app/lib/shared/dns/hostname";
-import { AppError } from "../../app/lib/shared/errors";
+import { assertHostnameAccess, assertRecordAccess, canSeeRecord } from "../../app/features/dns/server/authorization.server";
+import type { AppConfig } from "../../app/server/config.server";
+import { isDeepSubdomain, isHostnameWithinNamespace, normalizeGrantSet, normalizeHostname, normalizeNamespaceGrant, resolveRelativeOwner } from "../../app/shared/lib/dns/hostname";
+import { AppError } from "../../app/shared/lib/errors";
 import { sessionFor } from "../helpers";
 
 const grant = "magic.nycu.club";

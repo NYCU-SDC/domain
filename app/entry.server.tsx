@@ -3,7 +3,7 @@ import { renderToReadableStream } from "react-dom/server";
 import type { EntryContext, RouterContextProvider } from "react-router";
 import { ServerRouter } from "react-router";
 
-import { getWorkerRuntime } from "./lib/server/runtime.server";
+import { getWorkerRuntime } from "./server/runtime.server";
 
 export const streamTimeout = 5_000;
 

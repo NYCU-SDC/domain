@@ -1,0 +1,14 @@
+.page {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	overflow-x: hidden;
+	background: var(--bg);
+}
+
+.content {
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	flex-direction: column;
+}

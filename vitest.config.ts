@@ -24,6 +24,11 @@ export default defineConfig({
 			};
 		})
 	],
+	resolve: {
+		alias: {
+			"~": path.resolve(import.meta.dirname, "app")
+		}
+	},
 	test: {
 		include: ["tests/**/*.test.ts"],
 		setupFiles: ["./tests/setup.ts"]
