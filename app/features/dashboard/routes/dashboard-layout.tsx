@@ -68,25 +68,27 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 						</button>
 						<label className={styles.namespaceSelect}>
 							<span>Namespace</span>
-							<select
-								defaultValue="all"
-								aria-label="選擇 namespace"
-								name="namespace"
-								onChange={event => {
-									const url = new URL(window.location.href);
-									if (event.target.value === "all") url.searchParams.delete("namespace");
-									else url.searchParams.set("namespace", event.target.value);
-									window.location.assign(url.toString());
-								}}
-							>
-								<option value="all">全部可管理範圍</option>
-								{loaderData.grants.map(grant => (
-									<option key={grant} value={grant}>
-										{grant}
-									</option>
-								))}
-							</select>
-							<ChevronDown aria-hidden="true" />
+							<span className={styles.selectControl}>
+								<select
+									defaultValue="all"
+									aria-label="選擇 namespace"
+									name="namespace"
+									onChange={event => {
+										const url = new URL(window.location.href);
+										if (event.target.value === "all") url.searchParams.delete("namespace");
+										else url.searchParams.set("namespace", event.target.value);
+										window.location.assign(url.toString());
+									}}
+								>
+									<option value="all">全部可管理範圍</option>
+									{loaderData.grants.map(grant => (
+										<option key={grant} value={grant}>
+											{grant}
+										</option>
+									))}
+								</select>
+								<ChevronDown aria-hidden="true" />
+							</span>
 						</label>
 						<div className={styles.headerActions}>
 							<div className={styles.profile}>

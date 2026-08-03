@@ -81,29 +81,38 @@
 	background: var(--surface);
 }
 .namespaceSelect {
-	position: relative;
 	display: grid;
-	grid-template-columns: auto minmax(160px, auto) auto;
+	grid-template-columns: auto minmax(190px, auto);
 	align-items: center;
-	gap: 9px;
+	gap: 12px;
 }
-.namespaceSelect span {
+.namespaceSelect > span:first-child {
 	color: var(--text-muted);
 	font-size: 11px;
 	font-weight: 800;
 }
+.selectControl {
+	position: relative;
+	display: flex;
+	min-width: 190px;
+	align-items: center;
+}
 .namespaceSelect select {
 	appearance: none;
+	width: 100%;
 	min-height: 40px;
-	padding: 6px 32px 6px 12px;
+	padding: 7px 36px 7px 14px;
+	border: 0;
 	border-radius: 999px;
 	background: var(--surface);
+	color: var(--text);
+	cursor: pointer;
 	font-size: 13px;
 	font-weight: 700;
 }
-.namespaceSelect > svg {
+.selectControl > svg {
 	position: absolute;
-	right: 9px;
+	right: 12px;
 	width: 15px;
 	pointer-events: none;
 }
@@ -180,11 +189,15 @@
 		padding: 8px 12px;
 	}
 	.namespaceSelect {
-		grid-template-columns: minmax(0, 1fr) auto;
+		grid-template-columns: minmax(0, 1fr);
 		flex: 1;
 	}
-	.namespaceSelect span {
+	.namespaceSelect > span:first-child {
 		display: none;
+	}
+	.selectControl {
+		width: 100%;
+		min-width: 0;
 	}
 	.namespaceSelect select {
 		width: 100%;
