@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { describe, expect, it, vi } from "vitest";
 
+import { createApplicationConfirmation, verifyApplicationConfirmation } from "../../app/features/applications/server/application-confirmation.server";
 import {
 	createAccessApplication,
 	listAccessApplications,
@@ -40,6 +41,30 @@ describe("public namespace applications", () => {
 	it("composes a relative requested domain with the configured zone", () => {
 		const normalized = normalizeAccessApplicationInput({ ...validRaw, requestedNamespace: "Magic" }, env);
 		expect(normalized.requestedNamespace).toBe("magic.nycu.club");
+	});
+
+	it("binds a short-lived confirmation to every normalized field", async () => {
+		const input = normalizeAccessApplicationInput(validRaw, env);
+		const now = Date.now();
+		const confirmation = await createApplicationConfirmation(input, env, now);
+		await expect(verifyApplicationConfirmation(confirmation.token, input, env, now + 1_000)).resolves.toBe(confirmation.applicationId);
+		await expect(verifyApplicationConfirmation(confirmation.token, { ...input, purpose: `${input.purpose} 已遭修改` }, env, now + 1_000)).rejects.toThrow(/資料已變更/u);
+		await expect(verifyApplicationConfirmation(confirmation.token, input, env, confirmation.expiresAt)).rejects.toThrow(/逾時/u);
+		await expect(verifyApplicationConfirmation(undefined, input, env, now)).rejects.toThrow(/確認資料無效/u);
+
+		const stored = await env.DB.prepare("SELECT COUNT(*) AS total FROM access_applications").first<{ total: number }>();
+		expect(stored?.total).toBe(0);
+	});
+
+	it("uses the signed application ID so a confirmation cannot be stored twice", async () => {
+		const input = normalizeAccessApplicationInput(validRaw, env);
+		const confirmation = await createApplicationConfirmation(input, env);
+		const applicationId = await verifyApplicationConfirmation(confirmation.token, input, env);
+		const request = testRequest("/apply", { method: "POST" });
+		await createAccessApplication(env.DB, input, request, env, "req-confirmed-create", applicationId);
+		await expect(createAccessApplication(env.DB, input, request, env, "req-confirmed-replay", applicationId)).rejects.toThrow();
+		const stored = await env.DB.prepare("SELECT COUNT(*) AS total FROM access_applications WHERE id = ?").bind(applicationId).first<{ total: number }>();
+		expect(stored?.total).toBe(1);
 	});
 
 	it("stores the application with an audit event and tracks notification delivery", async () => {

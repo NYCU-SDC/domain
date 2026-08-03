@@ -80,9 +80,10 @@ export async function createAccessApplication(
 	input: AccessApplicationFormInput & { requestedNamespace: string },
 	request: Request,
 	env: Env,
-	requestId: string
+	requestId: string,
+	applicationId: string = crypto.randomUUID()
 ): Promise<AccessApplicationView> {
-	const id = crypto.randomUUID();
+	const id = applicationId;
 	const now = Date.now();
 	const audit = await prepareAuditStatement(database, request, env, {
 		action: "application.submit",
