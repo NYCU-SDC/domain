@@ -17,7 +17,7 @@ export const links: Route.LinksFunction = () => [
 export const meta: Route.MetaFunction = () => [
 	{ title: "nycu.club｜社團子網域管理平台" },
 	{
-		content: "由軟體開發社維護，提供陽明交大社團安全、可稽核的 DNS 與 Cloudflare cache 管理。",
+		content: "由軟體開發社維護，提供陽明交大社團自助式 DNS 與 Cloudflare cache 管理。",
 		name: "description"
 	},
 	{ content: "website", property: "og:type" },
@@ -29,14 +29,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	const data = useRouteLoaderData<typeof loader>("root");
 	const nonce = data?.cspNonce;
 	return (
-		<html lang="zh-Hant" suppressHydrationWarning>
+		<html lang="zh-Hant">
 			<head>
 				<meta charSet="utf-8" />
 				<meta content="width=device-width, initial-scale=1" name="viewport" />
-				<meta content="#f3eae2" media="(prefers-color-scheme: light)" name="theme-color" />
-				<meta content="#171411" media="(prefers-color-scheme: dark)" name="theme-color" />
+				<meta content="#F4E9E1" name="theme-color" />
 				<Meta />
-				<Links />
+				<Links nonce="" />
 			</head>
 			<body>
 				<a className="skipLink" href="#main-content">

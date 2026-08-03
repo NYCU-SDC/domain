@@ -16,12 +16,13 @@ function applySecurityHeaders(response: Response, request: Request, env: Env, no
 	const headers = new Headers(response.headers);
 	const url = new URL(request.url);
 	const production = env.ENVIRONMENT === "production";
+	const localDevelopment = env.ENVIRONMENT === "local";
 	const csp = [
 		"default-src 'self'",
 		`script-src 'self' 'nonce-${nonce}'`,
-		"style-src 'self'",
+		localDevelopment ? "style-src 'self' 'unsafe-inline' https://font.emtech.cc" : "style-src 'self' https://font.emtech.cc",
 		"img-src 'self' data: https://avatars.githubusercontent.com",
-		"font-src 'self'",
+		"font-src 'self' https://font.emtech.cc",
 		"connect-src 'self'",
 		"object-src 'none'",
 		"base-uri 'self'",
