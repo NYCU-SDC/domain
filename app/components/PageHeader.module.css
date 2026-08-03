@@ -1,0 +1,2 @@
+.header { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 30px; }.header h1 { margin: 0; font-size: clamp(30px, 4vw, 44px); letter-spacing: -.04em; line-height: 1.12; }.header > div:first-child > p:last-child { max-width: 720px; margin: 8px 0 0; color: var(--text-muted); }.actions { display: flex; flex: none; flex-wrap: wrap; gap: 9px; }
+@media (max-width: 680px) { .header { align-items: flex-start; flex-direction: column; }.actions { width: 100%; }.actions > * { flex: 1; } }

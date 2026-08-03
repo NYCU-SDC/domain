@@ -1,0 +1,10 @@
+.page { display: grid; min-height: 100vh; grid-template-columns: minmax(420px, .9fr) 1.1fr; background: var(--surface); }
+.panel { display: flex; max-width: 560px; flex-direction: column; justify-content: center; padding: 64px clamp(32px, 7vw, 92px); }
+.copy { margin-top: 76px; }.copy h1 { margin: 0; font-size: clamp(36px, 5vw, 54px); letter-spacing: -.045em; line-height: 1.08; }.copy > p:last-child { color: var(--text-muted); }
+.githubButton { width: 100%; margin-top: 18px; }
+.error { padding: 12px 14px; margin-top: 18px; border: 1px solid var(--danger); border-radius: 10px; background: var(--danger-soft); color: var(--danger); font-weight: 650; }
+.permissions { display: grid; gap: 16px; padding: 0; margin: 30px 0 0; list-style: none; }.permissions li { display: grid; grid-template-columns: 26px 1fr; gap: 11px; }.permissions svg { color: var(--success); }.permissions span { display: grid; }.permissions small { margin-top: 2px; color: var(--text-muted); }
+.pending { padding: 13px; margin-top: 30px; border-radius: 10px; background: var(--surface-muted); color: var(--text-muted); font-size: 13px; }
+.aside { display: grid; min-height: 100%; place-items: center; padding: 72px; background: radial-gradient(circle at 75% 20%, #174e9c, transparent 37%), #061834; color: #fff; }.aside > div { max-width: 620px; }.aside h2 { margin: 30px 0 12px; font-size: clamp(38px, 5vw, 66px); letter-spacing: -.05em; line-height: 1.05; }.aside p { max-width: 55ch; color: #b6c8e3; font-size: 18px; }.gridMark { display: grid; width: 76px; height: 76px; place-items: center; border: 1px solid #6d91c5; border-radius: 21px; background: #0b2b59; color: #9bc0ff; font-size: 34px; font-weight: 850; box-shadow: 20px 20px 0 #0d2343; }
+@media (max-width: 860px) { .page { grid-template-columns: 1fr; }.panel { max-width: 620px; min-height: 100vh; margin: 0 auto; }.aside { display: none; } }
+@media (max-width: 520px) { .panel { padding: 32px 22px; }.copy { margin-top: 56px; } }
