@@ -17,15 +17,10 @@ test.describe("public SSR and login entry", () => {
 			await expect(page.getByLabel("支援的 DNS 類型").getByText(type, { exact: true })).toBeVisible();
 		}
 		const firstFaq = page.getByRole("button", { name: "誰可以使用？" });
+		await expect(firstFaq).toBeEnabled();
 		await expect(firstFaq).toHaveAttribute("aria-expanded", "false");
-		await expect
-			.poll(async () => {
-				if ((await firstFaq.getAttribute("aria-expanded")) === "false") {
-					await firstFaq.click();
-				}
-				return firstFaq.getAttribute("aria-expanded");
-			})
-			.toBe("true");
+		await firstFaq.click();
+		await expect(firstFaq).toHaveAttribute("aria-expanded", "true");
 		await expect(page.getByText("陽明交大社團或校內單位的網站維護者都可以提出申請。", { exact: false })).toBeVisible();
 		await firstFaq.click();
 		await expect(firstFaq).toHaveAttribute("aria-expanded", "false");
