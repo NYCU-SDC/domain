@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const publicRoutes = ["/", "/apply", "/docs", "/security", "/login"] as const;
+const publicRoutes = ["/", "/apply", "/docs", "/security", "/login", "/sitemap"] as const;
 const wcagTags = ["wcag2a", "wcag2aa", "wcag2aaa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 async function expectNoAutomatedWcagViolations(page: Page): Promise<void> {
@@ -18,7 +18,6 @@ test.describe("WCAG 2.2 accessibility guardrails", () => {
 	for (const path of publicRoutes) {
 		test(`${path} has no automated A, AA, or AAA violations`, async ({ page }) => {
 			await page.goto(path);
-			await page.waitForLoadState("networkidle");
 			await expectNoAutomatedWcagViolations(page);
 		});
 	}
@@ -32,6 +31,72 @@ test.describe("WCAG 2.2 accessibility guardrails", () => {
 		await expect(page.locator("#main-content")).toBeFocused();
 	});
 
+	test("SPA page changes restart focus and announce the loaded page", async ({ page }) => {
+		await page.goto("/");
+		const routeStatus = page.locator("#route-status");
+		await expect(routeStatus).toHaveAttribute("role", "status");
+		await expect(routeStatus).toHaveAttribute("aria-live", "polite");
+
+		const docsLink = page.getByRole("navigation", { name: "頁尾導覽" }).getByRole("link", { name: "使用說明" });
+		await docsLink.focus();
+		await expect(docsLink).toBeFocused();
+		await docsLink.press("Enter");
+
+		await expect(page).toHaveURL(/\/docs$/u);
+		await expect(page.locator("#main-content")).toBeFocused();
+		await expect(routeStatus).toHaveText("頁面已載入：安全管理社團 DNS 與 cache");
+
+		await page.keyboard.press("Tab");
+		await expect(page.getByRole("navigation", { name: "麵包屑" }).getByRole("link", { name: "首頁" })).toBeFocused();
+	});
+
+	test("public subpages identify their location with linked breadcrumbs", async ({ page }) => {
+		const routes = [
+			["/apply", "申請子網域"],
+			["/docs", "使用說明"],
+			["/security", "隱私與安全"],
+			["/login", "登入"],
+			["/sitemap", "網站導覽"]
+		] as const;
+
+		for (const [path, current] of routes) {
+			await page.goto(path);
+			const breadcrumbs = page.getByRole("navigation", { name: "麵包屑" });
+			await expect(breadcrumbs.getByRole("link", { name: "首頁" })).toHaveAttribute("href", "/");
+			const currentItem = breadcrumbs.locator('[aria-current="page"]');
+			await expect(currentItem).toHaveText(current);
+			await expect(currentItem).not.toHaveAttribute("href");
+		}
+	});
+
+	test("site map documents semantic keyboard navigation and lists every public page", async ({ page }) => {
+		await page.goto("/sitemap");
+		await expect(page.getByRole("heading", { name: "鍵盤與網站導覽說明" })).toBeVisible();
+		await expect(page.getByText(/第一個焦點按 Enter 啟用「跳到主要內容」/u)).toBeVisible();
+		await expect(page.getByRole("navigation", { name: "主要導覽" })).toBeVisible();
+		await expect(page.locator("main#main-content")).toBeVisible();
+		await expect(page.getByRole("contentinfo")).toBeVisible();
+		await expect(page.locator("[accesskey]")).toHaveCount(0);
+
+		const pageList = page.getByRole("heading", { name: "公開頁面" }).locator("xpath=following-sibling::ul[1]");
+		for (const destination of ["首頁", "申請子網域", "使用說明", "隱私與安全", "登入"]) {
+			await expect(pageList.getByRole("link", { name: destination, exact: true })).toBeVisible();
+		}
+	});
+
+	test("new-window links include a programmatic warning", async ({ page }) => {
+		await page.goto("/");
+		const maintainerLink = page.locator('#main-content a[href="https://sdc.nycu.club"]');
+		await expect(maintainerLink).toHaveAttribute("target", "_blank");
+		await expect(maintainerLink).toHaveAttribute("title", "sdc.nycu.club（另開新視窗）");
+		await expect(maintainerLink).toHaveAccessibleName(/另開新視窗/u);
+
+		const footerLink = page.locator('#site-footer a[href="https://sdc.nycu.club"]');
+		await expect(footerLink).toHaveAttribute("target", "_blank");
+		await expect(footerLink).toHaveAttribute("title", "交大軟體開發社（另開新視窗）");
+		await expect(footerLink).toHaveAccessibleName(/另開新視窗/u);
+	});
+
 	test("FAQ questions expose a visible keyboard focus state", async ({ page }) => {
 		await page.goto("/#faq");
 		await page.waitForLoadState("networkidle");
@@ -39,7 +104,8 @@ test.describe("WCAG 2.2 accessibility guardrails", () => {
 		await expect(question).toBeEnabled();
 		await question.focus();
 		await expect(question).toBeFocused();
-		await expect(question).toHaveCSS("background-color", "rgb(255, 178, 2)");
+		await expect(question).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+		expect(await question.evaluate(element => getComputedStyle(element).boxShadow)).not.toBe("none");
 		await question.press("Enter");
 		await expect(question).toHaveAttribute("aria-expanded", "true");
 	});

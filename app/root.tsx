@@ -2,6 +2,7 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, 
 
 import type { Route } from "./+types/root";
 import { getWorkerRuntime } from "./server/runtime.server";
+import { RouteAccessibility } from "./shared/components/accessibility/RouteAccessibility";
 import { createPrivateMeta } from "./shared/lib/seo";
 import "./styles/global.css";
 
@@ -43,7 +44,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <Outlet />;
+	return (
+		<>
+			<RouteAccessibility />
+			<Outlet />
+		</>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

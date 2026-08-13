@@ -1,5 +1,6 @@
 import { EyeOff, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 
+import { Breadcrumbs } from "~/shared/components/navigation/Breadcrumbs";
 import { createPublicMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/security";
 import styles from "./public-info.module.css";
@@ -15,6 +16,7 @@ export default function SecurityPage() {
 	return (
 		<main className={styles.main} id="main-content" tabIndex={-1}>
 			<article className={styles.content}>
+				<Breadcrumbs current="隱私與安全" />
 				<h1>隱私與安全</h1>
 				<p className={styles.lead}>
 					平台只使用 GitHub public identity 辨識使用者，不要求 repository 或 organization 權限。Cloudflare API Token、OAuth Client Secret、session token 與 IP hash secret 不會送到瀏覽器。

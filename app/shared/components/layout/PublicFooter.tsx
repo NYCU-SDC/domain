@@ -5,7 +5,8 @@ import styles from "./PublicFooter.module.css";
 const footerLinks = [
 	{ label: "使用說明", to: "/docs" },
 	{ label: "申請子網域", to: "/apply" },
-	{ label: "隱私與安全", to: "/security" }
+	{ label: "隱私與安全", to: "/security" },
+	{ label: "網站導覽", to: "/sitemap" }
 ] as const;
 
 const repositoryUrl = "https://github.com/NYCU-SDC/domain";
@@ -13,13 +14,13 @@ const creatorUrl = "https://github.com/elvisdragonmao/";
 
 export function PublicFooter() {
 	return (
-		<footer className={styles.footer}>
+		<footer className={styles.footer} id="site-footer" tabIndex={-1}>
 			<div className={styles.identity}>
 				<strong translate="no">nycu.club</strong>
 				<p>
 					<a href={creatorUrl}>毛哥EM</a> 製作，由{" "}
-					<a href="https://sdc.nycu.club" rel="noreferrer" target="_blank">
-						交大軟體開發社
+					<a href="https://sdc.nycu.club" rel="noreferrer" target="_blank" title="交大軟體開發社（另開新視窗）">
+						交大軟體開發社<span className="srOnly">（另開新視窗）</span>
 					</a>{" "}
 					維護
 				</p>

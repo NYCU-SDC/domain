@@ -6,7 +6,7 @@ import styles from "./PublicHeader.module.css";
 export function PublicHeader() {
 	return (
 		<header className={styles.header}>
-			<nav className={styles.nav} aria-label="主要導覽">
+			<nav className={styles.nav} id="site-navigation" aria-label="主要導覽" tabIndex={-1}>
 				<Link className={`brand ${styles.wordmark}`} to="/" translate="no">
 					nycu.club
 				</Link>

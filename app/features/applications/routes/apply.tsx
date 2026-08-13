@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, Send } from "lucide-react";
+import { Check, Send } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { data, Form, Link, useNavigation } from "react-router";
 
@@ -9,6 +9,7 @@ import { writeFailureAudit } from "~/features/audit/server/audit.server";
 import { getWorkerRuntime } from "~/server/runtime.server";
 import { enforceRateLimit } from "~/server/security/rate-limit.server";
 import { assertSameOrigin, hashClientIp, readUrlEncodedForm } from "~/server/security/request.server";
+import { Breadcrumbs } from "~/shared/components/navigation/Breadcrumbs";
 import type { AccessApplicationFormInput } from "~/shared/lib/applications";
 import { AppError, toAppError } from "~/shared/lib/errors";
 import { createPublicMeta } from "~/shared/lib/seo";
@@ -269,6 +270,7 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 	if (actionData?.phase === "complete") {
 		return (
 			<main className={styles.success} id="main-content" tabIndex={-1}>
+				<Breadcrumbs current="申請子網域" />
 				<span className={styles.successIcon}>
 					<Check aria-hidden="true" />
 				</span>
@@ -318,10 +320,7 @@ export default function Apply({ actionData }: Route.ComponentProps) {
 	return (
 		<main className={styles.layout} id="main-content" tabIndex={-1}>
 			<aside className={styles.intro}>
-				<Link className={styles.back} to="/">
-					<ArrowLeft aria-hidden="true" size={17} />
-					回到首頁
-				</Link>
+				<Breadcrumbs current="申請子網域" />
 				<h1>
 					申請一個
 					<br />

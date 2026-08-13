@@ -282,7 +282,9 @@
 
 .faqToggle:focus-visible {
 	outline: none;
-	background: var(--yellow);
+	box-shadow: inset 0 0 0 0.1875rem var(--focus);
+	text-decoration: underline;
+	text-underline-offset: 0.25rem;
 }
 
 .faqToggle svg {

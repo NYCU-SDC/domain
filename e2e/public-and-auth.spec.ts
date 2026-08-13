@@ -19,6 +19,7 @@ test.describe("public SSR and login entry", () => {
 		await expect(page.getByRole("button", { name: "誰可以使用？" })).toHaveAttribute("aria-expanded", "false");
 		await expect(page.getByText("陽明交大社團或校內單位的網站維護者都可以提出申請。", { exact: false })).toBeAttached();
 		await expect(page.getByRole("link", { name: "隱私與安全" })).toHaveAttribute("href", "/security");
+		await expect(page.getByRole("link", { name: "網站導覽" })).toHaveAttribute("href", "/sitemap");
 		await expect(page.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute("href", "https://github.com/NYCU-SDC/domain");
 		await expect(page.getByRole("link", { name: "毛哥EM", exact: true })).toHaveAttribute("href", "https://github.com/elvisdragonmao/");
 		await expect(page.getByRole("link", { name: "交大軟體開發社" }).first()).toHaveAttribute("href", "https://sdc.nycu.club");
@@ -108,6 +109,10 @@ test.describe("public SSR and login entry", () => {
 		await expect(page.getByRole("heading", { name: "隱私與安全", exact: true })).toBeVisible();
 		await expect(page.getByRole("navigation", { name: "主要導覽" }).getByRole("link", { name: "申請子網域" })).toHaveAttribute("href", "/apply");
 		await expect(page.getByRole("navigation", { name: "頁尾導覽" }).getByRole("link", { name: "隱私與安全" })).toHaveAttribute("href", "/security");
+
+		await page.goto("/sitemap");
+		await expect(page.getByRole("heading", { name: "網站導覽（SITE MAP）" })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "公開頁面" })).toBeVisible();
 	});
 
 	test("removed status route returns a noindex 404", async ({ page }) => {

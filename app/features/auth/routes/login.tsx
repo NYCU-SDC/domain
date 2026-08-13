@@ -3,6 +3,7 @@ import { Link, redirect } from "react-router";
 
 import { getAuthenticatedSession } from "~/features/auth/server/session.server";
 import { getWorkerRuntime } from "~/server/runtime.server";
+import { Breadcrumbs } from "~/shared/components/navigation/Breadcrumbs";
 import { createPrivateMeta } from "~/shared/lib/seo";
 import type { Route } from "./+types/login";
 import styles from "./login.module.css";
@@ -30,6 +31,7 @@ export default function Login({ loaderData }: Route.ComponentProps) {
 	return (
 		<main className={styles.main} id="main-content" tabIndex={-1}>
 			<section className={styles.panel}>
+				<Breadcrumbs current="登入" />
 				<h1>登入</h1>
 				{loaderData.errorMessage ? (
 					<div className={styles.error} role="alert">

@@ -58,8 +58,9 @@ export default function Landing() {
 				<div className={styles.heroCopy}>
 					<p className={styles.maintainer}>
 						交大軟體開發社維護
-						<a href="https://sdc.nycu.club" rel="noreferrer" target="_blank">
+						<a href="https://sdc.nycu.club" rel="noreferrer" target="_blank" title="sdc.nycu.club（另開新視窗）">
 							sdc.nycu.club <ExternalLink size={14} aria-hidden="true" />
+							<span className="srOnly">（另開新視窗）</span>
 						</a>
 					</p>
 					<h1>
@@ -100,7 +101,7 @@ export default function Landing() {
 				</aside>
 			</section>
 
-			<section className={styles.manage} id="manage">
+			<section className={styles.manage} id="manage" tabIndex={-1}>
 				<header className={styles.sectionHeader}>
 					<h2>可以改什麼</h2>
 					<p>管理 DNS、切換 Cloudflare Proxy，網站更新後也能直接清除快取。</p>
@@ -138,7 +139,7 @@ export default function Landing() {
 				</div>
 			</section>
 
-			<section className={styles.faq} id="faq">
+			<section className={styles.faq} id="faq" tabIndex={-1}>
 				<header className={styles.sectionHeader}>
 					<h2>常見問題</h2>
 				</header>

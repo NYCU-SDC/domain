@@ -13,21 +13,6 @@
 	top: 7.5rem;
 }
 
-.back {
-	display: inline-flex;
-	min-height: 2.75rem;
-	align-items: center;
-	gap: 0.4375rem;
-	margin-bottom: 2.5rem;
-	font-weight: 760;
-	text-decoration: none;
-}
-
-.back:hover {
-	text-decoration: underline;
-	text-underline-offset: 0.25rem;
-}
-
 .intro h1 {
 	margin: 0;
 	font-size: clamp(3rem, 6vw, 5.6rem);
@@ -45,7 +30,7 @@
 	font-size: 1.05rem;
 }
 
-.intro ul {
+.intro > ul {
 	display: grid;
 	gap: 0.625rem;
 	padding: 0;
@@ -53,14 +38,14 @@
 	list-style: none;
 }
 
-.intro li {
+.intro > ul > li {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
 	font-weight: 720;
 }
 
-.intro li span {
+.intro > ul > li > span {
 	display: grid;
 	width: 1.875rem;
 	height: 1.875rem;
@@ -330,11 +315,11 @@
 		max-width: 8ch;
 	}
 
-	.intro ul {
+	.intro > ul {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	.intro li {
+	.intro > ul > li {
 		align-items: flex-start;
 		flex-direction: column;
 	}
@@ -346,16 +331,12 @@
 		padding-block: 2.25rem 4.5rem;
 	}
 
-	.back {
-		margin-bottom: 1.75rem;
-	}
-
-	.intro ul,
+	.intro > ul,
 	.twoColumns {
 		grid-template-columns: 1fr;
 	}
 
-	.intro li {
+	.intro > ul > li {
 		align-items: center;
 		flex-direction: row;
 	}
