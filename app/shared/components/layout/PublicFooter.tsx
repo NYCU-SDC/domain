@@ -11,6 +11,7 @@ const footerLinks = [
 
 const repositoryUrl = "https://github.com/NYCU-SDC/domain";
 const creatorUrl = "https://github.com/elvisdragonmao/";
+const accessibilityBadgeUrl = "https://accessibility.moda.gov.tw/Applications/Detail?category=20260804001506";
 
 export function PublicFooter() {
 	return (
@@ -24,7 +25,10 @@ export function PublicFooter() {
 					</a>{" "}
 					維護
 				</p>
-				<img alt="無障礙標章 2.1" className={styles.badge} height="41" src="/accessibility-badge.svg" width="117" />
+				<a className={styles.badge} href={accessibilityBadgeUrl} rel="noreferrer" target="_blank" title="通過AAA檢測等級無障礙網頁檢測（另開新視窗）">
+					<img alt="通過AAA檢測等級無障礙網頁檢測" height="44" src="/accessibility-badge.svg" width="125" />
+					<span className="srOnly">（另開新視窗）</span>
+				</a>
 			</div>
 			<nav aria-label="頁尾導覽">
 				{footerLinks.map(link => (

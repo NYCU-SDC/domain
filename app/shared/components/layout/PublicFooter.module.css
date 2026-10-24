@@ -23,10 +23,14 @@
 }
 
 .badge {
-	display: block;
-	width: 7.3125rem;
-	height: auto;
+	justify-self: start;
 	margin-top: 0.25rem;
+}
+
+.badge img {
+	display: block;
+	width: 7.8125rem;
+	height: auto;
 }
 
 .footer nav {
