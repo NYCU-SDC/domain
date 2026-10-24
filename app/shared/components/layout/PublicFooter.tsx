@@ -24,6 +24,7 @@ export function PublicFooter() {
 					</a>{" "}
 					維護
 				</p>
+				<img alt="無障礙標章 2.1" className={styles.badge} height="41" src="/accessibility-badge.svg" width="117" />
 			</div>
 			<nav aria-label="頁尾導覽">
 				{footerLinks.map(link => (
