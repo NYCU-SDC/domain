@@ -138,6 +138,9 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		allowUnderscore: false,
 		allowWildcard: false
 	});
+	if (namespace !== zoneName && !namespace.endsWith(`.${zoneName}`)) {
+		throw new AppError("VALIDATION_ERROR", `Namespace「${namespace}」不在 ${zoneName} 內；請選 Root（${zoneName}），或填寫完整子網域，例如 ${namespace}.${zoneName}`);
+	}
 	const baseHostname = resolveRelativeOwner(input.name, namespace);
 
 	if (input.type === "SRV") {

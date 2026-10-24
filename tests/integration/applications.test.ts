@@ -26,14 +26,13 @@ const validRaw = {
 };
 
 describe("public namespace applications", () => {
-	it("normalizes a valid application and rejects protected or suspicious input", () => {
+	it("normalizes a valid application and rejects apex or suspicious input", () => {
 		const normalized = normalizeAccessApplicationInput(validRaw, env);
 		expect(normalized).toMatchObject({
 			githubLogin: "magician123",
 			requestedNamespace: "magic.nycu.club"
 		});
 		expect(() => normalizeAccessApplicationInput({ ...validRaw, requestedNamespace: "nycu.club" }, env)).toThrow(/真正子網域/u);
-		expect(() => normalizeAccessApplicationInput({ ...validRaw, requestedNamespace: "www.nycu.club" }, env)).toThrow(/受平台保護/u);
 		expect(() => normalizeAccessApplicationInput({ ...validRaw, currentWebsiteUrl: "https://user:pass@example.com/" }, env)).toThrow(/輸入資料格式/u);
 		expect(() => normalizeAccessApplicationInput({ ...validRaw, website: "bot-filled" }, env)).toThrow(/輸入資料格式/u);
 	});

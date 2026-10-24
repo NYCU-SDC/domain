@@ -214,8 +214,19 @@ export function AdminUsersManager({ csrfToken, users }: { readonly csrfToken: st
 										)}
 									</td>
 									<td>
-										<span className={styles.grantCount}>{user.grants.length}</span>
-										<div className={styles.grantTooltip}>{user.grants.join(", ") || "No grants"}</div>
+										{user.isAdmin ? (
+											<>
+												<span className="statusPill" data-tone="success">
+													全部
+												</span>
+												<div className={styles.grantTooltip}>Admin：Root 與所有子網域</div>
+											</>
+										) : (
+											<>
+												<span className={styles.grantCount}>{user.grants.length}</span>
+												<div className={styles.grantTooltip}>{user.grants.join(", ") || "No grants"}</div>
+											</>
+										)}
 									</td>
 									<td>
 										<span className={styles.note}>{user.note ?? "—"}</span>

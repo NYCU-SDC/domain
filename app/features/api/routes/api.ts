@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createAdminUser, getAdminUser, listAdminUsers, resolveGithubIdentityForAdmin, updateAdminUser } from "~/features/admin/server/users.server";
 import { prepareAuditStatement, writeAuditLog, writeFailureAudit } from "~/features/audit/server/audit.server";
 import { getAuthenticatedSession, requireActiveSession, requireAdminSession, requireAuthenticatedSession } from "~/features/auth/server/session.server";
-import { assertHostnameAccess, assertPurgeEverythingAccess, assertRecordAccess, canSeeRecord, isProtectedHostname, matchingNamespace } from "~/features/dns/server/authorization.server";
+import { assertHostnameAccess, assertPurgeEverythingAccess, assertRecordAccess, canSeeRecord, matchingNamespace } from "~/features/dns/server/authorization.server";
 import { CloudflareClient } from "~/server/cloudflare/client.server";
 import { getAppConfig, requireSecret } from "~/server/config.server";
 import { createDb } from "~/server/db/client.server";
@@ -15,7 +15,7 @@ import { assertCsrfToken, assertSameOrigin, createCsrfToken } from "~/server/sec
 import { adminUsersQuerySchema, createUserSchema, resolveGithubUserSchema, updateUserSchema } from "~/shared/lib/admin";
 import { apiFailure, apiSuccess, assertJsonRequest } from "~/shared/lib/api";
 import { normalizePurgeHostnames, normalizePurgePrefixes, normalizePurgeUrls, purgeEverythingSchema } from "~/shared/lib/cache";
-import { normalizeHostname } from "~/shared/lib/dns/hostname";
+import { inferRecordNamespace, matchesNamespaceFilter, normalizeHostname } from "~/shared/lib/dns/hostname";
 import { allowedDnsTypes, normalizeDnsMutation, parseDnsRecordInput } from "~/shared/lib/dns/records";
 import { AppError, validationErrorFromZod } from "~/shared/lib/errors";
 import type { Route } from "./+types/api";
@@ -121,7 +121,7 @@ function cloudflareClient(env: Env, requestId: string): CloudflareClient {
 
 function publicRecord(record: Awaited<ReturnType<CloudflareClient["getDnsRecord"]>>, session: Awaited<ReturnType<typeof requireActiveSession>>, env: Env) {
 	const config = getAppConfig(env);
-	const namespace = session.user.isAdmin ? null : matchingNamespace(record.name, session.grants);
+	const namespace = session.user.isAdmin ? inferRecordNamespace(record.name, config.zoneName) : matchingNamespace(record.name, session.grants);
 	return {
 		content: record.content ?? null,
 		createdOn: record.created_on ?? null,
@@ -131,7 +131,7 @@ function publicRecord(record: Awaited<ReturnType<CloudflareClient["getDnsRecord"
 		name: record.name,
 		namespace,
 		priority: record.priority ?? null,
-		protected: config.protectedRecordIds.has(record.id) || isProtectedHostname(record.name, config),
+		protected: config.protectedRecordIds.has(record.id),
 		proxiable: record.proxiable,
 		proxied: record.proxied,
 		ttl: record.ttl,
@@ -292,18 +292,16 @@ async function dispatchGet(request: Request, env: Env, requestId: string): Promi
 	if (path === "/dns-records") {
 		const filters = parseWithSchema(dnsQuerySchema, queryObject(request));
 		const config = getAppConfig(env);
-		if (filters.namespace) {
-			const canonical = normalizeHostname(filters.namespace);
-			if (!active.user.isAdmin && !active.grants.includes(canonical)) {
-				throw new AppError("FORBIDDEN", "無法查詢未授權的 namespace");
-			}
+		const namespace = filters.namespace ? normalizeHostname(filters.namespace) : null;
+		if (namespace && !active.user.isAdmin && !active.grants.includes(namespace)) {
+			throw new AppError("FORBIDDEN", "無法查詢未授權的 namespace");
 		}
 		const records = (await cloudflareClient(env, requestId).listDnsRecords())
 			.filter(record => canSeeRecord(active, record, config))
 			.map(record => publicRecord(record, active, env))
 			.filter(record => filters.type === "all" || record.type === filters.type)
 			.filter(record => filters.proxied === "all" || record.proxied === (filters.proxied === "yes"))
-			.filter(record => !filters.namespace || record.name === filters.namespace || record.name.endsWith(`.${filters.namespace}`))
+			.filter(record => !namespace || matchesNamespaceFilter(record.name, namespace, config.zoneName))
 			.filter(record => {
 				if (!filters.search) return true;
 				const haystack = `${record.name} ${record.content ?? ""} ${JSON.stringify(record.data ?? {})}`.toLowerCase();

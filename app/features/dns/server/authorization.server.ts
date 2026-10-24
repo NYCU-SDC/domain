@@ -10,14 +10,6 @@ export interface RecordAuthorizationTarget {
 	readonly type?: string;
 }
 
-export function isProtectedHostname(hostname: string, config: AppConfig): boolean {
-	const canonical = normalizeHostname(hostname, {
-		allowUnderscore: true,
-		allowWildcard: true
-	});
-	return config.protectedHostnames.has(canonical);
-}
-
 export function matchingNamespace(hostname: string, grants: readonly string[]): string | null {
 	const matches = grants.filter(grant => isHostnameWithinNamespace(hostname, grant));
 	matches.sort((left, right) => right.split(".").length - left.split(".").length);
@@ -29,13 +21,13 @@ export function assertHostnameAccess(session: AuthenticatedSession, hostname: st
 		allowUnderscore: true,
 		allowWildcard: true
 	});
-	if (isProtectedHostname(canonical, config)) {
-		throw new AppError("PROTECTED_RESOURCE", "此 hostname 受平台保護，不能透過本平台修改");
-	}
-	if (canonical === config.zoneName || !canonical.endsWith(`.${config.zoneName}`)) {
-		throw new AppError("FORBIDDEN", "Hostname 不屬於 nycu.club zone 的可管理子網域");
+	if (canonical !== config.zoneName && !canonical.endsWith(`.${config.zoneName}`)) {
+		throw new AppError("FORBIDDEN", `Hostname「${canonical}」不在 ${config.zoneName} zone 內`);
 	}
 	if (session.user.isAdmin) return null;
+	if (canonical === config.zoneName) {
+		throw new AppError("FORBIDDEN", `根網域 ${config.zoneName} 只有 admin 可以管理`);
+	}
 	const namespace = matchingNamespace(canonical, session.grants);
 	if (!namespace) throw new AppError("FORBIDDEN", "你沒有權限管理此 hostname");
 	return namespace;
@@ -58,7 +50,6 @@ export function canSeeRecord(session: AuthenticatedSession, record: RecordAuthor
 			allowUnderscore: true,
 			allowWildcard: true
 		});
-		if (config.protectedHostnames.has(canonical)) return session.user.isAdmin;
 		return session.user.isAdmin || session.grants.some(grant => isHostnameWithinNamespace(canonical, grant));
 	} catch {
 		return false;

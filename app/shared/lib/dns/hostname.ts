@@ -104,7 +104,7 @@ export function resolveRelativeOwner(relativeName: string, namespace: string): s
 	return hostname;
 }
 
-export function normalizeNamespaceGrant(input: string, zoneName: string, protectedHostnames: ReadonlySet<string>): string {
+export function normalizeNamespaceGrant(input: string, zoneName: string): string {
 	const namespace = normalizeHostname(input, {
 		allowUnderscore: false,
 		allowWildcard: false
@@ -112,9 +112,6 @@ export function normalizeNamespaceGrant(input: string, zoneName: string, protect
 	const zone = normalizeHostname(zoneName);
 	if (namespace === zone || !namespace.endsWith(`.${zone}`)) {
 		throw new AppError("VALIDATION_ERROR", `Namespace 必須是 ${zone} 的真正子網域`);
-	}
-	if (protectedHostnames.has(namespace)) {
-		throw new AppError("PROTECTED_RESOURCE", "此 hostname 受平台保護，不能作為 grant");
 	}
 	return namespace;
 }
@@ -142,4 +139,32 @@ export function isDeepSubdomain(hostname: string, zoneName: string): boolean {
 	if (!host.endsWith(`.${zone}`)) return false;
 	const relative = host.slice(0, -1 * `.${zone}`.length);
 	return relative.split(".").length > 1;
+}
+
+/**
+ * Returns the namespace that owns a record when no grant applies: the zone root for the apex
+ * and root-level service names such as `_dmarc` or `*`, otherwise the first-level subdomain.
+ */
+export function inferRecordNamespace(hostname: string, zoneName: string): string {
+	if (hostname === zoneName || !hostname.endsWith(`.${zoneName}`)) return zoneName;
+	const labels = hostname.slice(0, -1 * `.${zoneName}`.length).split(".");
+	const topLabel = labels[labels.length - 1] ?? "";
+	if (topLabel.startsWith("_") || topLabel === "*") return zoneName;
+	return `${topLabel}.${zoneName}`;
+}
+
+export function subdomainLabelOf(namespace: string, zoneName: string): string {
+	return namespace.endsWith(`.${zoneName}`) ? namespace.slice(0, -1 * `.${zoneName}`.length) : "";
+}
+
+export function subdomainNamespace(label: string, zoneName: string): string {
+	const trimmed = label.trim().toLowerCase().replace(/\.$/u, "");
+	const relative = trimmed === zoneName ? "" : trimmed.endsWith(`.${zoneName}`) ? trimmed.slice(0, -1 * `.${zoneName}`.length) : trimmed;
+	return relative ? `${relative}.${zoneName}` : "";
+}
+
+/** Root keeps only records owned by the zone root; a subdomain keeps everything under it. */
+export function matchesNamespaceFilter(hostname: string, namespace: string, zoneName: string): boolean {
+	if (namespace === zoneName) return inferRecordNamespace(hostname, zoneName) === zoneName;
+	return isHostnameWithinNamespace(hostname, namespace);
 }

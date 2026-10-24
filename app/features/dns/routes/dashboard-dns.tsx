@@ -1,7 +1,9 @@
+import { listNamespaceOptions, selectedNamespace } from "~/features/dashboard/server/namespaces.server";
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { listAuthorizedDnsRecords } from "~/features/dns/server/records.server";
 import { getAppConfig } from "~/server/config.server";
 import { PageHeader } from "~/shared/components/layout/PageHeader";
+import { matchesNamespaceFilter } from "~/shared/lib/dns/hostname";
 import { safeErrorDiagnostics, toAppError } from "~/shared/lib/errors";
 import { createPrivateMeta } from "~/shared/lib/seo";
 import { DnsManager } from "../components/DnsManager";
@@ -10,18 +12,21 @@ import type { Route } from "./+types/dashboard-dns";
 export async function loader({ context, request }: Route.LoaderArgs) {
 	const { csrfToken, runtime, session } = await requireDashboardPage(request, context);
 	const config = getAppConfig(runtime.env);
+	const namespaces = await listNamespaceOptions(session, runtime.env);
+	const namespace = selectedNamespace(request, namespaces);
+	const base = {
+		allowProxiedDeepSubdomains: config.allowProxiedDeepSubdomains,
+		csrfToken,
+		grants: session.grants,
+		isAdmin: session.user.isAdmin,
+		knownSubdomains: namespaces.subdomains,
+		requestId: runtime.requestId,
+		selectedNamespace: namespace,
+		zoneName: config.zoneName
+	};
 	try {
-		const records = await listAuthorizedDnsRecords(session, runtime.env, runtime.requestId);
-		return {
-			allowProxiedDeepSubdomains: config.allowProxiedDeepSubdomains,
-			csrfToken,
-			error: null,
-			grants: session.grants,
-			isAdmin: session.user.isAdmin,
-			records,
-			requestId: runtime.requestId,
-			zoneName: config.zoneName
-		};
+		const records = (await listAuthorizedDnsRecords(session, runtime.env, runtime.requestId)).filter(record => !namespace || matchesNamespaceFilter(record.name, namespace, config.zoneName));
+		return { ...base, error: null, records };
 	} catch (error) {
 		const appError = toAppError(error);
 		const diagnostics = safeErrorDiagnostics(error);
@@ -35,16 +40,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 				userId: session.user.id
 			})
 		);
-		return {
-			allowProxiedDeepSubdomains: config.allowProxiedDeepSubdomains,
-			csrfToken,
-			error: appError.message,
-			grants: session.grants,
-			isAdmin: session.user.isAdmin,
-			records: [],
-			requestId: runtime.requestId,
-			zoneName: config.zoneName
-		};
+		return { ...base, error: appError.message, records: [] };
 	}
 }
 

@@ -122,7 +122,7 @@ export async function listAdminUsers(
 
 function normalizeRequestedGrants(grants: readonly string[], env: Env): string[] {
 	const config = getAppConfig(env);
-	return normalizeGrantSet(grants.map(grant => normalizeNamespaceGrant(grant, config.zoneName, config.protectedHostnames)));
+	return normalizeGrantSet(grants.map(grant => normalizeNamespaceGrant(grant, config.zoneName)));
 }
 
 async function auditStatementsForUserUpdate(

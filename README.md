@@ -159,12 +159,6 @@ TTL 支援 `1`（Auto）或 `60..86400` 秒；proxied record 必須使用 Auto�
 
 ### Protected records
 
-`PROTECTED_HOSTNAMES` 是 JSON array；預設範例：
-
-```json
-["nycu.club", "www.nycu.club", "api.nycu.club", "mail.nycu.club", "_dmarc.nycu.club"]
-```
-
 `PROTECTED_RECORD_IDS` 是可選的 Cloudflare record ID JSON array。即使 admin 也不能從此平台修改 protected record；必須使用 Cloudflare Dashboard 的 break-glass 流程。
 
 ### Deep-subdomain TLS policy
@@ -287,7 +281,6 @@ Resources 限制為 `Include → Specific zone → nycu.club`。這個 token 是
 
 - production/staging `CLOUDFLARE_ZONE_ID`
 - `BOOTSTRAP_ADMIN_GITHUB_IDS`
-- `PROTECTED_HOSTNAMES`
 - 可選 `PROTECTED_RECORD_IDS`
 - deep TLS 與 purge-everything feature flags
 
@@ -517,8 +510,7 @@ Worker entry 統一套用：
 
 ### Protected records 與 break-glass
 
-- 將 apex、主要 web/API/mail、DMARC 與其他共享服務加入 `PROTECTED_HOSTNAMES`。
-- 對無法單靠 hostname 表示的共享記錄加入 `PROTECTED_RECORD_IDS`。
+- 將 apex、主要 web/API/mail、DMARC 等不可由平台修改的共享記錄加入 `PROTECTED_RECORD_IDS`。
 - Break-glass 只透過 Cloudflare Dashboard 或獨立受控流程，操作後補登事件與原因。
 - 若啟用 deep proxy，先驗證 Total TLS/Advanced Certificate coverage，再修改 `ALLOW_PROXIED_DEEP_SUBDOMAINS`。
 

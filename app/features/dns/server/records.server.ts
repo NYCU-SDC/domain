@@ -1,7 +1,8 @@
 import type { AuthenticatedSession } from "~/features/auth/server/session.server";
-import { canSeeRecord, isProtectedHostname, matchingNamespace } from "~/features/dns/server/authorization.server";
+import { canSeeRecord, matchingNamespace } from "~/features/dns/server/authorization.server";
 import { CloudflareClient, type CloudflareDnsRecord } from "~/server/cloudflare/client.server";
 import { getAppConfig, requireSecret } from "~/server/config.server";
+import { inferRecordNamespace } from "~/shared/lib/dns/hostname";
 
 export interface DnsRecordView {
 	readonly content: string | null;
@@ -28,9 +29,9 @@ export function toDnsRecordView(record: CloudflareDnsRecord, session: Authentica
 		id: record.id,
 		modifiedOn: record.modified_on ?? null,
 		name: record.name,
-		namespace: session.user.isAdmin ? null : matchingNamespace(record.name, session.grants),
+		namespace: session.user.isAdmin ? inferRecordNamespace(record.name, config.zoneName) : matchingNamespace(record.name, session.grants),
 		priority: record.priority ?? null,
-		protected: config.protectedRecordIds.has(record.id) || isProtectedHostname(record.name, config),
+		protected: config.protectedRecordIds.has(record.id),
 		proxiable: record.proxiable,
 		proxied: record.proxied,
 		ttl: record.ttl,

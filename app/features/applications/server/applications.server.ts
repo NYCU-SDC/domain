@@ -71,7 +71,7 @@ export function normalizeAccessApplicationInput(raw: unknown, env: Env): AccessA
 	const requestedFqdn = isFullZoneHostname ? parsed.data.requestedNamespace : `${parsed.data.requestedNamespace}.${config.zoneName}`;
 	return {
 		...parsed.data,
-		requestedNamespace: normalizeNamespaceGrant(requestedFqdn, config.zoneName, config.protectedHostnames)
+		requestedNamespace: normalizeNamespaceGrant(requestedFqdn, config.zoneName)
 	};
 }
 

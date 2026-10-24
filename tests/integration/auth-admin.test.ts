@@ -281,7 +281,6 @@ describe("cache purge feature gates and rate limiting", () => {
 		bootstrapAdminGithubIds: new Set<string>(),
 		enablePurgeEverything: false,
 		environment: "local" as const,
-		protectedHostnames: new Set<string>(),
 		protectedRecordIds: new Set<string>(),
 		sessionMaxAgeSeconds: 604_800,
 		zoneId: "zone",

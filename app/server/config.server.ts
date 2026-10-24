@@ -9,7 +9,6 @@ export interface AppConfig {
 	readonly bootstrapAdminGithubIds: ReadonlySet<string>;
 	readonly enablePurgeEverything: boolean;
 	readonly environment: "local" | "production" | "staging";
-	readonly protectedHostnames: ReadonlySet<string>;
 	readonly protectedRecordIds: ReadonlySet<string>;
 	readonly sessionMaxAgeSeconds: number;
 	readonly zoneId: string;
@@ -53,7 +52,6 @@ export function getAppConfig(env: Env): AppConfig {
 		throw new AppError("INTERNAL_ERROR", "APP_ORIGIN 設定不正確", { cause: error });
 	}
 
-	const protectedHostnames = new Set(parseJsonArray(env.PROTECTED_HOSTNAMES, "PROTECTED_HOSTNAMES").map(hostname => normalizeHostname(hostname, { allowUnderscore: true, allowWildcard: false })));
 	const protectedRecordIds = new Set(parseJsonArray(env.PROTECTED_RECORD_IDS, "PROTECTED_RECORD_IDS"));
 	const bootstrapIds = env.BOOTSTRAP_ADMIN_GITHUB_IDS.split(",")
 		.map(id => id.trim())
@@ -72,7 +70,6 @@ export function getAppConfig(env: Env): AppConfig {
 		bootstrapAdminGithubIds: new Set(bootstrapIds),
 		enablePurgeEverything: parseBoolean(env.ENABLE_PURGE_EVERYTHING, "ENABLE_PURGE_EVERYTHING"),
 		environment: env.ENVIRONMENT,
-		protectedHostnames,
 		protectedRecordIds,
 		sessionMaxAgeSeconds,
 		zoneId: env.CLOUDFLARE_ZONE_ID,

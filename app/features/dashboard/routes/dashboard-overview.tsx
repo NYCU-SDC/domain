@@ -45,7 +45,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	const lastPurge = recent.results.find(event => event.action.startsWith("cache.purge"));
 	return {
 		counts: {
-			namespaces: session.user.isAdmin ? "全部" : session.grants.length,
+			namespaces: session.user.isAdmin ? "Root + 全部" : session.grants.length,
 			proxied: records.filter(record => record.proxied).length,
 			records: records.length
 		},

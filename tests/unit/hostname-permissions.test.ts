@@ -2,7 +2,18 @@ import { describe, expect, it } from "vitest";
 
 import { assertHostnameAccess, assertRecordAccess, canSeeRecord } from "../../app/features/dns/server/authorization.server";
 import type { AppConfig } from "../../app/server/config.server";
-import { isDeepSubdomain, isHostnameWithinNamespace, normalizeGrantSet, normalizeHostname, normalizeNamespaceGrant, resolveRelativeOwner } from "../../app/shared/lib/dns/hostname";
+import {
+	inferRecordNamespace,
+	isDeepSubdomain,
+	isHostnameWithinNamespace,
+	matchesNamespaceFilter,
+	normalizeGrantSet,
+	normalizeHostname,
+	normalizeNamespaceGrant,
+	resolveRelativeOwner,
+	subdomainNamespace
+} from "../../app/shared/lib/dns/hostname";
+import { normalizeDnsMutation } from "../../app/shared/lib/dns/records";
 import { AppError } from "../../app/shared/lib/errors";
 import { sessionFor } from "../helpers";
 
@@ -14,7 +25,6 @@ const config: AppConfig = {
 	bootstrapAdminGithubIds: new Set(),
 	enablePurgeEverything: false,
 	environment: "local",
-	protectedHostnames: new Set(["nycu.club", "api.nycu.club"]),
 	protectedRecordIds: new Set(["protected-record-id"]),
 	sessionMaxAgeSeconds: 604_800,
 	zoneId: "zone-id",
@@ -69,17 +79,45 @@ describe("DNS label boundary authorization", () => {
 		expect(normalizeGrantSet(["www.magic.nycu.club", grant, grant, "photo.nycu.club"])).toEqual([grant, "photo.nycu.club"]);
 	});
 
-	it("rejects apex, wildcard, external, and protected namespace grants", () => {
-		expect(() => normalizeNamespaceGrant("nycu.club", "nycu.club", new Set())).toThrow();
-		expect(() => normalizeNamespaceGrant("*.nycu.club", "nycu.club", new Set())).toThrow();
-		expect(() => normalizeNamespaceGrant("magic.example", "nycu.club", new Set())).toThrow();
-		expect(() => normalizeNamespaceGrant("api.nycu.club", "nycu.club", config.protectedHostnames)).toThrow(/保護/u);
+	it("rejects apex, wildcard, and external namespace grants", () => {
+		expect(() => normalizeNamespaceGrant("nycu.club", "nycu.club")).toThrow();
+		expect(() => normalizeNamespaceGrant("*.nycu.club", "nycu.club")).toThrow();
+		expect(() => normalizeNamespaceGrant("magic.example", "nycu.club")).toThrow();
 	});
 
 	it("detects first-level versus deep subdomains, including wildcard", () => {
 		expect(isDeepSubdomain("magic.nycu.club", "nycu.club")).toBe(false);
 		expect(isDeepSubdomain("www.magic.nycu.club", "nycu.club")).toBe(true);
 		expect(isDeepSubdomain("*.magic.nycu.club", "nycu.club")).toBe(true);
+	});
+});
+
+describe("root and subdomain namespaces", () => {
+	it("assigns root-level names to the zone and everything else to its first-level subdomain", () => {
+		expect(inferRecordNamespace("nycu.club", "nycu.club")).toBe("nycu.club");
+		expect(inferRecordNamespace("_dmarc.nycu.club", "nycu.club")).toBe("nycu.club");
+		expect(inferRecordNamespace("*.nycu.club", "nycu.club")).toBe("nycu.club");
+		expect(inferRecordNamespace("_https._tcp.nycu.club", "nycu.club")).toBe("nycu.club");
+		expect(inferRecordNamespace("test.nycu.club", "nycu.club")).toBe("test.nycu.club");
+		expect(inferRecordNamespace("_acme-challenge.www.test.nycu.club", "nycu.club")).toBe("test.nycu.club");
+	});
+
+	it("filters root without swallowing subdomains", () => {
+		expect(matchesNamespaceFilter("_github-challenge.nycu.club", "nycu.club", "nycu.club")).toBe(true);
+		expect(matchesNamespaceFilter("test.nycu.club", "nycu.club", "nycu.club")).toBe(false);
+		expect(matchesNamespaceFilter("www.test.nycu.club", "test.nycu.club", "nycu.club")).toBe(true);
+	});
+
+	it("composes a subdomain namespace from a bare label or a full FQDN", () => {
+		expect(subdomainNamespace("test", "nycu.club")).toBe("test.nycu.club");
+		expect(subdomainNamespace("Test.nycu.club.", "nycu.club")).toBe("test.nycu.club");
+		expect(subdomainNamespace("nycu.club", "nycu.club")).toBe("");
+		expect(subdomainNamespace(" ", "nycu.club")).toBe("");
+	});
+
+	it("rejects a namespace outside the zone with a pointer to the full name", () => {
+		expect(() => normalizeDnsMutation({ content: "v=1", name: "@", namespace: "test", proxied: false, ttl: 1, type: "TXT" }, "nycu.club", false)).toThrow(/test\.nycu\.club/u);
+		expect(normalizeDnsMutation({ content: "v=1", name: "@", namespace: "nycu.club", proxied: false, ttl: 1, type: "TXT" }, "nycu.club", false).hostname).toBe("nycu.club");
 	});
 });
 
@@ -93,8 +131,14 @@ describe("record authorization and IDOR guard primitives", () => {
 		expect(() => assertHostnameAccess(member, "photo.nycu.club", config)).toThrow(/權限/u);
 	});
 
-	it("keeps protected names, record IDs, and unsupported types unavailable to admin", () => {
-		expect(() => assertHostnameAccess(admin, "api.nycu.club", config)).toThrow(/保護/u);
+	it("lets only admins manage the zone root and rejects names outside the zone", () => {
+		expect(assertHostnameAccess(admin, "nycu.club", config)).toBeNull();
+		expect(assertHostnameAccess(admin, "_github-challenge.nycu.club", config)).toBeNull();
+		expect(() => assertHostnameAccess(member, "nycu.club", config)).toThrow(/admin/u);
+		expect(() => assertHostnameAccess(admin, "test", config)).toThrow(/不在 nycu\.club zone 內/u);
+	});
+
+	it("keeps protected record IDs and unsupported types unavailable to admin", () => {
 		expect(() =>
 			assertRecordAccess(
 				admin,

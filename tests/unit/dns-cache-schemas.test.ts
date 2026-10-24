@@ -80,7 +80,6 @@ describe("cache purge validation and authorization", () => {
 		bootstrapAdminGithubIds: new Set(),
 		enablePurgeEverything: false,
 		environment: "local",
-		protectedHostnames: new Set(["api.nycu.club"]),
 		protectedRecordIds: new Set(),
 		sessionMaxAgeSeconds: 604_800,
 		zoneId: "zone",
@@ -98,10 +97,10 @@ describe("cache purge validation and authorization", () => {
 		expect(() => normalizePurgeUrls({ urls: [url] })).toThrow(AppError);
 	});
 
-	it("rejects unauthorized, protected, and boundary-attack hostnames", () => {
+	it("rejects unauthorized, apex, and boundary-attack hostnames", () => {
 		expect(() => assertHostnameAccess(member, "photo.nycu.club", config)).toThrow(/權限/u);
 		expect(() => assertHostnameAccess(member, "evilmagic.nycu.club", config)).toThrow(/權限/u);
-		expect(() => assertHostnameAccess(member, "api.nycu.club", config)).toThrow(/保護/u);
+		expect(() => assertHostnameAccess(member, "nycu.club", config)).toThrow(/admin/u);
 		expect(() => normalizePurgeHostnames({ hostnames: ["*.magic.nycu.club"] })).toThrow();
 	});
 

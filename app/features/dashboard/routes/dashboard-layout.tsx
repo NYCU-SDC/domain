@@ -2,14 +2,16 @@ import { ChevronDown, ClipboardList, Database, Gauge, History, LayoutDashboard, 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Form, NavLink, Outlet } from "react-router";
 
+import { listNamespaceOptions, selectedNamespace } from "~/features/dashboard/server/namespaces.server";
 import { requireDashboardPage } from "~/features/dashboard/server/page-auth.server";
 import { ToastProvider } from "~/shared/components/feedback/ToastProvider";
 import type { Route } from "./+types/dashboard-layout";
 import styles from "./dashboard.module.css";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-	const { csrfToken, session } = await requireDashboardPage(request, context);
-	return { csrfToken, grants: session.grants, user: session.user };
+	const { csrfToken, runtime, session } = await requireDashboardPage(request, context);
+	const namespaces = await listNamespaceOptions(session, runtime.env);
+	return { csrfToken, namespaces, selectedNamespace: selectedNamespace(request, namespaces), user: session.user };
 }
 
 const navigation = [
@@ -21,6 +23,8 @@ const navigation = [
 ] as const;
 
 export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
+	const { namespaces } = loaderData;
+	const namespaceSearch = loaderData.selectedNamespace ? `?namespace=${encodeURIComponent(loaderData.selectedNamespace)}` : "";
 	const [menuOpen, setMenuOpen] = useState(false);
 	const menuButtonRef = useRef<HTMLButtonElement>(null);
 	const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -54,7 +58,13 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 					<nav className={styles.sideNav} aria-label="Dashboard 導覽">
 						<p>管理工具</p>
 						{navigation.map(({ icon: Icon, label, to }) => (
-							<NavLink key={to} to={to} end={to === "/dashboard"} onClick={() => setMenuOpen(false)} className={({ isActive }) => (isActive ? styles.active : undefined)}>
+							<NavLink
+								key={to}
+								to={{ pathname: to, search: namespaceSearch }}
+								end={to === "/dashboard"}
+								onClick={() => setMenuOpen(false)}
+								className={({ isActive }) => (isActive ? styles.active : undefined)}
+							>
 								<Icon aria-hidden="true" /> {label}
 							</NavLink>
 						))}
@@ -87,7 +97,7 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 							<span>Namespace</span>
 							<span className={styles.selectControl}>
 								<select
-									defaultValue="all"
+									defaultValue={loaderData.selectedNamespace ?? "all"}
 									aria-label="選擇 namespace"
 									name="namespace"
 									onChange={event => {
@@ -97,12 +107,24 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
 										window.location.assign(url.toString());
 									}}
 								>
-									<option value="all">全部可管理範圍</option>
-									{loaderData.grants.map(grant => (
-										<option key={grant} value={grant}>
-											{grant}
-										</option>
-									))}
+									<option value="all">{namespaces.root ? `全部：Root 與所有子網域` : "全部已授權子網域"}</option>
+									{namespaces.root ? (
+										<optgroup label="Root（根網域）">
+											<option value={namespaces.root}>Root：{namespaces.root}</option>
+										</optgroup>
+									) : null}
+									{namespaces.subdomains.length ? (
+										<optgroup label="Subdomain（子網域）">
+											{namespaces.subdomains.map(namespace => (
+												<option key={namespace} value={namespace}>
+													{namespace}
+												</option>
+											))}
+										</optgroup>
+									) : null}
+									{loaderData.selectedNamespace && loaderData.selectedNamespace !== namespaces.root && !namespaces.subdomains.includes(loaderData.selectedNamespace) ? (
+										<option value={loaderData.selectedNamespace}>{loaderData.selectedNamespace}</option>
+									) : null}
 								</select>
 								<ChevronDown aria-hidden="true" />
 							</span>

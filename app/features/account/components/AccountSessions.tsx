@@ -54,7 +54,7 @@ export function AccountSessions(props: Props) {
 					Namespace grants
 				</h2>
 				{props.user.isAdmin ? (
-					<p>Admin 可以管理所有非 protected DNS records。</p>
+					<p>Admin 可以管理 Root（根網域）與所有子網域中非 protected 的 DNS records。</p>
 				) : props.grants.length ? (
 					<ul>
 						{props.grants.map(grant => (
