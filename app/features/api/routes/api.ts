@@ -392,8 +392,8 @@ async function dispatchMutation(request: Request, env: Env, requestId: string, a
 		const config = getAppConfig(env);
 		const normalized = normalizeDnsMutation(parseDnsRecordInput(await readJsonBody(request)), config.zoneName, config.allowProxiedDeepSubdomains);
 		audit.hostname = normalized.hostname;
-		audit.namespace = normalized.namespace;
-		assertHostnameAccess(session, normalized.hostname, config);
+		audit.namespace = inferRecordNamespace(normalized.hostname, config.zoneName);
+		audit.namespace = assertHostnameAccess(session, normalized.hostname, config) ?? audit.namespace;
 		const record = await cloudflareClient(env, requestId).createDnsRecord(normalized.payload);
 		audit.after = record;
 		audit.targetId = record.id;
@@ -426,9 +426,8 @@ async function dispatchMutation(request: Request, env: Env, requestId: string, a
 		}
 		const normalized = normalizeDnsMutation(parseDnsRecordInput(await readJsonBody(request)), config.zoneName, config.allowProxiedDeepSubdomains);
 		// Authorize both the current server-fetched name and the proposed new name.
-		assertHostnameAccess(session, normalized.hostname, config);
 		audit.hostname = normalized.hostname;
-		audit.namespace = normalized.namespace;
+		audit.namespace = assertHostnameAccess(session, normalized.hostname, config) ?? inferRecordNamespace(normalized.hostname, config.zoneName);
 		const updated = await client.updateDnsRecord(recordId, normalized.payload);
 		audit.after = updated;
 		await writeAuditLog(env.DB, request, env, { ...audit, requestId, status: "success" });

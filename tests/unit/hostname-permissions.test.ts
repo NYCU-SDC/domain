@@ -11,7 +11,7 @@ import {
 	normalizeHostname,
 	normalizeNamespaceGrant,
 	resolveRelativeOwner,
-	subdomainNamespace
+	zoneRelativeName
 } from "../../app/shared/lib/dns/hostname";
 import { normalizeDnsMutation } from "../../app/shared/lib/dns/records";
 import { AppError } from "../../app/shared/lib/errors";
@@ -108,16 +108,21 @@ describe("root and subdomain namespaces", () => {
 		expect(matchesNamespaceFilter("www.test.nycu.club", "test.nycu.club", "nycu.club")).toBe(true);
 	});
 
-	it("composes a subdomain namespace from a bare label or a full FQDN", () => {
-		expect(subdomainNamespace("test", "nycu.club")).toBe("test.nycu.club");
-		expect(subdomainNamespace("Test.nycu.club.", "nycu.club")).toBe("test.nycu.club");
-		expect(subdomainNamespace("nycu.club", "nycu.club")).toBe("");
-		expect(subdomainNamespace(" ", "nycu.club")).toBe("");
+	it("accepts zone-relative names or pasted FQDNs inside the zone", () => {
+		expect(zoneRelativeName("test", "nycu.club")).toBe("test");
+		expect(zoneRelativeName("Test.nycu.club.", "nycu.club")).toBe("test");
+		expect(zoneRelativeName("nycu.club", "nycu.club")).toBe("@");
+		expect(zoneRelativeName("test.example.com", "nycu.club")).toBe("test.example.com");
 	});
 
-	it("rejects a namespace outside the zone with a pointer to the full name", () => {
-		expect(() => normalizeDnsMutation({ content: "v=1", name: "@", namespace: "test", proxied: false, ttl: 1, type: "TXT" }, "nycu.club", false)).toThrow(/test\.nycu\.club/u);
-		expect(normalizeDnsMutation({ content: "v=1", name: "@", namespace: "nycu.club", proxied: false, ttl: 1, type: "TXT" }, "nycu.club", false).hostname).toBe("nycu.club");
+	it("resolves Name against the zone when no namespace is sent", () => {
+		const txt = (name: string, namespace?: string) => normalizeDnsMutation({ content: "v=1", name, namespace, proxied: false, ttl: 1, type: "TXT" }, "nycu.club", false).hostname;
+		expect(txt("@")).toBe("nycu.club");
+		expect(txt("test")).toBe("test.nycu.club");
+		expect(txt("_acme.test")).toBe("_acme.test.nycu.club");
+		expect(txt("test.nycu.club")).toBe("test.nycu.club");
+		expect(txt("@", "test.nycu.club")).toBe("test.nycu.club");
+		expect(() => txt("@", "test")).toThrow(/不在 nycu\.club 內/u);
 	});
 });
 

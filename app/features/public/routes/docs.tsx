@@ -36,7 +36,8 @@ export default function DocsPage() {
 							2. 建立 DNS record
 						</h2>
 						<p>
-							選擇 namespace 後用相對 Name，例如 <code>@</code>、<code>www</code>、<code>_acme-challenge</code> 或 <code>*.dev</code>。介面會顯示完整 FQDN；後端仍會 canonicalize 並重新授權。
+							Name 填相對於 <code>nycu.club</code> 的名稱，例如 <code>magic</code>、<code>www.magic</code>、<code>_acme-challenge.magic</code> 或 <code>*.dev.magic</code>。介面會顯示完整
+							FQDN；後端仍會 canonicalize 並重新授權。
 						</p>
 					</article>
 					<article className="card">

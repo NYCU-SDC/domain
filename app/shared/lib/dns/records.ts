@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { AppError, validationErrorFromZod } from "../errors";
-import { isDeepSubdomain, normalizeHostname, resolveRelativeOwner } from "./hostname";
+import { isDeepSubdomain, normalizeHostname, resolveRelativeOwner, zoneRelativeName } from "./hostname";
 
 export const allowedDnsTypes = ["A", "AAAA", "CNAME", "TXT", "MX", "SRV", "CAA"] as const;
 export type AllowedDnsType = (typeof allowedDnsTypes)[number];
@@ -16,13 +16,13 @@ const relativeNameSchema = z.string().min(1).max(253);
 const namespaceSchema = z.string().min(1).max(253);
 const proxyBase = {
 	name: relativeNameSchema,
-	namespace: namespaceSchema,
+	namespace: namespaceSchema.optional(),
 	proxied: z.boolean().default(false),
 	ttl: ttlSchema.default(1)
 } as const;
 const dnsOnlyBase = {
 	name: relativeNameSchema,
-	namespace: namespaceSchema,
+	namespace: namespaceSchema.optional(),
 	proxied: z.literal(false).optional().default(false),
 	ttl: ttlSchema.default(1)
 } as const;
@@ -117,7 +117,6 @@ export type CloudflareDnsMutation =
 
 export interface NormalizedDnsMutation {
 	readonly hostname: string;
-	readonly namespace: string;
 	readonly payload: CloudflareDnsMutation;
 }
 
@@ -134,14 +133,17 @@ export function parseDnsRecordInput(input: unknown): DnsRecordInput {
 }
 
 export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, allowProxiedDeepSubdomains: boolean): NormalizedDnsMutation {
-	const namespace = normalizeHostname(input.namespace, {
-		allowUnderscore: false,
-		allowWildcard: false
-	});
-	if (namespace !== zoneName && !namespace.endsWith(`.${zoneName}`)) {
-		throw new AppError("VALIDATION_ERROR", `Namespace「${namespace}」不在 ${zoneName} 內；請選 Root（${zoneName}），或填寫完整子網域，例如 ${namespace}.${zoneName}`);
+	// Name is relative to the zone; the optional legacy namespace field still works as the origin.
+	const origin = input.namespace
+		? normalizeHostname(input.namespace, {
+				allowUnderscore: false,
+				allowWildcard: false
+			})
+		: zoneName;
+	if (origin !== zoneName && !origin.endsWith(`.${zoneName}`)) {
+		throw new AppError("VALIDATION_ERROR", `Namespace「${origin}」不在 ${zoneName} 內`);
 	}
-	const baseHostname = resolveRelativeOwner(input.name, namespace);
+	const baseHostname = resolveRelativeOwner(origin === zoneName ? zoneRelativeName(input.name, zoneName) : input.name, origin);
 
 	if (input.type === "SRV") {
 		const service = `_${input.service.replace(/^_/u, "").toLowerCase()}`;
@@ -156,7 +158,6 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		});
 		return {
 			hostname,
-			namespace,
 			payload: {
 				data: {
 					name: baseHostname,
@@ -186,7 +187,6 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		case "AAAA":
 			return {
 				hostname: baseHostname,
-				namespace,
 				payload: {
 					content: input.content,
 					name: baseHostname,
@@ -198,7 +198,6 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		case "CNAME":
 			return {
 				hostname: baseHostname,
-				namespace,
 				payload: {
 					content: normalizeHostname(input.target, {
 						allowUnderscore: false,
@@ -213,7 +212,6 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		case "TXT":
 			return {
 				hostname: baseHostname,
-				namespace,
 				payload: {
 					content: input.content,
 					name: baseHostname,
@@ -225,7 +223,6 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		case "MX":
 			return {
 				hostname: baseHostname,
-				namespace,
 				payload: {
 					content: normalizeHostname(input.target, {
 						allowUnderscore: false,
@@ -241,7 +238,6 @@ export function normalizeDnsMutation(input: DnsRecordInput, zoneName: string, al
 		case "CAA":
 			return {
 				hostname: baseHostname,
-				namespace,
 				payload: {
 					data: { flags: input.flags, tag: input.tag, value: input.value },
 					name: baseHostname,

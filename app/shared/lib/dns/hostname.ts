@@ -157,10 +157,11 @@ export function subdomainLabelOf(namespace: string, zoneName: string): string {
 	return namespace.endsWith(`.${zoneName}`) ? namespace.slice(0, -1 * `.${zoneName}`.length) : "";
 }
 
-export function subdomainNamespace(label: string, zoneName: string): string {
-	const trimmed = label.trim().toLowerCase().replace(/\.$/u, "");
-	const relative = trimmed === zoneName ? "" : trimmed.endsWith(`.${zoneName}`) ? trimmed.slice(0, -1 * `.${zoneName}`.length) : trimmed;
-	return relative ? `${relative}.${zoneName}` : "";
+/** Accepts a name relative to the zone, or a pasted FQDN inside it, and returns the relative form. */
+export function zoneRelativeName(name: string, zoneName: string): string {
+	const fqdn = name.trim().toLowerCase().replace(/\.$/u, "");
+	if (fqdn === zoneName) return "@";
+	return fqdn.endsWith(`.${zoneName}`) ? fqdn.slice(0, -1 * `.${zoneName}`.length) : name;
 }
 
 /** Root keeps only records owned by the zone root; a subdomain keeps everything under it. */

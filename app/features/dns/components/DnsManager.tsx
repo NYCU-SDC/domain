@@ -6,7 +6,7 @@ import { useDialogFocus } from "~/shared/client/useDialogFocus";
 import { EmptyState } from "~/shared/components/feedback/EmptyState";
 import { useToast } from "~/shared/components/feedback/ToastProvider";
 import { DataTableFrame } from "~/shared/components/table/DataTableFrame";
-import { subdomainLabelOf, subdomainNamespace } from "~/shared/lib/dns/hostname";
+import { inferRecordNamespace, isHostnameWithinNamespace, subdomainLabelOf, zoneRelativeName } from "~/shared/lib/dns/hostname";
 import { allowedDnsTypes, unsupportedDnsTypeReasons, type AllowedDnsType } from "~/shared/lib/dns/records";
 import styles from "./DnsManager.module.css";
 
@@ -42,14 +42,11 @@ interface Props {
 interface FormState {
 	flags: string;
 	name: string;
-	namespace: string;
 	port: string;
 	priority: string;
 	protocol: string;
 	proxied: boolean;
-	scope: "root" | "subdomain";
 	service: string;
-	subdomain: string;
 	tag: "iodef" | "issue" | "issuewild";
 	target: string;
 	ttl: string;
@@ -58,19 +55,17 @@ interface FormState {
 	weight: string;
 }
 
-function scopeFields(namespace: string, zoneName: string): Pick<FormState, "scope" | "subdomain"> {
-	return namespace === zoneName ? { scope: "root", subdomain: "" } : { scope: "subdomain", subdomain: subdomainLabelOf(namespace, zoneName) };
+function nameInZone(hostname: string, zoneName: string): string {
+	return hostname === zoneName ? "@" : subdomainLabelOf(hostname, zoneName);
 }
 
-const emptyForm = (namespace: string, zoneName: string): FormState => ({
+const emptyForm = (name: string): FormState => ({
 	flags: "0",
-	name: "@",
-	namespace,
+	name,
 	port: "443",
 	priority: "10",
 	protocol: "tcp",
 	proxied: false,
-	...scopeFields(namespace, zoneName),
 	service: "https",
 	tag: "issue",
 	target: "",
@@ -95,11 +90,6 @@ function caaTag(data: Record<string, unknown> | null): FormState["tag"] {
 	return value === "iodef" || value === "issuewild" ? value : "issue";
 }
 
-function relativeName(name: string, namespace: string): string {
-	if (name === namespace) return "@";
-	return name.endsWith(`.${namespace}`) ? name.slice(0, -1 * `.${namespace}`.length) : name;
-}
-
 function valueForRecord(record: RecordView): string {
 	if (record.type === "SRV") {
 		return `${dataString(record.data, "priority")} ${dataString(record.data, "weight")} ${dataString(record.data, "port")} ${dataString(record.data, "target")}`.trim();
@@ -118,8 +108,9 @@ export function DnsManager(props: Props) {
 	const [page, setPage] = useState(1);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [editing, setEditing] = useState<RecordView | null>(null);
-	const defaultNamespace = props.selectedNamespace ?? (props.isAdmin ? "" : (props.grants[0] ?? ""));
-	const [form, setForm] = useState<FormState>(() => emptyForm(defaultNamespace, props.zoneName));
+	const defaultNamespace = props.selectedNamespace ?? (props.isAdmin ? null : (props.grants[0] ?? null));
+	const defaultName = defaultNamespace ? nameInZone(defaultNamespace, props.zoneName) : "";
+	const [form, setForm] = useState<FormState>(() => emptyForm(defaultName));
 	const [busy, setBusy] = useState(false);
 	const modalRef = useRef<HTMLElement>(null);
 	const closeModal = useCallback(() => setModalOpen(false), []);
@@ -140,24 +131,21 @@ export function DnsManager(props: Props) {
 
 	const openCreate = () => {
 		setEditing(null);
-		setForm(emptyForm(defaultNamespace, props.zoneName));
+		setForm(emptyForm(defaultName));
 		setModalOpen(true);
 	};
 
 	const openEdit = (record: RecordView) => {
-		const namespace = record.namespace ?? props.zoneName;
 		const baseName = record.type === "SRV" ? dataString(record.data, "name") || record.name : record.name;
 		const type = record.type as AllowedDnsType;
 		setEditing(record);
 		setForm({
 			flags: dataNumber(record.data, "flags"),
-			name: relativeName(baseName, namespace),
-			namespace,
+			name: nameInZone(baseName, props.zoneName),
 			port: dataNumber(record.data, "port"),
 			priority: String(record.priority ?? (Number(dataNumber(record.data, "priority")) || 10)),
 			protocol: dataString(record.data, "proto").replace(/^_/u, "") || "tcp",
 			proxied: record.proxied,
-			...scopeFields(namespace, props.zoneName),
 			service: dataString(record.data, "service").replace(/^_/u, "") || "https",
 			tag: caaTag(record.data),
 			target: type === "CNAME" || type === "MX" ? (record.content ?? "") : dataString(record.data, "target"),
@@ -181,9 +169,15 @@ export function DnsManager(props: Props) {
 		}));
 	};
 
-	const namespace = props.isAdmin ? (form.scope === "root" ? props.zoneName : subdomainNamespace(form.subdomain, props.zoneName)) : form.namespace;
-	const previewHostname = namespace ? (form.name === "@" ? namespace : `${form.name}.${namespace}`.toLowerCase()) : null;
-	const preview = previewHostname ?? (props.isAdmin ? "請先填寫子網域" : "請先選擇 namespace");
+	const relativeName = zoneRelativeName(form.name, props.zoneName).trim().toLowerCase();
+	const previewHostname = relativeName ? (relativeName === "@" ? props.zoneName : `${relativeName}.${props.zoneName}`) : null;
+	const owner = previewHostname
+		? props.isAdmin
+			? inferRecordNamespace(previewHostname, props.zoneName)
+			: (props.grants.find(grant => isHostnameWithinNamespace(previewHostname, grant)) ?? null)
+		: null;
+	const outsideGrants = previewHostname !== null && owner === null;
+	const nameSuggestions = (props.isAdmin ? props.knownSubdomains : props.grants).map(namespace => nameInZone(namespace, props.zoneName));
 	const deepProxy = form.proxied && previewHostname !== null && subdomainLabelOf(previewHostname, props.zoneName).includes(".");
 
 	const submit = async (event: SyntheticEvent<HTMLFormElement>) => {
@@ -192,7 +186,6 @@ export function DnsManager(props: Props) {
 		try {
 			const base = {
 				name: form.name,
-				namespace,
 				proxied: ["A", "AAAA", "CNAME"].includes(form.type) ? form.proxied : false,
 				ttl: Number(form.ttl),
 				type: form.type
@@ -467,69 +460,6 @@ export function DnsManager(props: Props) {
 						</header>
 						<form onSubmit={submit}>
 							<div className={styles.formGrid}>
-								{props.isAdmin ? (
-									<fieldset className={`field ${styles.namespaceField} ${styles.fullRow}`}>
-										<legend>Namespace</legend>
-										<div className={styles.namespaceControls}>
-											<div className={styles.scopeOptions}>
-												<label>
-													<input checked={form.scope === "subdomain"} name="namespace-scope" onChange={() => updateForm("scope", "subdomain")} type="radio" value="subdomain" />
-													Subdomain
-												</label>
-												<label>
-													<input checked={form.scope === "root"} name="namespace-scope" onChange={() => updateForm("scope", "root")} type="radio" value="root" />
-													Root
-												</label>
-											</div>
-											{form.scope === "subdomain" ? (
-												<div className={styles.suffixInput}>
-													<label className="srOnly" htmlFor="record-subdomain">
-														子網域名稱（不含 .{props.zoneName}）
-													</label>
-													<input
-														aria-describedby="record-namespace-help"
-														autoComplete="off"
-														className="input"
-														id="record-subdomain"
-														list="known-subdomains"
-														name="subdomain"
-														required
-														spellCheck={false}
-														value={form.subdomain}
-														placeholder="magic…"
-														onChange={event => updateForm("subdomain", event.target.value)}
-													/>
-													<span aria-hidden="true">.{props.zoneName}</span>
-													<datalist id="known-subdomains">
-														{props.knownSubdomains.map(known => (
-															<option key={known} value={subdomainLabelOf(known, props.zoneName)} />
-														))}
-													</datalist>
-												</div>
-											) : (
-												<p className={styles.rootSummary}>{props.zoneName}</p>
-											)}
-										</div>
-										<p className="helpText" id="record-namespace-help">
-											{form.scope === "root"
-												? `Root 是根網域 ${props.zoneName} 本身，Name 填 @ 代表 ${props.zoneName}；另可管理 _dmarc、* 等根層級記錄。`
-												: `只填子網域名稱，例如 magic 會成為 magic.${props.zoneName}，並包含其下所有層級。`}
-										</p>
-									</fieldset>
-								) : (
-									<div className={`field ${styles.fullRow}`}>
-										<label htmlFor="record-namespace">Namespace（已授權子網域）</label>
-										<select className="select" id="record-namespace" name="namespace" required value={form.namespace} onChange={event => updateForm("namespace", event.target.value)}>
-											<option value="" disabled>
-												選擇子網域
-											</option>
-											{props.grants.map(grant => (
-												<option key={grant}>{grant}</option>
-											))}
-										</select>
-										<p className="helpText">包含此子網域下的所有層級。</p>
-									</div>
-								)}
 								<div className="field">
 									<label htmlFor="record-type">Type</label>
 									<select className="select" id="record-type" name="type" value={form.type} onChange={event => updateType(event.target.value as AllowedDnsType)}>
@@ -540,20 +470,44 @@ export function DnsManager(props: Props) {
 								</div>
 								<div className="field">
 									<label htmlFor="record-name">Name</label>
-									<input
-										autoComplete="off"
-										className="input"
-										id="record-name"
-										name="name"
-										required
-										spellCheck={false}
-										value={form.name}
-										onChange={event => updateForm("name", event.target.value)}
-										placeholder="@、www、*、*.dev…"
-									/>
-									<p className="helpText">
-										完整結果：<code>{preview}</code>
+									<div className={styles.suffixInput}>
+										<input
+											aria-describedby="record-name-preview"
+											autoComplete="off"
+											className="input"
+											id="record-name"
+											list="record-name-suggestions"
+											name="name"
+											required
+											spellCheck={false}
+											value={form.name}
+											onChange={event => updateForm("name", event.target.value)}
+											placeholder={props.isAdmin ? "@、magic、_acme.magic…" : "magic、www.magic…"}
+										/>
+										<span aria-hidden="true">.{props.zoneName}</span>
+									</div>
+									<datalist id="record-name-suggestions">
+										{nameSuggestions.map(suggestion => (
+											<option key={suggestion} value={suggestion} />
+										))}
+									</datalist>
+									<p className="helpText" id="record-name-preview">
+										{previewHostname ? (
+											<>
+												完整結果：<code>{previewHostname}</code>
+												{owner === props.zoneName ? "（Root）" : owner && owner !== previewHostname ? `（屬於 ${owner}）` : null}
+											</>
+										) : (
+											<>
+												<code>@</code> 代表 <code>{props.zoneName}</code> 本身。
+											</>
+										)}
 									</p>
+									{outsideGrants ? (
+										<p className={styles.fieldError} role="alert">
+											不在你的授權範圍內（可管理：{props.grants.join("、") || "無"}）
+										</p>
+									) : null}
 								</div>
 								{form.type === "A" || form.type === "AAAA" || form.type === "TXT" ? (
 									<div className="field">
@@ -739,7 +693,7 @@ export function DnsManager(props: Props) {
 								<button className="button" onClick={closeModal} type="button">
 									取消
 								</button>
-								<button className="button buttonPrimary" disabled={busy || (!props.allowProxiedDeepSubdomains && deepProxy)} type="submit">
+								<button className="button buttonPrimary" disabled={busy || outsideGrants || (!props.allowProxiedDeepSubdomains && deepProxy)} type="submit">
 									{busy ? (
 										"儲存中…"
 									) : (
